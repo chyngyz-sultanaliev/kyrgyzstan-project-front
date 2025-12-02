@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
-input {
-outline: none;
+.container{
+    width: 1400px;
+    margin: 0 auto;
 }
