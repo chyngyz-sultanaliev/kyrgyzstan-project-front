@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminLayout from "@/components/layouts/adminLayout/AdminLayout";
 import { FC, ReactNode } from "react";
 interface LayoutProps {
   children: ReactNode;
