@@ -1,10 +1,5 @@
+import Main from "@/components/pages/main/Main";
 
-const page = () => {
-  return (
-    <div>
-      
-    </div>
-  );
-};
+const page = () => <Main/>
 
 export default page;
