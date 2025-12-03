@@ -1,10 +1,10 @@
-import MainLayout from "@/components/layouts/MainLayout";
+import AdminLayout from "@/components/layouts/AdminLayout";
 import { FC, ReactNode } from "react";
 interface LayoutProps {
   children: ReactNode;
 }
 const layout: FC<LayoutProps> = ({ children }) => {
-  return <MainLayout>{children}</MainLayout>;
+  return <AdminLayout>{children}</AdminLayout>;
 };
 
 export default layout;
