@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 const Welcome = () => {
   const getCategory = async () => {
     try {
-      const res = await axios.get(`https://kyrgyzstan-project-back.onrender.com/categories/hotel`)
+      const res = await axios.get(`https://kyrgyzstan-project-back.onrender.com/api/v1/categories/hotel`)
       console.log(res.data, "hotel api");
       
     } catch (error) {
@@ -24,14 +24,19 @@ const Welcome = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className="w-full"
+      className="w-full flex items-center justify-center"
     >
-     <div className="flex items-center justify-center w-full min-h-[80vh] bg-[#111111aa]">
-       <div>
+     <div className="flex items-center justify-around w-full min-h-[80vh] bg-[#00000084]">
+       <div className="flex flex-col gap-5">
         <h1 className="text-white text-5xl">Аренда коттеджей <br /> и домов в Кыргызстане</h1>
         <p className="text-white text-xl">Найдите идеальный вариант сами или предоставьте это нам</p>
+        <div className="flex gap-4 mt-7">
+          <div className="w-40 h-40 bg-green-950"></div>
+          <div className="w-40 h-40 bg-green-950"></div>
+          <div className="w-40 h-40 bg-green-950"></div>
+        </div>
       </div>
-        <div className="max-w-sm mx-auto bg-white rounded-3xl shadow-md p-4 space-y-1">
+        <div className="max-w-sm bg-white rounded-3xl shadow-md p-4 space-y-1">
       <h1 className="text-2xl font-bold text-center">Заявка на подбор</h1>
       <p className="text-center text-gray-500 text-sm">
         Оставьте заявку на подбор и сократите свое время на поиск
@@ -84,7 +89,7 @@ const Welcome = () => {
 
         <button
           type="submit"
-          className="w-full py-1 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer"
+          className="w-full py-1 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
         >
           Оставить заявку
         </button>
