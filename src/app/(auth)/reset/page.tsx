@@ -1,10 +1,5 @@
+import Reset from "@/components/pages/auth/Reset";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const page = () => <Reset />;
 
 export default page;

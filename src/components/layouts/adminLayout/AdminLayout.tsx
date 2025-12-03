@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
-import Header from "../ui/adminLayout/Header";
-import Sidebar from "../ui/adminLayout/Sidebar";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
 
 interface AdminLayoutProps {
   children: ReactNode;

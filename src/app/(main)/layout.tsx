@@ -1,4 +1,4 @@
-import MainLayout from "@/components/layouts/MainLayout";
+import MainLayout from "@/components/layouts/mainLayout/MainLayout";
 import { FC, ReactNode } from "react";
 interface LayoutProps {
   children: ReactNode;
