@@ -1,12 +1,12 @@
 // src/components/ui/Header/Header.tsx
 import Link from "next/link";
-import Button from "../Button/Button";
 import Image from "next/image";
-import Img from "../../../../public/logo.svg";
+import Img from "../../../../public/footer_logo.png";
+import Button from "@/components/ui/Button/Button";
 
 const Header = () => {
   return (
-    <header className="bg-[#0A8791] py-4">
+    <header className="bg-[linear-gradient(90deg,#3C5F63_19.23%,#5B9096_63.46%,#3B8C95_100%)] py-4">
       <div className="container flex justify-between items-center">
         {/* Logo and Title */}
         <div className="flex items-center gap-16 text-white">
@@ -29,10 +29,6 @@ const Header = () => {
             Hotel
           </Link>
         </div>
-
-        {/* Navigation Links */}
-
-        {/* Button */}
         <Button variant="primary">Войти</Button>
       </div>
     </header>

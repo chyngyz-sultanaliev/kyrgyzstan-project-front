@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
-import Sidebar from "../ui/profileLayout/Sidebar";
-import Header from "../ui/profileLayout/Header";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 interface LayoutProps {
   children: ReactNode;
 }

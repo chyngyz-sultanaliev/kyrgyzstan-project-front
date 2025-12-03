@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import ProfileLayout from "@/components/layouts/ProfileLayout";
+import ProfileLayout from "@/components/layouts/profileLayout/ProfileLayout";
 interface LayoutProps {
   children: ReactNode;
 }
