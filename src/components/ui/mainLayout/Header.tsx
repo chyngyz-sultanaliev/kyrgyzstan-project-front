@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Button from "../Button/Button";
 import Image from "next/image";
-import Img from "../../../../public/logo.svg";
+import Img from "../../../../public/images/logo.svg";
 
 const Header = () => {
   return (
