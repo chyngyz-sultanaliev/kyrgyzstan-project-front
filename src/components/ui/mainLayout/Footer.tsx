@@ -1,7 +1,7 @@
 import React from "react";
 import { FaInstagram, FaFacebookF, FaVk, FaEnvelope } from "react-icons/fa";
 import Image from "next/image";
-import Img from "../../../../public/logo.svg"; // replace with your logo path
+import Img from "../../../../public/images/logo.svg"; // replace with your logo path
 
 const Footer = () => {
   return (
