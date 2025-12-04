@@ -122,7 +122,6 @@ export default function Register() {
           )}
         </div>
 
-        {/* Кнопка */}
         <Button
           type="submit"
           variant="primary"
@@ -131,7 +130,6 @@ export default function Register() {
         >
           Зарегистрироваться
         </Button>
-          {/* Ссылки снизу */}
         <div className="flex justify-center mt-4 text-sm text-[#0A8791]">
           <Link href="/login" className="hover:underline">
             Войти
