@@ -89,12 +89,10 @@ export default function LoginForm() {
           )}
         </div>
 
-        {/* Кнопка */}
         <Button type="submit" variant="primary" disabled={!isValid} className="w-full">
           Войти
         </Button>
 
-        {/* Ссылки снизу */}
         <div className="flex justify-between mt-4 text-sm text-[#0A8791]">
           <Link href="/reset" className="hover:underline">
             Забыли пароль?

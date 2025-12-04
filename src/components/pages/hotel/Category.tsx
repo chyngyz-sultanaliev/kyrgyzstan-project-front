@@ -31,9 +31,7 @@ const Category = () => {
         </h2>
 
         <select className="outline-0">
-          <option value="" disabled selected hidden>
-            Цены
-          </option>
+          <option>Цены</option>
           <option value="">до 400$</option>
           <option value="">до 800$</option>
           <option value="">до 1200$</option>
@@ -101,7 +99,6 @@ const Category = () => {
                   <h3>от 10000</h3>
                   <h3>от 12000</h3>
                   <h3>от 14000</h3>
-                 
                 </div>
               </div>
             </div>
@@ -173,12 +170,11 @@ const Category = () => {
                   <h3>Воскресенье</h3>
                 </div>
 
-               <div className="text-gray-900 font-semibold text-sm flex flex-col gap-2">
+                <div className="text-gray-900 font-semibold text-sm flex flex-col gap-2">
                   <h3>от 8000</h3>
                   <h3>от 10000</h3>
                   <h3>от 12000</h3>
                   <h3>от 14000</h3>
-                 
                 </div>
               </div>
             </div>
