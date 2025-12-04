@@ -1,114 +1,129 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ChevronRight } from "lucide-react";
 
-export default function Welcome() {
+export default function TourismLanding() {
+  const backgrounds = [
+    "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a3lyZ3l6c3RhbnxlbnwwfHwwfHx8MA%3D%3D",
+    "https://ipt.images.tshiftcdn.com/204440/x/0/12-day-kyrgyzstan-photo-tour-mountains-lakes-canyons.jpg?dpr=2&height=360&quality=65",
+    "https://icelandair.breezesim.com/cdn/shop/files/Kyrgyzstan_83c1f4cc9a.jpg?v=1759400076",
+    "https://www.nomadasaurus.com/wp-content/uploads/2016/10/Jyrgalan-Trek.jpg",
+    "https://cdn.explorekazakhstan.net/images/tours/47/1_1000x560.webp",
+  ];
+
   const categories = [
     {
-      title: "Group Tours",
-      img: "https://www.lifetripjourney.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Flifetripjourney%2Fkyrgyzstan%2FYELTSIN-PEAK.webp%3FupdatedAt%3D1735913882394%26tr%3Aq-80%2Cw-800&w=1920&q=75",
+      title: "group-tours",
+      img: "https://t3.ftcdn.net/jpg/01/72/11/78/360_F_172117865_2JkKUkVzOG93FVeZIK7gHkxmvmD8JbOB.jpg",
     },
     {
-      title: "Horseback Riding",
-      img: "https://media.istockphoto.com/id/2222062987/photo/kyrgyzstan-iconic-picture-traditional-kyrgyz-yurts-with-horses-in-a-scenic-mountains.jpg?s=612x612&w=0&k=20&c=4-32nE_LlYQN7_UUWBaRNsey5UQ7vTTebb9jIgrBHxY=",
+      title: "horseback-riding",
+      img: "https://media.istockphoto.com/id/156209467/photo/horse-and-mountains.jpg?s=612x612&w=0&k=20&c=lrKB7724ExU5tiTOZ9RG03n80QJqufk0GA2bhqE4Pl4=",
     },
     {
-      title: "Excursions",
+      title: "excursions",
       img: "https://cabar.asia/wp-content/uploads/2024/09/Zapovednik-Kyrgyz-Ata-Oshskaya-oblast-Kyrgyzstan.-Foto-PROON-Kyrgyzstan.jpeg",
     },
     {
-      title: "Trekking",
-      img: "https://optim.tildacdn.com/tild3738-6337-4363-b738-366161383038/-/resize/824x/-/format/webp/5Z6A6941.jpg.webp",
+      title: "ethno-tour",
+      img: "https://eurasia.travel/wp-content/uploads/2024/09/kyrgyzstan-nature-3-1024x683.jpg",
     },
     {
-      title: "Winter Tours",
-      img: "https://media.istockphoto.com/id/899693290/photo/nice-mountains-in-kyrgyzstan-country.jpg?s=612x612&w=0&k=20&c=cPwF-NwqG6VGAJJLwkKyhN3C1zcXDkxzahOTZ4CFEBg=",
+      title: "hiking",
+      img: "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a3lyZ3l6c3RhbnxlbnwwfHwwfHx8MA%3D%3D",
     },
     {
-      title: "Ethno Tours",
-      img: "https://live.worldtourismforum.net/uploads/kyrgyzstan-tourism-2025.jpg",
+      title: "mountaineering",
+      img: "https://images.locationscout.net/2024/09/ala-kul-lake-viewpoint-kyrgyz-republic-g6rh.jpg?w=1080&q=60",
     },
   ];
 
-  const backgroundImages = categories.map((c) => c.img);
-  const [currentBg, setCurrentBg] = useState(0);
+  const [bgIndex, setBgIndex] = useState(0);
+  const [catIndex, setCatIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
-    }, 6000);
+      setBgIndex((i) => (i + 1) % backgrounds.length);
+      setCatIndex((i) => (i + 1) % categories.length);
+    }, 5000);
     return () => clearInterval(interval);
-  }, [backgroundImages.length]);
+  }, []);
 
   return (
-    <div className="w-full min-h-screen text-white overflow-x-hidden font-[Inter]">
-      <section className="relative h-screen flex items-center">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentBg}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${backgroundImages[currentBg]}')` }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-          />
-        </AnimatePresence>
+    <>
+      {" "}
+      <div className="relative w-full h-max overflow-hidden text-white">
+        {/* BACKGROUND PARALLAX */}
+        <motion.div
+          key={bgIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          style={{
+            backgroundImage: `url(${backgrounds[bgIndex]})`,
+          }}
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
+        />
 
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/40 to-black/20" />
+        {/* OVERLAY */}
+        <div className="absolute inset-0 bg-black/60" />
 
-        {/* LEFT TEXT BLOCK */}
-        <div className="relative z-10 w-full max-w-3xl pl-20">
-          <motion.h1
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="text-6xl font-semibold tracking-tight leading-tight drop-shadow-xl"
-          >
-            Group-tours
-          </motion.h1>
+        {/* MAIN CONTENT */}
+        <div className="relative z-10 px-40 my-80 grid grid-cols-2 gap-20">
+          {/* LEFT TEXT */}
+          <div className="max-w-xl">
+            <h2 className="text-5xl font-bold mb-6">
+              {categories[catIndex].title}
+            </h2>
+            <p className="text-lg leading-relaxed mb-10">
+              Issyk-Kul Lake is the second largest mountain lake in the world at
+              an altitude of 1,607 meters above sea level, depth of 668 meters
+              asl. Lake is situated at the territory of the Issyk-Kul Biosphere
+              Reserve. Issyk-Kul Lake is 182 kilometers long and about 60
+              kilometers wide, with an area of 6,236 square kilometers.
+            </p>
+            <button className="flex items-center gap-3 bg-[linear-gradient(rgba(10,156,168,1),rgba(10,135,145,1))] px-6 py-3 rounded-2xl text-xl font-semibold">
+              book <ChevronRight />
+            </button>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-            className="mt-6 text-[18px] text-white/90 leading-relaxed drop-shadow-lg max-w-xl"
-          >
-            Issyk-Kul Lake is the second largest mountain lake in the world
-            located at an altitude of 1,607 meters above sea level.
-          </motion.p>
-
-          <motion.button
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.6 }}
-            className="mt-8 relative px-8 py-3 text-lg font-medium bg-white text-black rounded-xl shadow-xl hover:bg-white/90 transition-all duration-300"
-          >
-            Book →
-          </motion.button>
-        </div>
-
-        {/* RIGHT CATEGORY CAROUSEL */}
-        <div className="absolute right-10 top-1/2 -translate-y-1/2 flex flex-row space-x-6 overflow-x-auto w-[840px] h-[400px] py-4 scrollbar-none scroll-width-[none]">
-          {categories.map((c, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.15, duration: 0.8 }}
-              className="group relative min-w-60 h-[300px] rounded-2xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:scale-105 transition-transform duration-300"
+          {/* CATEGORY CAROUSEL — 3D INFINITE SPINNING WHEEL */}
+          <div className="relative w-full h-96 flex items-center justify-center">
+            <div
+              className="relative w-[700px] h-[400px]"
+              style={{ perspective: "1000px" }}
             >
-              <img
-                src={c.img}
-                className="w-full h-full object-cover group-hover:scale-110 duration-500"
-              />
-              <div className="absolute bottom-0 w-full bg-linear-to-t from-black/70 to-transparent p-4 text-center text-lg font-semibold tracking-wide">
-                {c.title}
-              </div>
-            </motion.div>
-          ))}
+              <motion.div
+                animate={{ rotateY: 360 }}
+                transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+                className="relative w-full h-full transform-3d"
+              >
+                {categories.map((cat, i) => {
+                  const angle = (360 / categories.length) * i;
+                  return (
+                    <div
+                      key={i}
+                      className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center"
+                      style={{
+                        transform: `rotateY(${angle}deg) translateZ(280px)`,
+                      }}
+                    >
+                      <div className="w-56 h-80 bg-white/10 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl transition-transform duration-500 hover:scale-110">
+                        <img
+                          src={cat.img}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <p className="mt-3 text-xl font-medium">{cat.title}</p>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            </div>
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }
