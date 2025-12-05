@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/components/utils/cn";
 
-type ButtonVariant = "primary" | "secondary" | "gradient" | "outline" | "green" | "red";
+type ButtonVariant = "primary" | "secondary" | "gradient";
 type IconPosition = "left" | "right";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -32,11 +32,9 @@ export default function Button({
 
   const variants: Record<ButtonVariant, string> = {
     primary: "bg-[#0A8791] text-white border-2 border-white",
-    secondary: "bg-gray-100 border-2 border-[#0A8791] text-[#0A8791] hover:bg-gray-200",
-    gradient: "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white text-[10px] sm:text-[18px]",
-    outline: "border-gray-300 text-white focus:ring-gray-400",
-    green: "bg-[#6CC51D] text-white focus:ring-gray-400",
-    red: "bg-[#FE585A] text-white focus:ring-gray-400",
+    secondary: "bg-white border-1 border-[#0A8791] text-[#0A8791] ",
+    gradient:
+      "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white text-[10px] sm:text-[18px]",
   };
 
   return (
@@ -51,9 +49,13 @@ export default function Button({
       {...props}
     >
       {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-      {!loading && icon && iconPosition === "left" && <span className="mr-2">{icon}</span>}
+      {!loading && icon && iconPosition === "left" && (
+        <span className="mr-2">{icon}</span>
+      )}
       {children}
-      {!loading && icon && iconPosition === "right" && <span className="ml-2">{icon}</span>}
+      {!loading && icon && iconPosition === "right" && (
+        <span className="ml-2">{icon}</span>
+      )}
     </button>
   );
 }
