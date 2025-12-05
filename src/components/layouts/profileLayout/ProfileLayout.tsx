@@ -4,13 +4,14 @@ import Header from "./Header";
 interface LayoutProps {
   children: ReactNode;
 }
-const ProfileLayout: FC<LayoutProps> = async ({ children }) => {
+
+const ProfileLayout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <div>
+      <div className="flex">
         <Sidebar />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );

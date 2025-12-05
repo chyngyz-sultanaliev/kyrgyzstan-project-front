@@ -1,10 +1,5 @@
+import Faq from "@/components/pages/profile/Faq";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const page = () => <Faq />;
 
 export default page;
