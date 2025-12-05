@@ -1,9 +1,19 @@
 @import "tailwindcss";
 
-textarea, input {
-outline: none;
+textarea,
+input {
+  outline: none;
 }
-.container{
-    width: 1400px;
-    margin: 0 auto;
+html {
+  scrollbar-width: none;
+}
+.container {
+  width: 1400px;
+  margin: 0 auto;
+}
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
