@@ -1,6 +1,16 @@
-import { notFound } from "next/navigation";
+/* eslint-disable @next/next/no-img-element */
+"use client";
+import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
 
+interface Tour {
+  id: number;
+  category: string;
+  url: string;
+  name: string;
+  description: string;
+  price: number;
+}
 const tourCategory = [
   // Group tours
   {
@@ -141,13 +151,12 @@ const tourCategory = [
   },
 ];
 
-interface Props {
-  params: { id: string };
-}
+const Detail = () => {
+  const { id } = useParams();
 
-const TourDetail = ({ params }: Props) => {
-  const tourId = parseInt(params.id);
-  const tour = tourCategory.find((t) => t.id === tourId);
+  if (!id) return notFound();
+
+  const tour = tourCategory.find((t: Tour) => t.id === Number(id));
 
   if (!tour) return notFound();
 
@@ -158,7 +167,9 @@ const TourDetail = ({ params }: Props) => {
           <img
             src={tour.url}
             alt={tour.name}
-            className="w-170 h-96 object-cover rounded-3xl shadow-lg"
+            width={680}
+            height={384}
+            className="w-full h-96 object-cover rounded-3xl shadow-lg"
           />
         </div>
         <div className="md:w-1/2 flex flex-col gap-5">
@@ -182,4 +193,4 @@ const TourDetail = ({ params }: Props) => {
   );
 };
 
-export default TourDetail;
+export default Detail;

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
 import { useState } from "react";
@@ -180,11 +181,13 @@ const Category = () => {
       {/* Tours */}
       <div className="flex flex-wrap gap-8 justify-center mt-6">
         {filteredTours.map((el) => (
-          <Link href={`/main/tour/${el.id}`} key={el.id}>
+          <Link href={`/tour/${el.id}`} key={el.id}>
             <div className="flex flex-col rounded-3xl justify-center w-94 h-90 bg-white shadow-md p-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-[#f5f5f5]">
               <img
                 src={el.url}
                 alt={el.name}
+                width={80}
+                height={55}
                 className="w-80 h-55 object-cover rounded-2xl ml-3"
               />
               <div className="ml-3 mt-2">
