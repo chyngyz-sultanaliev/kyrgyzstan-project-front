@@ -1,17 +1,27 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
+import Button from "@/components/ui/Button/Button";
 import Link from "next/link";
 import { useState } from "react";
 
 export const categories = [
-  "All",
+  "categories",
   "Group tours",
   "Horseback riding",
   "Excursions",
   "Mountaineering",
 ];
 
-const tourCategory = [
+
+interface Tour {
+  id: number;
+  category: string;
+  url: string;
+  name: string;
+  description: string;
+  price: number;
+}
+
+const tourCategory: Tour[] = [
   // Group tours
   {
     id: 1,
@@ -155,16 +165,15 @@ const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredTours =
-    selectedCategory === "All"
+
+
       ? tourCategory
       : tourCategory.filter((tour) => tour.category === selectedCategory);
 
   return (
     <section className="p-11">
-      <h1 className="text-4xl font-bold mb-6 ml-30">Category:</h1>
-
       {/* Categories */}
-      <div className="flex items-center justify-around  text-2xl mb-10 border-b pb-3 ml-30">
+      <div className="flex items-center justify-around text-2xl mb-10 border-b pb-3 ml-30">
         {categories.map((cat) => (
           <button
             key={cat}
@@ -180,25 +189,25 @@ const Category = () => {
 
       {/* Tours */}
       <div className="flex flex-wrap gap-8 justify-center mt-6">
-        {filteredTours.map((el) => (
-          <Link href={`/tour/${el.id}`} key={el.id}>
-            <div className="flex flex-col rounded-3xl justify-center w-94 h-90 bg-white shadow-md p-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-[#f5f5f5]">
-              <img
-                src={el.url}
-                alt={el.name}
-                width={80}
-                height={55}
-                className="w-80 h-55 object-cover rounded-2xl ml-3"
-              />
-              <div className="ml-3 mt-2">
-                <h2 className="font-semibold">{el.name}</h2>
-                <h2>Price: {el.price}</h2>
-              </div>
-              <button className="w-[113px] h-[37px] bg-[#8111EAB8] text-amber-50 rounded-sm font-light text-[15px] mt-3 ml-56">
-                Plan Your Trip
-              </button>
+        {filteredTours.map((tour) => (
+          <div
+            key={tour.id}
+            className="flex flex-col rounded-3xl justify-center w-94 h-90 bg-white shadow-md p-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-[#f5f5f5]"
+          >
+            <img
+              src={tour.url}
+              alt={tour.name}
+              className="w-80 h-55 object-cover rounded-2xl ml-3"
+            />
+            <div className="ml-3 mt-2">
+              <h2 className="font-semibold">{tour.name}</h2>
+              <h2>Price: {tour.price}</h2>
+              <h2>{tour.category}</h2>
             </div>
-          </Link>
+            <Link href={`/tour/${tour.id}`}>
+              <Button className="  ml-46">Plan Your Trip</Button>
+            </Link>
+          </div>
         ))}
       </div>
     </section>

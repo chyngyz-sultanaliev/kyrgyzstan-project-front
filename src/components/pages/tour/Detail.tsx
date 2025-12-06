@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
@@ -71,7 +70,9 @@ const tourCategory = [
     category: "Horseback riding",
     url: "https://www.journalofnomads.com/wp-content/uploads/2022/11/Horse-Riding-Panda-Pass-Tash-Rabat-29.jpg",
     name: "Family Friendly Horse Tour",
-    description: "Easy ride for families, picnic included.",
+
+    description:
+      "A family-friendly horse tour offers gentle rides on calm horses, beginner instruction, and chances to learn about horses, often including brushing or saddling, set in scenic, safe environments (like lava fields or farms) with amenities like hot chocolate, perfect for all ages to bond and create memories, focusing on fun interaction and basic skills rather than challenging treks",
     price: 6000,
   },
   {
@@ -161,20 +162,25 @@ const Detail = () => {
   if (!tour) return notFound();
 
   return (
-    <section className="p-10 max-w-5xl mx-auto">
-      <div className="flex flex-col md:flex-row gap-10">
+
+    <section className="p-10">
+      <div className="flex items-start gap-10">
+
         <div className="md:w-1/2">
           <img
             src={tour.url}
             alt={tour.name}
-            width={680}
-            height={384}
-            className="w-full h-96 object-cover rounded-3xl shadow-lg"
+
+            className="w-full h-190 object-cover rounded-3xl shadow-lg"
+
           />
         </div>
         <div className="md:w-1/2 flex flex-col gap-5">
           <h1 className="text-4xl font-bold">{tour.name}</h1>
-          <p className="text-lg text-gray-700">{tour.description}</p>
+          <p className="text-lg w-150 lh-67 text-gray-700">
+            {tour.description}
+          </p>
+
           <p className="text-2xl font-semibold text-purple-700">
             Price: {tour.price} KGS
           </p>
