@@ -182,10 +182,10 @@ setSuccess(true)
           </div>
         </div>
         <div className="flex items-center justify-between mt-16">
-          <video controls className="w-[560px] h-[360px]">
+          {/* <video controls className="w-[560px] h-[360px]">
             <source src="/video/hotel.mp4" type="video/mp4" />
             Your browser does not support the video tag.
-          </video>
+          </video> */}
           <div className="w-[560px] h-[360px] flex flex-col gap-6">
             <h3 className="text-2xl font-medium">Отзывы</h3>
             <div className="bg-gray-300 p-4 rounded-md">
