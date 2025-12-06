@@ -1,5 +1,4 @@
 "use client";
-
 import Button from "@/components/ui/Button/Button";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,6 +10,7 @@ export const categories = [
   "Excursions",
   "Mountaineering",
 ];
+
 
 interface Tour {
   id: number;
@@ -165,7 +165,8 @@ const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredTours =
-    selectedCategory === "categories"
+
+
       ? tourCategory
       : tourCategory.filter((tour) => tour.category === selectedCategory);
 

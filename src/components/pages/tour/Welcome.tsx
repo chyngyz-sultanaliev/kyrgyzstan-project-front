@@ -3,6 +3,7 @@ import aska from "../../../../public/images/touraska.png";
 
 const Welcome = () => {
   return (
+
     <section className="bg-slate-400  h-180">
       <div className="relative flex items-center justify-center  transform transition-transform duration-700 ease-in-out hover:rotate-y-3 hover:scale-105">
         <div

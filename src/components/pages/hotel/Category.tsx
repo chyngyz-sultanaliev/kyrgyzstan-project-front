@@ -1,7 +1,10 @@
-import React from "react";
+"use client"
+import { useRouter } from "next/navigation";
 import { FaAngleRight } from "react-icons/fa";
 
 const Category = () => {
+const router = useRouter()
+
   return (
     <section className="py-4">
       <div className="flex text-2xl justify-around">
@@ -109,7 +112,7 @@ const Category = () => {
                 Показать на карте
               </button>
 
-              <button className="text-[#0a8791] hover:underline cursor-pointer">
+              <button className="text-[#0a8791] hover:underline cursor-pointer" onClick={() => router.push("/hotel/detail")}>
                 Подробнее
               </button>
             </div>
@@ -185,7 +188,9 @@ const Category = () => {
                 Показать на карте
               </button>
 
-              <button className="text-[#0a8791] hover:underline cursor-pointer">
+
+              <button className="text-[#0a8791] hover:underline cursor-pointer" onClick={() => router.push("/hotel/detail")}>
+
                 Подробнее
               </button>
             </div>

@@ -70,7 +70,9 @@ export default function TourismLanding() {
         <div className="absolute inset-0 bg-black/60" />
 
         {/* MAIN CONTENT */}
+
         <div className="relative z-10 px-30 my-50 grid grid-cols-2 gap-30">
+
           {/* LEFT TEXT */}
           <div className="max-w-xl">
             <h2 className="text-5xl font-bold mb-6">
@@ -91,6 +93,7 @@ export default function TourismLanding() {
           {/* CATEGORY CAROUSEL — 3D INFINITE SPINNING WHEEL */}
           <div className="relative w-full h-96 flex items-center justify-center">
             <div
+
               className="relative w-[200px] h-[400px]"
               style={{ perspective: "1000px" }}
             >
