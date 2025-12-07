@@ -1,10 +1,4 @@
+import Car from "@/components/pages/admin/categories/Car";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
-
+const page = () => <Car />;
 export default page;

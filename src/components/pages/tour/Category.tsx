@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import Button from "@/components/ui/Button/Button";
 import Link from "next/link";
@@ -10,7 +11,6 @@ export const categories = [
   "Excursions",
   "Mountaineering",
 ];
-
 
 interface Tour {
   id: number;
@@ -164,11 +164,9 @@ const tourCategory: Tour[] = [
 const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const filteredTours =
-
-
-      ? tourCategory
-      : tourCategory.filter((tour) => tour.category === selectedCategory);
+  const filteredTours = selectedCategory
+    ? tourCategory
+    : tourCategory.filter((tour) => tour.category === selectedCategory);
 
   return (
     <section className="p-11">

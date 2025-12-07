@@ -1,10 +1,5 @@
+import Hotel from "@/components/pages/admin/hotel/Hotel";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const page = () => <Hotel />;
 
 export default page;
