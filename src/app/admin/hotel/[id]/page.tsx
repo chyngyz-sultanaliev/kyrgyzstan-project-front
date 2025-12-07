@@ -1,10 +1,5 @@
+import Edit from "@/components/pages/admin/hotel/Edit";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const page = () => <Edit />;
 
 export default page;

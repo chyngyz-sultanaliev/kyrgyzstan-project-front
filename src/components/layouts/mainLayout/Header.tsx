@@ -27,7 +27,9 @@ const Header = () => {
             Hotel
           </Link>
         </div>
-        <Button variant="primary">Войти</Button>
+        <Link href={"/login"}>
+          <Button variant="primary">Войти</Button>
+        </Link>
       </div>
     </header>
   );

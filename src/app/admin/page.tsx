@@ -1,10 +1,5 @@
+import Admin from "@/components/pages/admin/Admin";
 
-const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const page = () => <Admin />;
 
 export default page;
