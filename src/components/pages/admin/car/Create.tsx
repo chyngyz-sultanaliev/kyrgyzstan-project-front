@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -17,7 +16,7 @@ import {
 interface CarForm {
   title: string;
   description: string;
-  images: File[];
+  image: File[];
   transmission: string;
   seat: number;
   year: number;
@@ -38,11 +37,25 @@ export default function Create() {
     setValue,
     reset,
   } = useForm<CarForm>({
-    defaultValues: { withDriver: false, images: [] },
+    defaultValues: {
+      title: "",
+      description: "",
+      transmission: "",
+      seat: 0,
+      year: 0,
+      fuelType: "",
+      pricePerDay: 0,
+      drive: "",
+      categoryId: "",
+      engine: "",
+      minDriverAge: 0,
+      withDriver: false,
+      image: [],
+    },
     mode: "onSubmit",
   });
 
-  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [uploadedImage, setUploadedImage] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   // Очистка превью при unmount
@@ -51,38 +64,43 @@ export default function Create() {
     if (!e.target.files) return;
     const filesArray = Array.from(e.target.files);
 
-    const allFiles = [...uploadedImages, ...filesArray];
+    const allFiles = [...uploadedImage, ...filesArray];
     const limitedFiles = allFiles.slice(0, 5);
 
     const previews = limitedFiles.map((file) => URL.createObjectURL(file));
 
     imagePreviews.forEach((url) => URL.revokeObjectURL(url));
 
-    setUploadedImages(limitedFiles);
+    setUploadedImage(limitedFiles);
     setImagePreviews(previews);
-    setValue("images", limitedFiles, { shouldValidate: true });
+    setValue("image", limitedFiles, { shouldValidate: true });
 
     e.target.value = "";
   };
 
   const removeImage = (index: number) => {
-    const newImages = uploadedImages.filter((_, i) => i !== index);
+    const newImage = uploadedImage.filter((_, i) => i !== index);
     const newPreviews = imagePreviews.filter((_, i) => i !== index);
 
     URL.revokeObjectURL(imagePreviews[index]);
 
-    setUploadedImages(newImages);
+    setUploadedImage(newImage);
     setImagePreviews(newPreviews);
-    setValue("images", newImages);
+    setValue("image", newImage);
   };
 
   const onSubmit = (data: CarForm) => {
+    if (uploadedImage.length === 0) {
+      alert("Пожалуйста, загрузите хотя бы одно изображение");
+      return;
+    }
     const paylaod = {
       ...data,
       year: Number(data.year),
       seat: Number(data.seat),
       pricePerDay: Number(data.pricePerDay),
       minDriverAge: Number(data.minDriverAge),
+      images: uploadedImage.map((file) => file.name),
     };
     //   const res = await fetch("/api/cars", {
     //     method: "POST",
@@ -92,8 +110,8 @@ export default function Create() {
     //   const result = await res.json();
     //   console.log("Ответ сервера:", result);
     console.log("Отправка на сервер:", paylaod);
-    reset({ withDriver: false, images: [] });
-    setUploadedImages([]);
+    reset({ withDriver: false, image: [] });
+    setUploadedImage([]);
     setImagePreviews([]);
   };
 
@@ -363,7 +381,7 @@ export default function Create() {
             </label>
             <div
               className={`border-2 border-dashed rounded-lg p-6 text-center hover:border-[#0A8791] transition-colors cursor-pointer ${
-                errors.images ? "border-red-500" : "border-gray-300"
+                errors.image ? "border-red-500" : "border-gray-300"
               }`}
               onClick={() => document.getElementById("image-upload")?.click()}
               onDragOver={(e) => e.preventDefault()}
@@ -373,14 +391,14 @@ export default function Create() {
                   file.type.startsWith("image/")
                 );
                 if (files.length === 0) return;
-                const allFiles = [...uploadedImages, ...files].slice(0, 5);
+                const allFiles = [...uploadedImage, ...files].slice(0, 5);
                 const previews = allFiles.map((file) =>
                   URL.createObjectURL(file)
                 );
                 imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-                setUploadedImages(allFiles);
+                setUploadedImage(allFiles);
                 setImagePreviews(previews);
-                setValue("images", allFiles, { shouldValidate: true });
+                setValue("image", allFiles, { shouldValidate: true });
               }}
             >
               <input
@@ -405,9 +423,9 @@ export default function Create() {
               </label>
             </div>
 
-            {errors.images && (
+            {errors.image && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.images.message}
+                {errors.image.message}
               </p>
             )}
 
@@ -435,7 +453,7 @@ export default function Create() {
                         <X className="w-4 h-4" />
                       </button>
                       <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
-                        {uploadedImages[index].name}
+                        {uploadedImage[index].name}
                       </div>
                     </div>
                   ))}

@@ -29,18 +29,28 @@ export default function Footer() {
           <h3 className="font-semibold text-2xl mb-4">Tour</h3>
           <ul className="space-y-2 text-xl">
             <li>Horseback riding </li>
+            <li>Group tours </li>
+            <li>Excursions</li>
+            <li>Mountaineering</li>
           </ul>
         </div>
         <div>
           <h3 className="font-semibold text-2xl mb-4">Car</h3>
           <ul className="space-y-2 text-xl">
             <li>Passenger car</li>
+            <li>Off-Road car</li>
+            <li>Minibus car</li>
+            <li>Bus car</li>
           </ul>
         </div>
         <div>
           <h3 className="font-semibold text-2xl mb-4">Hotel</h3>
           <ul className="space-y-2 text-xl">
-            <li>swimming pool</li>
+            <li>Family and cozy</li>
+            <li>Bestsellers</li>
+            <li>For weddings </li>
+            <li>Swimming pool</li>
+            <li>Sauna</li>
           </ul>
         </div>
       </div>

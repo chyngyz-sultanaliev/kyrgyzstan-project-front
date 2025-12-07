@@ -9,7 +9,13 @@ const Header = () => {
       <div className="container flex justify-between items-center">
         <div className="flex items-center gap-16 text-white">
           <div className="flex items-center gap-2 ">
-            <Image src={Img} alt="Logo" width={100} height={80} />
+            <Image
+              src={Img}
+              alt="Logo"
+              width={100}
+              height={80}
+              className="w-auto h-10"
+            />
             <h1 className="text-2xl font-semibold mb-2">
               Kyrgyzstan Tourism Industry
             </h1>
@@ -27,9 +33,19 @@ const Header = () => {
             Hotel
           </Link>
         </div>
-        <Link href={"/login"}>
-          <Button variant="primary">Войти</Button>
-        </Link>
+        <div className="hidden lg:flex items-center gap-5">
+          <Link href={"/login"}>
+            <Button variant="primary">Войти</Button>
+          </Link>
+          <Link
+            href={"/admin"}
+            className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 cursor-pointer"
+          ></Link>
+          <Link
+            href={"/profile"}
+            className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 cursor-pointer"
+          ></Link>
+        </div>
       </div>
     </header>
   );
