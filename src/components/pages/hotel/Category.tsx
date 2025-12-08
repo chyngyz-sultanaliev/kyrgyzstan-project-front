@@ -7,7 +7,7 @@ const router = useRouter()
 
   return (
     <section className="py-4">
-      <div className="flex text-2xl justify-around md:hidden">
+      <div className="hidden text-2xl justify-around lg:flex">
         <h2
           className="text-black px-10 py-0.5 border-2 border-[#0a8791] rounded-full cursor-pointer 
                hover:bg-[#0a8791] hover:text-white transition-all"
@@ -40,8 +40,9 @@ const router = useRouter()
           <option value="">до 1200$</option>
         </select>
       </div>
-<div className="hidden md:flex">
+<div className="flex lg:hidden items-center justify-center gap-16">
         <select>
+        <option value="categories" disabled selected hidden>Категории</option>
         <option value="">Все</option>
         <option value=""> С бассейном</option>
         <option value="">Семейные</option>
@@ -54,7 +55,7 @@ const router = useRouter()
           <option value="">до 1200$</option>
         </select>
 </div>
-      <div className="flex justify-between py-12 md:flex-col md:gap-10">
+      <div className="flex py-12 flex-wrap gap-10">
         <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-2">
           {/* Left: Image */}
           <div className="relative w-1/2">
