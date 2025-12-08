@@ -100,7 +100,7 @@ export default function Create() {
       seat: Number(data.seat),
       pricePerDay: Number(data.pricePerDay),
       minDriverAge: Number(data.minDriverAge),
-      images: uploadedImage.map((file) => file.name),
+      image: uploadedImage.map((file) => file.name),
     };
     //   const res = await fetch("/api/cars", {
     //     method: "POST",
@@ -110,7 +110,7 @@ export default function Create() {
     //   const result = await res.json();
     //   console.log("Ответ сервера:", result);
     console.log("Отправка на сервер:", paylaod);
-    reset({ withDriver: false, image: [] });
+    reset();
     setUploadedImage([]);
     setImagePreviews([]);
   };

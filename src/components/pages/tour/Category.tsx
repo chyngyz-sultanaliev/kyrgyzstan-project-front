@@ -164,14 +164,11 @@ const tourCategory: Tour[] = [
 const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
- tourAdap
   const filteredTours =
     selectedCategory === "categories"
       ? tourCategory
       : tourCategory.filter((tour) => tour.category === selectedCategory);
-
   
-
   return (
     <section className="p-11">
       <div className="flex items-center justify-around text-2xl mb-10 border-b pb-3 ">
