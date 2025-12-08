@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Hotel = () => {
@@ -84,11 +85,13 @@ const Hotel = () => {
             hover:scale-105 transition
           "
             >
-              <img
-                src={cat.img}
-                alt={cat.title}
-                className="w-full h-full object-cover"
-              />
+              <Link href="/hotel">
+                <img
+                  src={cat.img}
+                  alt={cat.title}
+                  className="w-full h-full object-cover"
+                />
+              </Link>
             </div>
 
             <p className="mt-2 sm:mt-3 text-center text-base sm:text-lg lg:text-xl font-medium">
