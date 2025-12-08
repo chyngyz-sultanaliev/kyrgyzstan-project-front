@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button/Button";
 
 const Header = () => {
   return (
-    <header className="bg-[linear-gradient(90deg,#3C5F63_19.23%,#5B9096_63.46%,#3B8C95_100%)] py-4">
+    <header className="sticky top-0 z-50 bg-[linear-gradient(90deg,#3C5F63_19.23%,#5B9096_63.46%,#3B8C95_100%)] py-4">
       <div className="container flex justify-between items-center">
         <div className="flex items-center gap-16 text-white">
           <div className="flex items-center gap-2 ">

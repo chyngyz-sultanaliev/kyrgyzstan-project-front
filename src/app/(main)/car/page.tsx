@@ -1,10 +1,11 @@
+import Car from "@/components/pages/car/Car";
 
 const page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+  return (
+    <div>
+      <Car />
+    </div>
+  );
 };
 
 export default page;
