@@ -32,7 +32,7 @@ export interface Car {
   withDriver: boolean;
   createdAt: string;
   updatedAt: string;
-  reviews: Review[];
+  reviews?: Review[];
 }
 
 export interface CarsResponse {

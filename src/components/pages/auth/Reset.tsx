@@ -72,12 +72,9 @@ export default function Reset() {
         >
           Отправить
         </Button>
-        <div className="flex justify-between mt-4 text-sm text-[#0A8791]">
+        <div className="flex justify-center mt-4 text-sm text-[#0A8791]">
           <Link href="/login" className="hover:underline">
             Войти
-          </Link>
-          <Link href="/register" className="hover:underline">
-            Зарегистрироваться
           </Link>
         </div>
       </form>

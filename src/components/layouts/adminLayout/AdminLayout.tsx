@@ -7,11 +7,11 @@ interface AdminLayoutProps {
 }
 const AdminLayout: FC<AdminLayoutProps> = async ({ children }) => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <div>
+      <div className="flex">
         <Sidebar />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );

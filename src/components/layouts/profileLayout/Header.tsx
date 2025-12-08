@@ -1,18 +1,27 @@
 import Image from "next/image";
 import { IoNotificationsOutline } from "react-icons/io5";
 import Img from "../../../../public/footer_logo.png";
+import Link from "next/link";
 
 const ProfileHeader = () => {
   return (
     <header className="sticky top-0 w-full bg-white  border-b border-gray-200 z-30">
       <div className="w-full flex items-center justify-between px-8 py-3">
         <div className="flex items-center gap-16 text-[#0A8791]">
-          <div className="flex items-center gap-2 ">
-            <Image src={Img} alt="Logo" width={100} height={80} />
-            <h1 className="text-2xl font-semibold mb-2">
-              Kyrgyzstan Tourism Industry
-            </h1>
-          </div>
+          <Link href={"/"}>
+            <div className="flex items-center gap-2 ">
+              <Image
+                src={Img}
+                alt="Logo"
+                width={100}
+                height={80}
+                className="w-auto h-10"
+              />
+              <h1 className="text-2xl font-semibold mb-2">
+                Kyrgyzstan Tourism Industry
+              </h1>
+            </div>
+          </Link>
         </div>
 
         <div className="hidden lg:flex items-center gap-5">
