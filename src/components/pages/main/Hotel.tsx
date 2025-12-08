@@ -39,39 +39,63 @@ const Hotel = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="mt-20">
+    <div className="mt-16 sm:mt-20 ">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="w-full flex justify-center z-10 my-10"
+        className="w-full flex justify-center z-10 my-8 sm:my-10 px-4"
       >
-        <div className="bg-white/20 backdrop-blur-xl px-10 py-4 rounded-2xl shadow-xl text-center">
-          <h3 className="text-2xl font-semibold mb-2">
-            Car hire in Kyrgyzstan{" "}
+        <div className="bg-white/20 backdrop-blur-xl px-6 sm:px-10 py-4 rounded-2xl shadow-xl text-center">
+          <h3 className="text-xl sm:text-2xl font-semibold">
+            Car hire in Kyrgyzstan
           </h3>
         </div>
       </motion.div>
-      <div className="flex  gap-6 items-center mt-10 pl-20">
+
+      {/* CAROUSEL */}
+      <div
+        className="
+      flex gap-4 sm:gap-6 items-center
+      mt-8 sm:mt-10
+      px-4 sm:px-10 lg:px-20
+      overflow-x-auto
+      scrollbar-hide
+      snap-x snap-mandatory 
+    "
+      >
         {hotels.map((cat, i) => (
           <motion.div
             key={i}
             animate={{
-              scale: i === catIndex ? 1 : 0.8,
+              scale: i === catIndex ? 1 : 0.85,
               opacity: i === catIndex ? 1 : 0.5,
             }}
-            transition={{ duration: 0.8 }}
-            className="cursor-pointer"
+            transition={{ duration: 0.6 }}
+            className="cursor-pointer snap-center shrink-0"
             onClick={() => setCatIndex(i)}
           >
-            <div className="bg-white/10 backdrop-blur-xl border-none overflow-hidden w-50 h-80 rounded-2xl">
+            <div
+              className="
+            bg-white/10 backdrop-blur-xl
+            overflow-hidden
+            w-30 sm:w-48 lg:w-56
+            h-60 sm:h-72 lg:h-80
+            rounded-2xl
+            shadow-xl
+            hover:scale-105 transition
+          "
+            >
               <img
                 src={cat.img}
                 alt={cat.title}
                 className="w-full h-full object-cover"
               />
             </div>
-            <p className="mt-3 text-center text-xl font-medium">{cat.title}</p>
+
+            <p className="mt-2 sm:mt-3 text-center text-base sm:text-lg lg:text-xl font-medium">
+              {cat.title}
+            </p>
           </motion.div>
         ))}
       </div>
