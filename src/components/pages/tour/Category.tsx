@@ -164,8 +164,17 @@ const tourCategory: Tour[] = [
 const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const filteredTours = selectedCategory
+
+
+
+
+
+  const filteredTours = 
+  
+  selectedCategory
+
     ? tourCategory
+    
     : tourCategory.filter((tour) => tour.category === selectedCategory);
 
   return (
