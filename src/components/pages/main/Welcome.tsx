@@ -53,7 +53,7 @@ export default function TourismLanding() {
   return (
     <>
       {" "}
-      <div className="relative w-full h-max overflow-hidden text-white">
+      <div className="relative w-full h-max  text-white">
         {/* BACKGROUND PARALLAX */}
         <motion.div
           key={bgIndex}
@@ -63,38 +63,55 @@ export default function TourismLanding() {
           style={{
             backgroundImage: `url(${backgrounds[bgIndex]})`,
           }}
-          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          className="absolute inset-0 bg-cover bg-center lg:bg-fixed"
         />
 
         {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/60" />
 
         {/* MAIN CONTENT */}
-
-        <div className="relative z-10 px-30 my-50 grid grid-cols-2 gap-30">
-
+        <div
+          className="
+      relative z-10
+      px-4 sm:px-8 lg:px-24
+      py-20 sm:py-28 lg:py-40
+      grid grid-cols-1 lg:grid-cols-2
+      gap-14 lg:gap-28
+      items-center
+    "
+        >
           {/* LEFT TEXT */}
           <div className="max-w-xl">
-            <h2 className="text-5xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
               {categories[catIndex].title}
             </h2>
-            <p className="text-lg leading-relaxed mb-10">
+
+            <p className="text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
               Issyk-Kul Lake is the second largest mountain lake in the world at
-              an altitude of 1,607 meters above sea level, depth of 668 meters
-              asl. Lake is situated at the territory of the Issyk-Kul Biosphere
-              Reserve. Issyk-Kul Lake is 182 kilometers long and about 60
-              kilometers wide, with an area of 6,236 square kilometers.
+              an altitude of 1,607 meters above sea level, depth of 668 meters.
+              Lake is situated at the territory of the Issyk-Kul Biosphere
+              Reserve.
             </p>
-            <button className="flex items-center gap-3 bg-[linear-gradient(rgba(10,156,168,1),rgba(10,135,145,1))] px-6 py-3 rounded-2xl text-xl font-semibold">
+
+            <button
+              className="
+          flex items-center gap-3
+          bg-[linear-gradient(rgba(10,156,168,1),rgba(10,135,145,1))]
+          px-5 sm:px-6 py-2.5 sm:py-3
+          rounded-2xl
+          text-base sm:text-xl
+          font-semibold
+          hover:scale-105 transition
+        "
+            >
               book <ChevronRight />
             </button>
           </div>
 
-          {/* CATEGORY CAROUSEL — 3D INFINITE SPINNING WHEEL */}
-          <div className="relative w-full h-96 flex items-center justify-center">
+          {/* CATEGORY CAROUSEL */}
+          <div className="relative w-full h-80 sm:h-[400px] flex items-center justify-center">
             <div
-
-              className="relative w-[200px] h-[400px]"
+              className="relative w-40 sm:w-[200px] h-80 sm:h-[400px]"
               style={{ perspective: "1000px" }}
             >
               <motion.div
@@ -109,16 +126,29 @@ export default function TourismLanding() {
                       key={i}
                       className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center"
                       style={{
-                        transform: `rotateY(${angle}deg) translateZ(280px)`,
+                        transform: `rotateY(${angle}deg) translateZ(260px)`,
                       }}
                     >
-                      <div className="w-56 h-80 bg-white/10 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl transition-transform duration-500 hover:scale-110">
+                      <div
+                        className="
+                    w-44 sm:w-56
+                    h-64 sm:h-80
+                    bg-white/10 backdrop-blur-xl
+                    rounded-2xl overflow-hidden
+                    shadow-xl
+                    transition-transform duration-500
+                    hover:scale-110
+                  "
+                      >
                         <img
                           src={cat.img}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <p className="mt-3 text-xl font-medium">{cat.title}</p>
+
+                      <p className="mt-2 sm:mt-3 text-base sm:text-xl font-medium text-center">
+                        {cat.title}
+                      </p>
                     </div>
                   );
                 })}
