@@ -26,14 +26,14 @@ const Welcome = () => {
       }}
       className="w-full flex items-center justify-center"
     >
-     <div className="flex items-center justify-around w-full min-h-[80vh] bg-[#00000084]">
+     <div className="flex flex-col lg:flex-row items-center justify-around w-full min-h-[80vh] bg-[#00000084] gap-10 px-4">
        <div className="flex flex-col gap-5">
-        <h1 className="text-white text-5xl">Аренда коттеджей <br /> и домов в Кыргызстане</h1>
+        <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl">Аренда коттеджей <br /> и домов в Кыргызстане</h1>
         <p className="text-white text-xl">Найдите идеальный вариант сами или предоставьте это нам</p>
         <div className="flex gap-4 mt-7">
-          <div className="w-40 h-40 bg-green-950"></div>
-          <div className="w-40 h-40 bg-green-950"></div>
-          <div className="w-40 h-40 bg-green-950"></div>
+          <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 bg-green-950"></div>
+          <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 bg-green-950"></div>
+          <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 bg-green-950"></div>
         </div>
       </div>
         <div className="max-w-sm bg-white rounded-3xl shadow-md p-4 space-y-1">
