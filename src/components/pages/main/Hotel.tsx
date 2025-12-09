@@ -85,7 +85,7 @@ const Hotel = () => {
             hover:scale-105 transition
           "
             >
-              <Link href="/hotel">
+              <Link href="/car">
                 <img
                   src={cat.img}
                   alt={cat.title}

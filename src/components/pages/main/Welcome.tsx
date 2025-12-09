@@ -40,7 +40,7 @@ export default function TourismLanding() {
     },
   ];
 
-  const [bgIndex, setBgIndex] = useState(0);
+  const [bgIndex, setBgIndex] = useState(0); 
   const [catIndex, setCatIndex] = useState(0);
 
   useEffect(() => {
