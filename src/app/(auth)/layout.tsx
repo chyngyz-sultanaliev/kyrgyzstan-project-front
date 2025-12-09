@@ -1,4 +1,4 @@
-import AuthLayout from "@/components/layout/AuthLayout";
+import AuthLayout from "@/components/layouts/AuthLayout";
 import { FC, ReactNode } from "react";
 
 interface AuthLayoutProps {
