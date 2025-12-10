@@ -3,14 +3,12 @@ const Welcome = () => {
     <section className="bg-slate-400 relative min-h-[80vh] py-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-16">
         <div className="relative w-full h-[350px] sm:h-[450px] md:h-[500px] lg:h-[600px] flex items-start lg:items-center">
-          {/* Изображение */}
           <img
             src="https://i.pinimg.com/originals/83/34/ae/8334aee26e027fb348be0a0253452784.jpg"
             alt="img"
             className="w-full h-full object-cover rounded-3xl shadow-[2px_-2px_21px_0_rgba(146,247,0,0.29)]"
           />
 
-          {/* Текст поверх изображения */}
           <div
             className="absolute top-6 sm:top-10 md:top-12 lg:top-16 xl:top-20
                           left-1/2 transform -translate-x-1/2 lg:left-16 lg:translate-x-0

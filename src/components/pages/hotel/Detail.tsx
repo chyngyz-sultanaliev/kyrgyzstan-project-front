@@ -10,7 +10,6 @@ const Detail = () => {
     document.body.style.overflow = form ? "hidden" : "auto";
   }, [form]);
 
-
   function handleSend() {
     setSuccess(true);
   }
@@ -34,39 +33,39 @@ const Detail = () => {
             </a>
           </div>
         </div>
-<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-  {/* Left big image */}
-  <div className="md:col-span-2">
-    <img
-      src="/images/hotel-detail.jpg"
-      alt="hotel"
-      className="w-full h-[300px] md:h-[450px] object-cover rounded-xl"
-    />
-  </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Left big image */}
+          <div className="md:col-span-2">
+            <img
+              src="/images/hotel-detail.jpg"
+              alt="hotel"
+              className="w-full h-[300px] md:h-[450px] object-cover rounded-xl"
+            />
+          </div>
 
-  {/* Right 2x2 images */}
-  <div className="grid grid-cols-2 gap-4 md:col-span-2">
-    <img
-      src="/images/hotel-detail.jpg"
-      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
-    />
+          {/* Right 2x2 images */}
+          <div className="grid grid-cols-2 gap-4 md:col-span-2">
+            <img
+              src="/images/hotel-detail.jpg"
+              className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+            />
 
-    <img
-      src="/images/hotel-detail.jpg"
-      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
-    />
+            <img
+              src="/images/hotel-detail.jpg"
+              className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+            />
 
-    <img
-      src="/images/hotel-detail.jpg"
-      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
-    />
+            <img
+              src="/images/hotel-detail.jpg"
+              className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+            />
 
-    <img
-      src="/images/hotel-detail.jpg"
-      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
-    />
-  </div>
-</div>
+            <img
+              src="/images/hotel-detail.jpg"
+              className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+            />
+          </div>
+        </div>
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-48">
           <div>
@@ -270,7 +269,8 @@ const Detail = () => {
               >
                 <h3 className="text-2xl font-medium">Заявка отправлена!</h3>
                 <p className="text-center">
-                  В течение 15 минут с вами свяжется специалист и проконсультирует.
+                  В течение 15 минут с вами свяжется специалист и
+                  проконсультирует.
                 </p>
 
                 <button

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import { useRouter } from "next/navigation";
 import { FaAngleRight } from "react-icons/fa";
 
 const Category = () => {
-const router = useRouter()
+  const router = useRouter();
 
   return (
     <section className="py-4">
@@ -34,27 +34,33 @@ const router = useRouter()
         </h2>
 
         <select className="outline-0">
-         <option value="price" disabled selected hidden>Цены</option>
+          <option value="price" disabled selected hidden>
+            Цены
+          </option>
           <option value="">до 400$</option>
           <option value="">до 800$</option>
           <option value="">до 1200$</option>
         </select>
       </div>
-<div className="flex lg:hidden items-center justify-center gap-16">
+      <div className="flex lg:hidden items-center justify-center gap-16">
         <select>
-        <option value="categories" disabled selected hidden>Категории</option>
-        <option value="">Все</option>
-        <option value=""> С бассейном</option>
-        <option value="">Семейные</option>
-        <option value="">Хиты продаж</option>
-      </select>
-      <select className="outline-0">
-         <option value="price" disabled selected hidden>Цены</option>
+          <option value="categories" disabled selected hidden>
+            Категории
+          </option>
+          <option value="">Все</option>
+          <option value=""> С бассейном</option>
+          <option value="">Семейные</option>
+          <option value="">Хиты продаж</option>
+        </select>
+        <select className="outline-0">
+          <option value="price" disabled selected hidden>
+            Цены
+          </option>
           <option value="">до 400$</option>
           <option value="">до 800$</option>
           <option value="">до 1200$</option>
         </select>
-</div>
+      </div>
       <div className="flex py-12 flex-wrap gap-10">
         <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-2">
           {/* Left: Image */}
@@ -127,7 +133,10 @@ const router = useRouter()
                 Показать на карте
               </button>
 
-              <button className="text-[#0a8791] hover:underline cursor-pointer" onClick={() => router.push("/hotel/detail")}>
+              <button
+                className="text-[#0a8791] hover:underline cursor-pointer"
+                onClick={() => router.push("/hotel/detail")}
+              >
                 Подробнее
               </button>
             </div>
@@ -203,9 +212,10 @@ const router = useRouter()
                 Показать на карте
               </button>
 
-
-              <button className="text-[#0a8791] hover:underline cursor-pointer" onClick={() => router.push("/hotel/detail")}>
-
+              <button
+                className="text-[#0a8791] hover:underline cursor-pointer"
+                onClick={() => router.push("/hotel/detail")}
+              >
                 Подробнее
               </button>
             </div>
