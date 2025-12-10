@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "www.journalofnomads.com",
       },
+      {
+        protocol: "https",
+        hostname: "images.alltrails.com",
+      },
     ],
   },
 };

@@ -10,6 +10,7 @@ const Detail = () => {
     document.body.style.overflow = form ? "hidden" : "auto";
   }, [form]);
 
+
   function handleSend() {
     setSuccess(true);
   }
@@ -175,7 +176,7 @@ const Detail = () => {
               className="bg-[#0a8791] text-white py-2 px-6 rounded-full cursor-pointer mt-16 hover:bg-[#05585e] transition-all"
               onClick={() => {
                 setForm(true);
-                setSuccess(false)
+                setSuccess(false);
               }}
             >
               Оставить заявку на этот выбор{" "}
@@ -233,7 +234,6 @@ const Detail = () => {
                   placeholder="+996 ___ __ __"
                   className="w-full border border-gray-500 py-2 px-4 rounded-full"
                 />
-
                 <input
                   type="text"
                   placeholder="Количество человек"
