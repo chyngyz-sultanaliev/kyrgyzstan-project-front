@@ -7,7 +7,7 @@ const router = useRouter()
 
   return (
     <section className="py-4">
-      <div className="flex text-2xl justify-around">
+      <div className="hidden text-2xl justify-around lg:flex">
         <h2
           className="text-black px-10 py-0.5 border-2 border-[#0a8791] rounded-full cursor-pointer 
                hover:bg-[#0a8791] hover:text-white transition-all"
@@ -34,13 +34,28 @@ const router = useRouter()
         </h2>
 
         <select className="outline-0">
-          <option>Цены</option>
+         <option value="price" disabled selected hidden>Цены</option>
           <option value="">до 400$</option>
           <option value="">до 800$</option>
           <option value="">до 1200$</option>
         </select>
       </div>
-      <div className="grid grid-cols-2 grid-rows-1 py-12">
+<div className="flex lg:hidden items-center justify-center gap-16">
+        <select>
+        <option value="categories" disabled selected hidden>Категории</option>
+        <option value="">Все</option>
+        <option value=""> С бассейном</option>
+        <option value="">Семейные</option>
+        <option value="">Хиты продаж</option>
+      </select>
+      <select className="outline-0">
+         <option value="price" disabled selected hidden>Цены</option>
+          <option value="">до 400$</option>
+          <option value="">до 800$</option>
+          <option value="">до 1200$</option>
+        </select>
+</div>
+      <div className="flex py-12 flex-wrap gap-10">
         <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-2">
           {/* Left: Image */}
           <div className="relative w-1/2">
@@ -118,7 +133,7 @@ const router = useRouter()
             </div>
           </div>
         </div>
-        <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-4">
+        <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-2">
           {/* Left: Image */}
           <div className="relative w-1/2">
             <img

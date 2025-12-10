@@ -5,15 +5,13 @@ import { CiHeart, CiShare2 } from "react-icons/ci";
 const Detail = () => {
   const [form, setForm] = useState(false);
   const [success, setSuccess] = useState(false);
+
   useEffect(() => {
-    if (form) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = form ? "hidden" : "auto";
   }, [form]);
 
-  function handleform() {
+
+  function handleSend() {
     setSuccess(true);
   }
   return (
@@ -36,37 +34,41 @@ const Detail = () => {
             </a>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-22">
-          {/* Left big image */}
-          <div className="md:col-span-2 w-[700px]">
-            <img
-              src="/images/hotel-detail.jpg"
-              className=" h-[450px] object-cover rounded-l-xl"
-              alt="hotel"
-            />
-          </div>
+<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+  {/* Left big image */}
+  <div className="md:col-span-2">
+    <img
+      src="/images/hotel-detail.jpg"
+      alt="hotel"
+      className="w-full h-[300px] md:h-[450px] object-cover rounded-xl"
+    />
+  </div>
 
-          {/* Right 2x2 grid */}
-          <div className="grid grid-cols-2 gap-4 w-[630px]">
-            <img
-              src="/images/hotel-detail.jpg"
-              className="w-[400px] h-52 object-cover"
-            />
-            <img
-              src="/images/hotel-detail.jpg"
-              className="w-[400px] h-52 object-cover rounded-tr-xl"
-            />
-            <img
-              src="/images/hotel-detail.jpg"
-              className="w-[400px] h-52 object-cover"
-            />
-            <img
-              src="/images/hotel-detail.jpg"
-              className="w-[400px] h-52 object-cover rounded-br-xl"
-            />
-          </div>
-        </div>
-        <div className="flex items-start gap-44">
+  {/* Right 2x2 images */}
+  <div className="grid grid-cols-2 gap-4 md:col-span-2">
+    <img
+      src="/images/hotel-detail.jpg"
+      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+    />
+
+    <img
+      src="/images/hotel-detail.jpg"
+      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+    />
+
+    <img
+      src="/images/hotel-detail.jpg"
+      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+    />
+
+    <img
+      src="/images/hotel-detail.jpg"
+      className="w-full h-[150px] md:h-52 object-cover rounded-xl"
+    />
+  </div>
+</div>
+
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-48">
           <div>
             <div className="flex items-center gap-12 border-b-2 w-fit pb-3 pt-10 border-gray-600">
               <h3 className="text-xl">
@@ -206,73 +208,84 @@ const Detail = () => {
             </div>
           </div>
         </div>
-        <div
-          className={`fixed top-0 left-0 w-screen h-screen bg-[#000000a7] backdrop-blur-sm z-30 
-              flex items-center justify-center ${form ? "flex" : "hidden"}`}
-          onClick={() => setForm(false)}
-        >
+        {form && (
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white w-fit p-14 rounded-xl flex flex-col items-center gap-4"
-            style={{ display: success ? "none" : "flex" }}
+            className="fixed top-0 left-0 w-screen h-screen bg-black/60 backdrop-blur-sm
+            flex items-center justify-center z-30"
+            onClick={() => setForm(false)}
           >
-            <h3 className="text-2xl font-medium">Заявка</h3>
-            <p>Оставьте заявку на подбор и сократите свое время на поиск</p>
+            {/* FORM BLOCK */}
+            {!success && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white w-[400px] p-10 rounded-xl flex flex-col items-center gap-4"
+              >
+                <h3 className="text-2xl font-medium">Заявка</h3>
+                <p>Оставьте заявку — мы свяжемся с вами в ближайшее время</p>
 
-            <input
-              type="text"
-              placeholder="Имя"
-              className="w-full border-[1.5px] border-gray-600 py-2 px-10 rounded-full"
-            />
-            <input
-              type="text"
-              placeholder="+996-___-___"
-              className="w-full border-[1.5px] border-gray-600 py-2 px-10 rounded-full"
-            />
-            <input
-              type="text"
-              placeholder="количество человек"
-              className="w-full border-[1.5px] border-gray-600 py-2 px-10 rounded-full"
-            />
+                <input
+                  type="text"
+                  placeholder="Имя"
+                  className="w-full border border-gray-500 py-2 px-4 rounded-full"
+                />
 
-            <div className="w-full flex items-center justify-between gap-3">
-              <input
-                type="text"
-                placeholder="въезд"
-                className="border-[1.5px] border-gray-600 py-2 px-4 rounded-full w-full"
-              />
-              <input
-                type="text"
-                placeholder="отъезд"
-                className="border-[1.5px] border-gray-600 py-2 px-4 rounded-full w-full"
-              />
-            </div>
+                <input
+                  type="text"
+                  placeholder="+996 ___ __ __"
+                  className="w-full border border-gray-500 py-2 px-4 rounded-full"
+                />
+                <input
+                  type="text"
+                  placeholder="Количество человек"
+                  className="w-full border border-gray-500 py-2 px-4 rounded-full"
+                />
 
-            <button
-              className="bg-[#0a8791] text-white py-2 px-7 rounded-full cursor-pointer"
-              onClick={handleform}
-            >
-              Оставить заявку
-            </button>
+                <div className="w-full flex items-center gap-3">
+                  <input
+                    type="text"
+                    placeholder="Въезд"
+                    className="w-full border border-gray-500 py-2 px-4 rounded-full"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Отъезд"
+                    className="w-full border border-gray-500 py-2 px-4 rounded-full"
+                  />
+                </div>
+
+                <button
+                  onClick={handleSend}
+                  className="bg-[#0a8791] text-white py-2 px-7 rounded-full hover:bg-[#05585e]"
+                >
+                  Оставить заявку
+                </button>
+              </div>
+            )}
+
+            {/* SUCCESS BLOCK */}
+            {success && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white w-[400px] p-10 rounded-lg flex flex-col items-center gap-5"
+              >
+                <h3 className="text-2xl font-medium">Заявка отправлена!</h3>
+                <p className="text-center">
+                  В течение 15 минут с вами свяжется специалист и проконсультирует.
+                </p>
+
+                <button
+                  className="bg-[#0a8791] text-white py-2 px-7 rounded-full hover:bg-[#05585e]"
+                  onClick={() => {
+                    setForm(false);
+                    setSuccess(false);
+                  }}
+                >
+                  Закрыть
+                </button>
+              </div>
+            )}
           </div>
-
-          <div
-            className="w-[400px] flex flex-col items-center gap-5 bg-white p-12 rounded-md"
-            style={{ display: form && !success ? "none" : "flex" }}
-          >
-            <h3 className="text-2xl font-medium">Ваша заявка отправлена!</h3>
-            <p>
-              В течение 15 минут с вами свяжется специалист, поможет подобрать
-              идеальный вариант и проконсультирует по всем вопросам
-            </p>
-            <button
-              className="bg-[#0a8791] text-white py-2 px-7 rounded-full cursor-pointer"
-              onClick={() => setForm(false)}
-            >
-              Закрыть
-            </button>
-          </div>
-        </div>
+        )}
       </section>
     </>
   );

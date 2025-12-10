@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Hotel = () => {
@@ -37,6 +39,7 @@ const Hotel = () => {
       setCatIndex((i) => (i + 1) % hotels.length);
     }, 5000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="mt-16 sm:mt-20 ">
@@ -48,7 +51,7 @@ const Hotel = () => {
       >
         <div className="bg-white/20 backdrop-blur-xl px-6 sm:px-10 py-4 rounded-2xl shadow-xl text-center">
           <h3 className="text-xl sm:text-2xl font-semibold">
-            Car hire in Kyrgyzstan
+            Hotel in Kyrgyzstan
           </h3>
         </div>
       </motion.div>
@@ -56,12 +59,8 @@ const Hotel = () => {
       {/* CAROUSEL */}
       <div
         className="
-      flex gap-4 sm:gap-6 items-center
-      mt-8 sm:mt-10
-      px-4 sm:px-10 lg:px-20
-      overflow-x-auto
-      scrollbar-hide
-      snap-x snap-mandatory 
+        container
+      flex gap-2 sm:gap-3 items-center
     "
       >
         {hotels.map((cat, i) => (
@@ -86,11 +85,13 @@ const Hotel = () => {
             hover:scale-105 transition
           "
             >
-              <img
-                src={cat.img}
-                alt={cat.title}
-                className="w-full h-full object-cover"
-              />
+              <Link href="/car">
+                <img
+                  src={cat.img}
+                  alt={cat.title}
+                  className="w-full h-full object-cover"
+                />
+              </Link>
             </div>
 
             <p className="mt-2 sm:mt-3 text-center text-base sm:text-lg lg:text-xl font-medium">

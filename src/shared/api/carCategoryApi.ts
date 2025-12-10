@@ -12,7 +12,7 @@ export interface CarCategory {
   updatedAt: string;
   cars?: Car[];
 }
-
+  
 export const carCategoryApi = createApi({
   reducerPath: "carCategoryApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
