@@ -197,7 +197,7 @@ const Category = () => {
               className="w-80 h-55 object-cover rounded-2xl ml-3"
             />
             <div className="ml-3 mt-2">
-              <h2 className="font-semibold">{tour.name}</h2>
+              <h2 className="font-szemibold">{tour.name}</h2>
               <h2>Price: {tour.price}</h2>
               <h2>{tour.category}</h2>
             </div>
