@@ -4,7 +4,7 @@ import { CiHeart, CiShare2 } from "react-icons/ci";
 
 const Detail = () => {
   const [form, setForm] = useState(false);
-  const [success, setSuccess] = useState(false)
+  const [success, setSuccess] = useState(false);
   useEffect(() => {
     if (form) {
       document.body.style.overflow = "hidden";
@@ -13,9 +13,9 @@ const Detail = () => {
     }
   }, [form]);
 
-function handleform() {
-setSuccess(true)
-}
+  function handleform() {
+    setSuccess(true);
+  }
   return (
     <>
       <section className="px-20 py-10">
@@ -174,7 +174,7 @@ setSuccess(true)
               className="bg-[#0a8791] text-white py-2 px-6 rounded-full cursor-pointer mt-16 hover:bg-[#05585e] transition-all"
               onClick={() => {
                 setForm(true);
-                setSuccess(false)
+                setSuccess(false);
               }}
             >
               Оставить заявку на этот выбор{" "}
@@ -214,7 +214,7 @@ setSuccess(true)
           <div
             onClick={(e) => e.stopPropagation()}
             className="bg-white w-fit p-14 rounded-xl flex flex-col items-center gap-4"
-            style={{display: success ? "none" : "flex"}}
+            style={{ display: success ? "none" : "flex" }}
           >
             <h3 className="text-2xl font-medium">Заявка</h3>
             <p>Оставьте заявку на подбор и сократите свое время на поиск</p>
@@ -248,17 +248,29 @@ setSuccess(true)
               />
             </div>
 
-            <button className="bg-[#0a8791] text-white py-2 px-7 rounded-full cursor-pointer" onClick={handleform}>
+            <button
+              className="bg-[#0a8791] text-white py-2 px-7 rounded-full cursor-pointer"
+              onClick={handleform}
+            >
               Оставить заявку
             </button>
           </div>
-          <div className="w-[400px] flex flex-col items-center gap-5 bg-white p-12 rounded-md" style={{display: form && !success? "none" : "flex"}}>
+
+          <div
+            className="w-[400px] flex flex-col items-center gap-5 bg-white p-12 rounded-md"
+            style={{ display: form && !success ? "none" : "flex" }}
+          >
             <h3 className="text-2xl font-medium">Ваша заявка отправлена!</h3>
             <p>
               В течение 15 минут с вами свяжется специалист, поможет подобрать
               идеальный вариант и проконсультирует по всем вопросам
             </p>
-            <button className="bg-[#0a8791] text-white py-2 px-7 rounded-full cursor-pointer" onClick={() => setForm(false)}>Закрыть</button>
+            <button
+              className="bg-[#0a8791] text-white py-2 px-7 rounded-full cursor-pointer"
+              onClick={() => setForm(false)}
+            >
+              Закрыть
+            </button>
           </div>
         </div>
       </section>

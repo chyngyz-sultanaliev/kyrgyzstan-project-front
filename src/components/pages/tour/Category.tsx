@@ -168,7 +168,7 @@ const Category = () => {
     selectedCategory === "categories"
       ? tourCategory
       : tourCategory.filter((tour) => tour.category === selectedCategory);
-  
+
   return (
     <section className="p-11">
       <div className="flex items-center justify-around text-2xl mb-10 border-b pb-3 ">
@@ -202,7 +202,7 @@ const Category = () => {
               <h2>{tour.category}</h2>
             </div>
             <Link href={`/tour/${tour.id}`}>
-              <Button className="  ml-46">Plan Your Trip</Button>
+              <Button className="bg-[#5B9096]  ml-46">Plan Your Trip</Button>
             </Link>
           </div>
         ))}
