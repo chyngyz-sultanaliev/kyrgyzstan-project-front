@@ -4,7 +4,7 @@ import { SlArrowUp } from "react-icons/sl";
 import { SlArrowDown } from "react-icons/sl";
 import { PiTelegramLogo } from "react-icons/pi";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Tour {
   id: number;
@@ -310,6 +310,7 @@ const days = [
 const Detail = () => {
   const [modal, setModal] = useState(false);
   const [openDay, setOpenDay] = useState<number | null>(null);
+  const [bid, setBid] = useState(false);
 
   const { id } = useParams();
 
@@ -379,6 +380,62 @@ const Detail = () => {
         </div>
       </div>
 
+      <div className="">
+        {modal && (
+          <div className="fixed inset-0 z-50 flex justify-center bg-[] items-center">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${tour.url})` }}
+            ></div>
+
+            <div className="absolute  inset-0 bg-black/20 backdrop-blur-sm"></div>
+
+            <div className="flex flex-col items-center gap-6 bg-white justify-center relative z-10 w-[620px] h-120 rounded-2xl border border-[#570979]  backdrop-blur-xl">
+              <h1 className="text-2xl text-black">Application for selection</h1>
+              <p>Submit a request for selection and reduce your search time</p>
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
+              />
+              <input
+                type="text"
+                placeholder="+996-___-___"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
+              />
+
+              <input
+                type="text"
+                placeholder="Your criteria for a cottage (the more specific, the better)"
+                className="w-120 border-gray-400 border-[1.5px] py-6 px-10 rounded-xl"
+              />
+
+              <button
+                className="bg-[#5B9096] text-white py-2 px-7 rounded-xl cursor-pointer  font-medium hover:bg-cyan-100 hover:text-gray-600 transition ransform transform:translate(10px,-5px)"
+                onClick={() => setModal(false)}
+              >
+                Submit a request
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="">
+        {bid && (
+          <div className="bg-white w-[400px] p-10 rounded-lg flex flex-col items-center gap-5">
+            <h3 className="text-2xl font-medium">Заявка отправлена!</h3>
+            <p className="text-center">
+              В течение 15 минут с вами свяжется специалист и проконсультирует.
+            </p>
+
+            <button className="bg-[#0a8791] text-white py-2 px-7 rounded-full hover:bg-[#05585e]">
+              Закрыть
+            </button>
+          </div>
+        )}
+      </div>
+
       <div className=" flex gap-12 items-start mt-12 pb-17 ">
         <div className="flex flex-col  gap-5 ml-7">
           <div className=" flex flex-col gap-2">
@@ -409,69 +466,6 @@ const Detail = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="">
-        {modal && (
-          <div className="fixed inset-0 z-50 flex justify-center bg-[] items-center">
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${tour.url})` }}
-            ></div>
-
-            <div className="absolute  inset-0 bg-black/20 backdrop-blur-sm"></div>
-
-            <div className="flex flex-col items-center gap-6 bg-white justify-center relative z-10 w-[650px] h-170 rounded-2xl border border-[#570979]  backdrop-blur-xl">
-              <h1 className="text-2xl text-black">Application for selection</h1>
-              <p>Submit a request for selection and reduce your search time</p>
-              <input
-                type="text"
-                placeholder="Name"
-                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
-              />
-              <input
-                type="text"
-                placeholder="+996-___-___"
-                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
-              />
-              <input
-                type="text"
-                placeholder="Number of people"
-                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
-              />
-
-              <div className="flex items-center justify-between gap-3">
-                <input
-                  type="text"
-                  placeholder="entry"
-                  className="border-[1.5px] border-gray-400 py-2 px-4 rounded-xl w-57"
-                />
-                <input
-                  type="text"
-                  placeholder="departure"
-                  className="border-[1.5px] border-gray-400 py-2 px-4 rounded-xl w-57"
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Your criteria for a cottage (the more specific, the better)"
-                className="w-120 border-gray-400 border-[1.5px] py-6 px-10 rounded-xl"
-              />
-              <input
-                type="text"
-                placeholder="Acceptable budget"
-                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
-              />
-
-              <button
-                className="bg-[#5B9096] text-white py-2 px-7 rounded-xl cursor-pointer  font-medium hover:bg-cyan-100 hover:text-gray-600 transition ransform transform:translate(10px,-5px)"
-                onClick={() => setModal(false)}
-              >
-                Submit a request
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
