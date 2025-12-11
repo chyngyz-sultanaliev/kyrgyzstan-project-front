@@ -40,7 +40,7 @@ export default function TourismLanding() {
     },
   ];
 
-  const [bgIndex, setBgIndex] = useState(0); 
+  const [bgIndex, setBgIndex] = useState(0);
   const [catIndex, setCatIndex] = useState(0);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export default function TourismLanding() {
             >
               <motion.div
                 animate={{ rotateY: 360 }}
-                transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+                transition={{ repeat: Infinity, ease: "linear", duration: 50 }}
                 className="relative w-full h-full transform-3d"
               >
                 {categories.map((cat, i) => {

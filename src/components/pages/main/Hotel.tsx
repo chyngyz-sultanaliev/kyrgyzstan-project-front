@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-import { motion } from "framer-motion";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const Hotel = () => {
@@ -12,11 +11,11 @@ const Hotel = () => {
     },
     {
       title: "Baitur",
-      img: "https://media.istockphoto.com/id/156209467/photo/horse-and-mountains.jpg?s=612x612&w=0&k=20&c=lrKB7724ExU5tiTOZ9RG03n80QJqufk0GA2bhqE4Pl4=",
+      img: "https://cdn.pixabay.com/photo/2020/01/14/17/17/kyrgyzstan-4765706_640.jpg",
     },
     {
       title: "Raduga",
-      img: "https://cabar.asia/wp-content/uploads/2024/09/Zapovednik-Kyrgyz-Ata-Oshskaya-oblast-Kyrgyzstan.-Foto-PROON-Kyrgyzstan.jpeg",
+      img: "https://cdn.britannica.com/45/190645-050-AC4B6D04/Lake-Ysyk-body-water-Kyrgyzstan.jpg",
     },
     {
       title: "Redens",
@@ -24,83 +23,94 @@ const Hotel = () => {
     },
     {
       title: "Kapriz",
-      img: "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a3lyZ3l6c3RhbnxlbnwwfHwwfHx8MA%3D%3D",
+      img: "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5",
     },
     {
       title: "Orion",
-      img: "https://images.locationscout.net/2024/09/ala-kul-lake-viewpoint-kyrgyz-republic-g6rh.jpg?w=1080&q=60",
+      img: "https://sputnik.kg/img/102340/99/1023409982_0:182:4752:3168_1920x0_80_0_0_eda7e4f57f52cf019fa10f5fa0c44057.jpg",
     },
   ];
 
-  const [catIndex, setCatIndex] = useState(0);
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCatIndex((i) => (i + 1) % hotels.length);
-    }, 5000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const timer = setInterval(() => {
+      setActive((i) => (i + 1) % hotels.length);
+    }, 3000);
+    return () => clearInterval(timer);
   }, []);
+
+  const visible = [
+    hotels[(active - 1 + hotels.length) % hotels.length],
+    hotels[active],
+    hotels[(active + 1) % hotels.length],
+  ];
+
   return (
-    <div className="mt-16 sm:mt-20 ">
+    <section className=" mt-10 sm:mt-20 px-4">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="w-full flex justify-center z-10 my-8 sm:my-10 px-4"
+        className="w-full flex justify-center z-10 my-10 px-4"
       >
         <div className="bg-white/20 backdrop-blur-xl px-6 sm:px-10 py-4 rounded-2xl shadow-xl text-center">
-          <h3 className="text-xl sm:text-2xl font-semibold">
+          <h3 className="text-xl sm:text-2xl font-semibold ">
             Hotel in Kyrgyzstan
           </h3>
         </div>
       </motion.div>
 
-      {/* CAROUSEL */}
-      <div
-        className="
-        container
-      flex gap-2 sm:gap-3 items-center
-    "
-      >
-        {hotels.map((cat, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              scale: i === catIndex ? 1 : 0.85,
-              opacity: i === catIndex ? 1 : 0.5,
-            }}
-            transition={{ duration: 0.6 }}
-            className="cursor-pointer snap-center shrink-0"
-            onClick={() => setCatIndex(i)}
-          >
-            <div
-              className="
-            bg-white/10 backdrop-blur-xl
-            overflow-hidden
-            w-30 sm:w-48 lg:w-56
-            h-60 sm:h-72 lg:h-80
-            rounded-2xl
-            shadow-xl
-            hover:scale-105 transition
-          "
-            >
-              <Link href="/car">
-                <img
-                  src={cat.img}
-                  alt={cat.title}
-                  className="w-full h-full object-cover"
-                />
-              </Link>
-            </div>
+      <div className="flex justify-center items-center gap-4 sm:gap-6 mt-10">
+        {visible.map((hotel, i) => {
+          const isActive = i === 1;
 
-            <p className="mt-2 sm:mt-3 text-center text-base sm:text-lg lg:text-xl font-medium">
-              {cat.title}
-            </p>
-          </motion.div>
-        ))}
+          return (
+            <div
+              key={i}
+              onClick={() =>
+                !isActive &&
+                setActive(
+                  (active + (i === 0 ? -1 : 1) + hotels.length) % hotels.length
+                )
+              }
+              className={`
+                cursor-pointer
+                transition-all duration-500 mt-7
+                ${
+                  isActive
+                    ? "scale-100 opacity-100"
+                    : "scale-90 opacity-50 hidden sm:block"
+                }
+              `}
+            >
+              <div
+                className="
+                  bg-white/10 backdrop-blur-xl
+                  overflow-hidden
+                  w-35 sm:w-48 lg:w-56
+                  h-60 sm:h-72 lg:h-80
+                  rounded-2xl
+                  shadow-xl
+                "
+              >
+                <Link href="/hotel">
+                  <img
+                    src={hotel.img}
+                    alt={hotel.title}
+                    className="w-full h-full object-cover"
+                  />
+                </Link>
+              </div>
+
+              <p className="mt-2 sm:mt-3 text-center text-base sm:text-lg font-medium">
+                {hotel.title}
+              </p>
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
 

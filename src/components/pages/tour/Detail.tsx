@@ -4,7 +4,7 @@ import { SlArrowUp } from "react-icons/sl";
 import { SlArrowDown } from "react-icons/sl";
 import { PiTelegramLogo } from "react-icons/pi";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Tour {
   id: number;
@@ -19,7 +19,7 @@ const tourCategory = [
   {
     id: 1,
     category: "Group tours",
-    url: "https://central-asia.guide/wp-content/uploads/2024/11/Kel_Suu_tour-1024x682.jpg",
+    url: "https://silkwaytrips.com/wp-content/uploads/2025/01/Kel-Suu-lake-in-Kyrgyzstan-1.webp",
     name: "Kyrgyzstan Group Highlights",
     description:
       "Kyrgyzstan group highlights focus on immersive nomadic culture, stunning Tian Shan mountain landscapes, and Silk Road history, featuring experiences like staying in yurts, horseback riding, meeting eagle hunters, visiting Issyk-Kul Lake and Tash Rabat caravanserai, trekking to alpine lakes (Ala Kul), exploring ancient sites like Burana Tower, and engaging with local communities for authentic cultural immersion in vibrant markets and traditional homes",
@@ -29,6 +29,7 @@ const tourCategory = [
     car: "10 km by car",
     days: "2 Days",
     cost: "145.00 $",
+    seaLevel: "345 km",
     price: 6000,
   },
   {
@@ -43,6 +44,7 @@ const tourCategory = [
     walk: "4 km walk",
     car: "8 km by car",
     days: "2 Days",
+    seaLevel: "345 km",
     cost: "150.00 $",
     price: 6000,
   },
@@ -58,6 +60,7 @@ const tourCategory = [
     walk: "2 km walk",
     car: "5 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "95.00 $",
     price: 6000,
   },
@@ -72,6 +75,7 @@ const tourCategory = [
     walk: "1 km walk",
     car: "7 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "120.00 $",
     price: 6000,
   },
@@ -89,6 +93,7 @@ const tourCategory = [
     walk: "1 km walk",
     car: "3 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "85.00 $",
     price: 6000,
   },
@@ -104,6 +109,7 @@ const tourCategory = [
     walk: "2 km walk",
     car: "6 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "110.00 $",
     price: 6000,
   },
@@ -119,6 +125,7 @@ const tourCategory = [
     walk: "1 km walk",
     car: "3 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "70.00 $",
     price: 6000,
   },
@@ -134,6 +141,7 @@ const tourCategory = [
     walk: "2 km walk",
     car: "12 km by car",
     days: "3 Days",
+    seaLevel: "345 km",
     cost: "220.00 $",
     price: 6000,
   },
@@ -142,7 +150,7 @@ const tourCategory = [
   {
     id: 9,
     category: "Excursions",
-    url: "https://media.tacdn.com/media/attractions-splice-spp-360x240/10/d7/34/73.jpg",
+    url: "https://dynamic-media.tacdn.com/media/photo-o/2f/45/fa/7e/caption.jpg?w=1400&h=1000&s=1",
     name: "Historical Bishkek Excursion",
     description:
       "A multi-day horseback trek is an immersive journey through stunning landscapes (mountains, valleys, lakes) on horseback, often lasting 2-7+ days, offering a deep dive into local nomadic culture, with nights spent in yurts or rustic camps, featuring authentic cuisine, local guides, and varying difficulty suitable for beginners to advanced riders, blending adventure with cultural connection. ",
@@ -151,6 +159,7 @@ const tourCategory = [
     walk: "5 km walk",
     car: "4 km car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "40.00 $",
     price: 6000,
   },
@@ -166,6 +175,7 @@ const tourCategory = [
     walk: "3 km walk",
     car: "10 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "55.00 $",
     price: 6000,
   },
@@ -181,6 +191,7 @@ const tourCategory = [
     walk: "4 km walk",
     car: "2 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "65.00 $",
     price: 6000,
   },
@@ -195,6 +206,7 @@ const tourCategory = [
     metres: "2200 meters above sea level",
     walk: "2 km walk",
     car: "7 km by car",
+    seaLevel: "345 km",
     days: "1 Day",
     cost: "60.00 $",
     price: 6000,
@@ -212,6 +224,7 @@ const tourCategory = [
     metres: "3800 meters above sea level",
     walk: "8 km walk",
     car: "3 km by car",
+    seaLevel: "345 km",
     days: "2 Days",
     cost: "180.00 $",
     price: 6000,
@@ -227,6 +240,7 @@ const tourCategory = [
     metres: "2500 meters above sea level",
     walk: "10 km walk",
     car: "4 km by car",
+    seaLevel: "345 km",
     days: "2 Days",
     cost: "160.00 $",
     price: 6000,
@@ -243,6 +257,7 @@ const tourCategory = [
     walk: "14 km walk",
     car: "6 km by car",
     days: "4 Days",
+    seaLevel: "345 km",
     cost: "250.00 $",
     price: 6000,
   },
@@ -258,6 +273,7 @@ const tourCategory = [
     walk: "3 km walk",
     car: "5 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "55.00 $",
     price: 6000,
   },
@@ -294,6 +310,7 @@ const days = [
 const Detail = () => {
   const [modal, setModal] = useState(false);
   const [openDay, setOpenDay] = useState<number | null>(null);
+  const [bid, setBid] = useState(false);
 
   const { id } = useParams();
 
@@ -304,51 +321,127 @@ const Detail = () => {
   if (!tour) return notFound();
 
   return (
-    <section className="p-10">
-      <div className="flex   w-[1399px] h-[450px]   gap-8 bg-[#357087] text-amber-50">
-        <div className=" ml-5">
+    <section className="">
+      <div className="flex  gap-15">
+        <div className="">
           <img
             src={tour.url}
             alt={tour.name}
-            className="w-170 h-100 object-cover rounded-sm shadow-lg mt-6"
+            className="w-200 h-164 object-cover rounded-2xl mt-5 ml-6"
+            style={{
+              boxShadow: "0px 1px 4px 4px rgba(146, 247, 0, 0.28)",
+            }}
           />
         </div>
-        <div className="md:w-1/2 flex flex-col gap-5">
-          <h1 className="text-4xl mt-10 ">Location: {tour.location}</h1>
 
-          <div className="flex ">
-            <div className="flex flex-col gap-7 mt-3 ">
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
+        <div
+          className="flex pl-4 flex-col   rounded-2xl w-130 h-103 mt-26 text-gray-500"
+          style={{ boxShadow: "2px -2px 21px 0px rgba(34, 60, 80, 0.29)" }}
+        >
+          <h1 className="text-2xl mt-10 ml-12 ">Location: {tour.location}</h1>
+
+          <div className=" ">
+            <div className="flex flex-col   gap-9 mt-3 ">
+              <h2 className="flex gfont-roboto font-medium ml-12 text-[22px] leading-[100%] tracking-normal">
                 {tour.metres}
               </h2>
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.walk}
-              </h2>
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.car}
-              </h2>
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.days}
-              </h2>
+              <div className="w-80 h-0.5 ml-11 bg-gray-500"></div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col ml-12 gap-3">
+                  <h2 className="font-roboto font-medium text-[22px] leading-[100%] tracking-normal">
+                    {tour.walk}
+                  </h2>
+                  <h2 className="font-roboto font-medium text-[22px] leading-[100%] tracking-normal">
+                    {tour.car}
+                  </h2>
+                </div>
+
+                <div className="w-0.5 h-16 bg-gray-500"></div>
+                <div className="flex flex-col ">
+                  <h2 className="font-roboto font-medium text-[22px] leading-[100%] tracking-normal">
+                    {tour.days}
+                  </h2>
+                  <h2 className="flex mt-4   font-roboto font-medium text-[25px] leading-[100%] tracking-[0] text-[#C29D38]">
+                    {tour.cost}
+                  </h2>
+                </div>
+              </div>
             </div>
-            <h2 className="flex items-end ml-28  font-roboto font-medium text-[30px] leading-[100%] tracking-[0] text-[#C29D38]">
-              {tour.cost}
-            </h2>
           </div>
 
+          <h2 className="text-2xl ml-12 mt-4">Sea Level: {tour.seaLevel}</h2>
           <button
             onClick={() => setModal(true)}
-            className="mt-5 w-[150px] h-[45px] bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition"
+            className="mt-5 w-95 h-15 ml-12 bg-[#5B9096] text-xl text-white rounded-lg font-medium hover:bg-[#5b909693]  transition ransform transform:translate(10px,-5px)"
           >
-            Order
+            Submit a request for this selection
           </button>
         </div>
       </div>
 
-      <div className=" flex items-start mt-6  gap-9">
-        <div className=" flex flex-col gap-2">
-          <h1 className="text-2xl">Description:</h1>
-          <p className="w-140">{tour.description}</p>
+      <div className="">
+        {modal && (
+          <div className="fixed inset-0 z-50 flex justify-center bg-[] items-center">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${tour.url})` }}
+            ></div>
+
+            <div className="absolute  inset-0 bg-black/20 backdrop-blur-sm"></div>
+
+            <div className="flex flex-col items-center gap-6 bg-white justify-center relative z-10 w-[620px] h-120 rounded-2xl border border-[#570979]  backdrop-blur-xl">
+              <h1 className="text-2xl text-black">Application for selection</h1>
+              <p>Submit a request for selection and reduce your search time</p>
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
+              />
+              <input
+                type="text"
+                placeholder="+996-___-___"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
+              />
+
+              <input
+                type="text"
+                placeholder="Your criteria for a cottage (the more specific, the better)"
+                className="w-120 border-gray-400 border-[1.5px] py-6 px-10 rounded-xl"
+              />
+
+              <button
+                className="bg-[#5B9096] text-white py-2 px-7 rounded-xl cursor-pointer  font-medium hover:bg-cyan-100 hover:text-gray-600 transition ransform transform:translate(10px,-5px)"
+                onClick={() => setModal(false)}
+              >
+                Submit a request
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="">
+        {bid && (
+          <div className="bg-white w-[400px] p-10 rounded-lg flex flex-col items-center gap-5">
+            <h3 className="text-2xl font-medium">Заявка отправлена!</h3>
+            <p className="text-center">
+              В течение 15 минут с вами свяжется специалист и проконсультирует.
+            </p>
+
+            <button className="bg-[#0a8791] text-white py-2 px-7 rounded-full hover:bg-[#05585e]">
+              Закрыть
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className=" flex gap-12 items-start mt-12 pb-17 ">
+        <div className="flex flex-col  gap-5 ml-7">
+          <div className=" flex flex-col gap-2">
+            <h1 className="text-2xl">Description:</h1>
+            <p className="w-140 pb-5">{tour.description}</p>
+          </div>
         </div>
 
         <div className="">
@@ -373,78 +466,6 @@ const Detail = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="">
-        {modal && (
-          <div className="fixed inset-0 z-50 flex justify-center items-center">
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${tour.url})` }}
-            ></div>
-
-            <div className="absolute  inset-0 bg-black/20 backdrop-blur-sm"></div>
-
-            <div className="flex flex-col items-center justify-center relative z-10 w-[650px] h-170 bg-[#5d5b5b5e] rounded-2xl border border-[#570979]  backdrop-blur-xl">
-              <h2 className="flex gap-4 text-[#080E7D] text-2xl mb-4">
-                Order Number: <span className="text-[#FFFFFF]">24006</span>
-              </h2>
-
-              <div className="flex flex-col gap-5 text-white">
-                <p
-                  className="flex gap-20 font-roboto font-medium text-2xl leading-[100%] tracking-[0]
- text-[#080E7D]"
-                >
-                  Name Tour:{" "}
-                  <span className=" text-xl text-[#FFFFFF]">{tour.name}</span>
-                </p>
-                <p
-                  className=" flex gap-35 font-roboto font-medium text-2xl leading-[100%] tracking-[0]
- text-[#080E7D]"
-                >
-                  Price:{" "}
-                  <span className="text-xl text-[#FFFFFF]">{tour.cost}</span>
-                </p>
-
-                <div className="flex flex-col gap-3 mt-6">
-                  <span className="">
-                    <h3>Your Name</h3>
-                    <input className="w-110 h-11 rounded bg-white/70" />
-                  </span>
-
-                  <span>
-                    <h3>Your Number</h3>
-                    <input className="w-110 h-11 rounded bg-white/70" />
-                  </span>
-
-                  <span>
-                    <h3>Your Message</h3>
-                    <textarea className="w-110  rounded bg-white/70 h-24" />
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-22">
-                  <h4>Please indicate the number of people.</h4>
-
-                  <h3 className="flex items-center pl-2 w-18 h-8 text-[#000000] text-xl rounded-xl bg-[#D9D9D9]">
-                    2<div className="w-0.5 h-8 bg-[#5d5b5b5e] ml-7"></div>
-                    <span className="text-[#21272A] text-sm ml-1">
-                      <SlArrowUp />
-                      <SlArrowDown />
-                    </span>
-                  </h3>
-                </div>
-
-                <button
-                  onClick={() => setModal(false)}
-                  className=" w-30 py-3 bg-blue-600 rounded-lg text-white mt-5 ml-40 flex justify-center items-center gap-2"
-                >
-                  Send <PiTelegramLogo />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
