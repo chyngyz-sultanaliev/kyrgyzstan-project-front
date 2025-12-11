@@ -168,9 +168,9 @@ const Category = () => {
     selectedCategory === "categories"
       ? tourCategory
       : tourCategory.filter((tour) => tour.category === selectedCategory);
-  
+
   return (
-    <section className="p-11">
+    <section className="container  p-11">
       <div className="flex items-center justify-around text-2xl mb-10 border-b pb-3 ">
         {categories.map((cat) => (
           <button
@@ -197,12 +197,12 @@ const Category = () => {
               className="w-80 h-55 object-cover rounded-2xl ml-3"
             />
             <div className="ml-3 mt-2">
-              <h2 className="font-semibold">{tour.name}</h2>
+              <h2 className="font-szemibold">{tour.name}</h2>
               <h2>Price: {tour.price}</h2>
               <h2>{tour.category}</h2>
             </div>
             <Link href={`/tour/${tour.id}`}>
-              <Button className="  ml-46">Plan Your Trip</Button>
+              <Button className="bg-[#5B9096]  ml-46">Plan Your Trip</Button>
             </Link>
           </div>
         ))}
