@@ -10,22 +10,22 @@ const Welcome = () => {
           />
 
           <div
-            className="absolute top-6 sm:top-10 md:top-12 lg:top-16 xl:top-20
-                          left-1/2 transform -translate-x-1/2 lg:left-16 lg:translate-x-0
-                          flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-6
-                          text-amber-50 text-center lg:text-left px-4 sm:px-6 lg:px-0
-                          rounded-xl py-4 max-w-xl"
+            className="absolute  top-6 sm:top-10 md:top-32 md:ml-[180px] md:mt-[60px] lg:top-16 xl:top-20
+                           transform -translate-x-1/2 lg:left-16 lg:translate-x-0
+                          flex flex-col items-start gap-3 sm:gap-4 md:gap-5 lg:gap-6
+                          text-amber-50  lg:text-left  sm:px-6 lg:px-0
+                          rounded-xl  "
           >
-            <h1 className="font-roboto font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-snug">
+            <h1 className="font-roboto font-semibold  text-2xl sm:text-3xl md:text-3xl lg:text-5xl xl:text-6xl leading-snug">
               Your extreme hike <br />
               to Asian Patagonia
             </h1>
-            <h3 className="font-roboto font-medium text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl leading-snug mt-2">
+            <h3 className="font-roboto font-medium text-sm sm:text-base md:text-sm lg:text-xl xl:text-2xl leading-snug mt-2">
               Discover untouched mountains, <br />
               crystal lakes, and the hospitality of <br />
               Central Asia’s hidden gem.
             </h3>
-            <button className="font-roboto font-medium text-sm sm:text-base md:text-lg lg:text-xl w-36 sm:w-44 md:w-52 lg:w-60 h-10 sm:h-12 md:h-14 rounded-2xl bg-[#D9D9D940] mt-3 sm:mt-4 mx-auto lg:mx-0">
+            <button className="font-roboto font-medium text-sm sm:text-base md:text-[12] md:mr-[111] lg:text-xl w-36 sm:w-44 md:w-37 lg:w-60 h-10 sm:h-12 md:h-12 rounded-2xl bg-[#D9D9D940] mt-3 sm:mt-4 mx-auto lg:mx-0">
               Plan Your Trip
             </button>
           </div>
