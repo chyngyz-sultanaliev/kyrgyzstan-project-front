@@ -168,7 +168,7 @@ const Detail = () => {
             <h2 className="text-2xl font-medium">
               <span className="text-sm font-light">
                 Январские празднкии (сутки)
-              </span>{" "}
+              </span>
               от 30 000 ₽
             </h2>
             <button
