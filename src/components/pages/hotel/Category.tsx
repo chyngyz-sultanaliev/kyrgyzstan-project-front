@@ -225,7 +225,7 @@ const Category = () => {
         </div>  
 
 
-         <div className="md:hidden w-screen mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex flex-col gap-2">
+         <div className="md:hidden w-screen mx-auto md:h-72 bg-white rounded-2xl shadow-md h-auto p-4 flex flex-col gap-2">
           {/* Left: Image */}
           <div className="w-full">
             <img
@@ -243,7 +243,7 @@ const Category = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between px-2">
               {/* Features */}
               <div className="flex flex-col gap-2 mt-3 text-gray-700 text-sm">
                 <div className="flex items-center ">🛏 25 спальных мест</div>
