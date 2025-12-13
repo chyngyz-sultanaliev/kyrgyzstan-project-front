@@ -1,34 +1,35 @@
-import Image from "next/image";
-import aska from "../../../../public/images/touraska.png";
-
 const Welcome = () => {
   return (
+    <section className="bg-slate-400 relative min-h-[80vh] py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-16">
+        <div className="relative w-full h-[350px] sm:h-[450px] md:h-[500px] lg:h-[600px] flex items-start lg:items-center">
+          <img
+            src="https://i.pinimg.com/originals/83/34/ae/8334aee26e027fb348be0a0253452784.jpg"
+            alt="img"
+            className="w-full h-full object-cover rounded-3xl shadow-[2px_-2px_21px_0_rgba(146,247,0,0.29)]"
+          />
 
-    <section className="bg-slate-400  h-180">
-      <div className="relative flex items-center justify-center  transform transition-transform duration-700 ease-in-out hover:rotate-y-3 hover:scale-105">
-        <div
-          className=" absolute mr-155 mt-50 flex flex-col gap-7 text-amber-50  object-cover rounded-xl 
-           transition-transform duration-500 ease-in-out 
-           hover:rotate-y-12 hover:rotate-x-6 z-auto"
-        >
-          <h1 className="font-roboto font-medium text-[60px] leading-none tracking-normal">
-            Your extreme hike <br />
-            to Asian Patagonia
-          </h1>
-          <h3 className="font-['Roboto'] font-medium text-[40px] leading-[100%] tracking-[0%]">
-            Discover untouched mountains, <br />
-            crystal lakes, and the hospitality of <br />
-            Central Asia’s hidden gem.
-          </h3>
-          <button className="font-['Roboto'] font-medium text-[30px] leading-[100%] tracking-[0%] w-60 h-15 rounded-2xl bg-[#D9D9D940] ">
-            Plan Your Trip
-          </button>
+          <div
+            className="absolute  top-6 sm:top-10 md:top-32 md:ml-[180px] md:mt-[60px] lg:top-16 xl:top-20
+                           transform -translate-x-1/2 lg:left-16 lg:translate-x-0
+                          flex flex-col items-start gap-3 sm:gap-4 md:gap-5 lg:gap-6
+                          text-amber-50  lg:text-left  sm:px-6 lg:px-0
+                          rounded-xl  "
+          >
+            <h1 className="font-roboto font-semibold  text-2xl sm:text-3xl md:text-3xl lg:text-5xl xl:text-6xl leading-snug">
+              Your extreme hike <br />
+              to Asian Patagonia
+            </h1>
+            <h3 className="font-roboto font-medium text-sm sm:text-base md:text-sm lg:text-xl xl:text-2xl leading-snug mt-2">
+              Discover untouched mountains, <br />
+              crystal lakes, and the hospitality of <br />
+              Central Asia’s hidden gem.
+            </h3>
+            <button className="font-roboto font-medium text-sm sm:text-base md:text-[12] md:mr-[111] lg:text-xl w-36 sm:w-44 md:w-37 lg:w-60 h-10 sm:h-12 md:h-12 rounded-2xl bg-[#D9D9D940] mt-3 sm:mt-4 mx-auto lg:mx-0">
+              Plan Your Trip
+            </button>
+          </div>
         </div>
-        <Image
-          src={aska}
-          alt="img"
-          className="w-320 h-160  object-cover rounded-3xl  mt-8"
-        />
       </div>
     </section>
   );

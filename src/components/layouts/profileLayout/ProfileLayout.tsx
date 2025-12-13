@@ -1,4 +1,5 @@
-import { FC, ReactNode } from "react";
+"use client";
+import { FC, ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 interface LayoutProps {
@@ -6,11 +7,14 @@ interface LayoutProps {
 }
 
 const ProfileLayout: FC<LayoutProps> = ({ children }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      <Header open={open} setOpen={setOpen} />
+
       <div className="flex">
-        <Sidebar />
+        <Sidebar open={open} setOpen={setOpen} />
         <main className="flex-1">{children}</main>
       </div>
     </div>

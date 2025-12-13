@@ -1,10 +1,8 @@
 "use client";
 import { notFound, useParams } from "next/navigation";
-import { SlArrowUp } from "react-icons/sl";
-import { SlArrowDown } from "react-icons/sl";
-import { PiTelegramLogo } from "react-icons/pi";
-
+import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 import { useState } from "react";
+import ReviewForm from "./Review";
 
 interface Tour {
   id: number;
@@ -13,13 +11,21 @@ interface Tour {
   name: string;
   description: string;
   price: number;
+  location?: string;
+  metres?: string;
+  walk?: string;
+  car?: string;
+  days?: string;
+  seaLevel?: string;
+  cost?: string;
 }
+
 const tourCategory = [
   // Group tours
   {
     id: 1,
     category: "Group tours",
-    url: "https://central-asia.guide/wp-content/uploads/2024/11/Kel_Suu_tour-1024x682.jpg",
+    url: "https://silkwaytrips.com/wp-content/uploads/2025/01/Kel-Suu-lake-in-Kyrgyzstan-1.webp",
     name: "Kyrgyzstan Group Highlights",
     description:
       "Kyrgyzstan group highlights focus on immersive nomadic culture, stunning Tian Shan mountain landscapes, and Silk Road history, featuring experiences like staying in yurts, horseback riding, meeting eagle hunters, visiting Issyk-Kul Lake and Tash Rabat caravanserai, trekking to alpine lakes (Ala Kul), exploring ancient sites like Burana Tower, and engaging with local communities for authentic cultural immersion in vibrant markets and traditional homes",
@@ -29,6 +35,7 @@ const tourCategory = [
     car: "10 km by car",
     days: "2 Days",
     cost: "145.00 $",
+    seaLevel: "345 km",
     price: 6000,
   },
   {
@@ -43,6 +50,7 @@ const tourCategory = [
     walk: "4 km walk",
     car: "8 km by car",
     days: "2 Days",
+    seaLevel: "345 km",
     cost: "150.00 $",
     price: 6000,
   },
@@ -58,6 +66,7 @@ const tourCategory = [
     walk: "2 km walk",
     car: "5 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "95.00 $",
     price: 6000,
   },
@@ -72,6 +81,7 @@ const tourCategory = [
     walk: "1 km walk",
     car: "7 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "120.00 $",
     price: 6000,
   },
@@ -89,6 +99,7 @@ const tourCategory = [
     walk: "1 km walk",
     car: "3 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "85.00 $",
     price: 6000,
   },
@@ -104,6 +115,7 @@ const tourCategory = [
     walk: "2 km walk",
     car: "6 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "110.00 $",
     price: 6000,
   },
@@ -119,6 +131,7 @@ const tourCategory = [
     walk: "1 km walk",
     car: "3 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "70.00 $",
     price: 6000,
   },
@@ -134,6 +147,7 @@ const tourCategory = [
     walk: "2 km walk",
     car: "12 km by car",
     days: "3 Days",
+    seaLevel: "345 km",
     cost: "220.00 $",
     price: 6000,
   },
@@ -142,7 +156,7 @@ const tourCategory = [
   {
     id: 9,
     category: "Excursions",
-    url: "https://media.tacdn.com/media/attractions-splice-spp-360x240/10/d7/34/73.jpg",
+    url: "https://dynamic-media.tacdn.com/media/photo-o/2f/45/fa/7e/caption.jpg?w=1400&h=1000&s=1",
     name: "Historical Bishkek Excursion",
     description:
       "A multi-day horseback trek is an immersive journey through stunning landscapes (mountains, valleys, lakes) on horseback, often lasting 2-7+ days, offering a deep dive into local nomadic culture, with nights spent in yurts or rustic camps, featuring authentic cuisine, local guides, and varying difficulty suitable for beginners to advanced riders, blending adventure with cultural connection. ",
@@ -151,6 +165,7 @@ const tourCategory = [
     walk: "5 km walk",
     car: "4 km car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "40.00 $",
     price: 6000,
   },
@@ -166,6 +181,7 @@ const tourCategory = [
     walk: "3 km walk",
     car: "10 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "55.00 $",
     price: 6000,
   },
@@ -181,6 +197,7 @@ const tourCategory = [
     walk: "4 km walk",
     car: "2 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "65.00 $",
     price: 6000,
   },
@@ -195,6 +212,7 @@ const tourCategory = [
     metres: "2200 meters above sea level",
     walk: "2 km walk",
     car: "7 km by car",
+    seaLevel: "345 km",
     days: "1 Day",
     cost: "60.00 $",
     price: 6000,
@@ -212,6 +230,7 @@ const tourCategory = [
     metres: "3800 meters above sea level",
     walk: "8 km walk",
     car: "3 km by car",
+    seaLevel: "345 km",
     days: "2 Days",
     cost: "180.00 $",
     price: 6000,
@@ -227,6 +246,7 @@ const tourCategory = [
     metres: "2500 meters above sea level",
     walk: "10 km walk",
     car: "4 km by car",
+    seaLevel: "345 km",
     days: "2 Days",
     cost: "160.00 $",
     price: 6000,
@@ -243,6 +263,7 @@ const tourCategory = [
     walk: "14 km walk",
     car: "6 km by car",
     days: "4 Days",
+    seaLevel: "345 km",
     cost: "250.00 $",
     price: 6000,
   },
@@ -258,6 +279,7 @@ const tourCategory = [
     walk: "3 km walk",
     car: "5 km by car",
     days: "1 Day",
+    seaLevel: "345 km",
     cost: "55.00 $",
     price: 6000,
   },
@@ -294,159 +316,163 @@ const days = [
 const Detail = () => {
   const [modal, setModal] = useState(false);
   const [openDay, setOpenDay] = useState<number | null>(null);
+  const [chair, setChair] = useState(false);
 
   const { id } = useParams();
-
   if (!id) return notFound();
 
-  const tour = tourCategory.find((t: Tour) => t.id === Number(id));
-
+  const tour = tourCategory.find((t) => t.id === Number(id));
   if (!tour) return notFound();
 
   return (
-    <section className="p-10">
-      <div className="flex   w-[1399px] h-[450px]   gap-8 bg-[#357087] text-amber-50">
-        <div className=" ml-5">
-          <img
-            src={tour.url}
-            alt={tour.name}
-            className="w-170 h-100 object-cover rounded-sm shadow-lg mt-6"
-          />
-        </div>
-        <div className="md:w-1/2 flex flex-col gap-5">
-          <h1 className="text-4xl mt-10 ">Location: {tour.location}</h1>
-
-          <div className="flex ">
-            <div className="flex flex-col gap-7 mt-3 ">
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.metres}
-              </h2>
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.walk}
-              </h2>
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.car}
-              </h2>
-              <h2 className="font-roboto font-medium text-[32px] leading-[100%] tracking-normal">
-                {tour.days}
-              </h2>
-            </div>
-            <h2 className="flex items-end ml-28  font-roboto font-medium text-[30px] leading-[100%] tracking-[0] text-[#C29D38]">
-              {tour.cost}
-            </h2>
+    <>
+      <section className="container px-6 md:px-12 py-8">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-12">
+          <div className="">
+            <img
+              src={tour.url}
+              alt={tour.name}
+              className=" w-[300px]           
+      h-[460px]
+      md:w-[420px]        
+      md:h-[300px]
+      lg:w-[900px]         
+      lg:h-[370px]
+      object-cover
+      rounded-2xl
+      mt-5 md:mt-0"
+              style={{ boxShadow: "0px 1px 4px 4px rgba(146, 247, 0, 0.28)" }}
+            />
           </div>
 
-          <button
-            onClick={() => setModal(true)}
-            className="mt-5 w-[150px] h-[45px] bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition"
+          <div
+            className="flex flex-col p-4 md:p-6 rounded-2xl w-full md:w-[420px] mr-[130px] h-[290px] md:h-80 mt-6 md:mt-12 text-gray-500 "
+            style={{ boxShadow: "2px -2px 21px 0px rgba(34, 60, 80, 0.29)" }}
           >
-            Order
-          </button>
-        </div>
-      </div>
-
-      <div className=" flex items-start mt-6  gap-9">
-        <div className=" flex flex-col gap-2">
-          <h1 className="text-2xl">Description:</h1>
-          <p className="w-140">{tour.description}</p>
-        </div>
-
-        <div className="">
-          <h1>Route</h1>
-          <div className="flex flex-col gap-4 mt-5">
-            {days.map((day, index) => (
-              <div key={index} className="w-200">
-                <h2
-                  onClick={() => setOpenDay(openDay === index ? null : index)}
-                  className="flex items-center justify-between bg-[#D9D9D9] w-200 h-10 pl-5 pr-5 cursor-pointer"
-                >
-                  {day.title}
-                  {openDay === index ? <SlArrowUp /> : <SlArrowDown />}
-                </h2>
-
-                {openDay === index && (
-                  <p className="bg-[#EFEFEF] p-3 text-[14px] leading-4">
-                    {day.content}
-                  </p>
-                )}
+            <h1 className="text-2xl md:text-xl mb-2">
+              Location: {tour.location}
+            </h1>
+            <h2 className="text-lg md:text-base font-medium">{tour.metres}</h2>
+            <div className="w-full h-px bg-gray-500 my-2"></div>
+            <div className="flex justify-between">
+              <div className="flex flex-col gap-2">
+                <span>{tour.walk}</span>
+                <span>{tour.car}</span>
               </div>
-            ))}
+              <div className="w-px bg-gray-500"></div>
+              <div className="flex flex-col gap-2 ">
+                <span>{tour.days}</span>
+                <span className="text-[#C29D38] font-semibold">
+                  {tour.cost}
+                </span>
+              </div>
+            </div>
+            <h2 className="mt-4 text-lg md:text-base">
+              Sea Level: {tour.seaLevel}
+            </h2>
+
+            <button
+              onClick={() => setModal(true)}
+              className="mt-5 w-full md:w-[270px] h-10 bg-[#5B9096] text-white rounded-lg font-medium hover:bg-[#5b909693] transition"
+            >
+              Submit a request for this selection
+            </button>
           </div>
         </div>
-      </div>
 
-      <div className="">
+        {/* Modal */}
         {modal && (
-          <div className="fixed inset-0 z-50 flex justify-center items-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${tour.url})` }}
+              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              onClick={() => setModal(false)}
             ></div>
 
-            <div className="absolute  inset-0 bg-black/20 backdrop-blur-sm"></div>
-
-            <div className="flex flex-col items-center justify-center relative z-10 w-[650px] h-170 bg-[#5d5b5b5e] rounded-2xl border border-[#570979]  backdrop-blur-xl">
-              <h2 className="flex gap-4 text-[#080E7D] text-2xl mb-4">
-                Order Number: <span className="text-[#FFFFFF]">24006</span>
-              </h2>
-
-              <div className="flex flex-col gap-5 text-white">
-                <p
-                  className="flex gap-20 font-roboto font-medium text-2xl leading-[100%] tracking-[0]
- text-[#080E7D]"
-                >
-                  Name Tour:{" "}
-                  <span className=" text-xl text-[#FFFFFF]">{tour.name}</span>
-                </p>
-                <p
-                  className=" flex gap-35 font-roboto font-medium text-2xl leading-[100%] tracking-[0]
- text-[#080E7D]"
-                >
-                  Price:{" "}
-                  <span className="text-xl text-[#FFFFFF]">{tour.cost}</span>
-                </p>
-
-                <div className="flex flex-col gap-3 mt-6">
-                  <span className="">
-                    <h3>Your Name</h3>
-                    <input className="w-110 h-11 rounded bg-white/70" />
-                  </span>
-
-                  <span>
-                    <h3>Your Number</h3>
-                    <input className="w-110 h-11 rounded bg-white/70" />
-                  </span>
-
-                  <span>
-                    <h3>Your Message</h3>
-                    <textarea className="w-110  rounded bg-white/70 h-24" />
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-22">
-                  <h4>Please indicate the number of people.</h4>
-
-                  <h3 className="flex items-center pl-2 w-18 h-8 text-[#000000] text-xl rounded-xl bg-[#D9D9D9]">
-                    2<div className="w-0.5 h-8 bg-[#5d5b5b5e] ml-7"></div>
-                    <span className="text-[#21272A] text-sm ml-1">
-                      <SlArrowUp />
-                      <SlArrowDown />
-                    </span>
-                  </h3>
-                </div>
-
-                <button
-                  onClick={() => setModal(false)}
-                  className=" w-30 py-3 bg-blue-600 rounded-lg text-white mt-5 ml-40 flex justify-center items-center gap-2"
-                >
-                  Send <PiTelegramLogo />
-                </button>
-              </div>
+            <div className="relative z-10 bg-white w-[90%] md:w-[620px] p-6 rounded-2xl flex items-center justify-center flex-col gap-4">
+              <h1 className="text-2xl font-semibold">
+                Application for selection
+              </h1>
+              <p>Submit a request for selection and reduce your search time</p>
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-4 rounded-xl"
+              />
+              <input
+                type="text"
+                placeholder="+996-___-___"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-4 rounded-xl"
+              />
+              <input
+                type="text"
+                placeholder="Your criteria for a cottage"
+                className="w-120 border-[1.5px] border-gray-400 py-4 px-4 rounded-xl"
+              />
+              <button
+                onClick={() => {
+                  setModal(false), setChair(true);
+                }}
+                className="bg-[#5B9096] w-50 h-12 text-white py-2 px-4 rounded-xl font-medium hover:bg-cyan-100 hover:text-gray-600 transition"
+              >
+                Submit a request
+              </button>
             </div>
           </div>
         )}
-      </div>
-    </section>
+        {chair && (
+          <div className="fixed  inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              onClick={() => setChair(false)}
+            ></div>
+            <div className="relative z-10 bg-white w-110 h-70 p-6 rounded-2xl flex flex-col  items-center justify-center gap-7">
+              <h1 className="text-3xl">Application sent!</h1>
+              <p className="text-xl text-center">
+                A specialist will contact you within 15 minutes and provide
+                advice.
+              </p>
+
+              <button
+                onClick={() => setChair(false)}
+                className="w-40 h-13 rounded-2xl bg-[#0A8791] text-amber-50 text-2xl"
+              >
+                close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Description */}
+        <div className="mt-12 flex flex-col md:flex-row gap-8">
+          <div className="flex-1">
+            <h1 className="text-2xl mb-2">Description:</h1>
+            <p>{tour.description}</p>
+          </div>
+
+          {/* Route */}
+          <div className="flex-1">
+            <h1 className="text-2xl mb-2">Route</h1>
+            <div className="flex flex-col gap-2">
+              {days.map((day, index) => (
+                <div key={index} className="">
+                  <h2
+                    onClick={() => setOpenDay(openDay === index ? null : index)}
+                    className="flex justify-between items-center bg-gray-300 p-2 cursor-pointer"
+                  >
+                    {day.title}
+                    {openDay === index ? <SlArrowUp /> : <SlArrowDown />}
+                  </h2>
+                  {openDay === index && (
+                    <p className="bg-gray-100 p-2 text-sm">{day.content}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      <ReviewForm />
+    </>
   );
 };
 
