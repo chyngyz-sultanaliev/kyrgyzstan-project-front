@@ -1,10 +1,8 @@
 "use client";
 import { notFound, useParams } from "next/navigation";
-import { SlArrowUp } from "react-icons/sl";
-import { SlArrowDown } from "react-icons/sl";
-import { PiTelegramLogo } from "react-icons/pi";
-
-import { useEffect, useState } from "react";
+import { SlArrowUp, SlArrowDown } from "react-icons/sl";
+import { useState } from "react";
+import ReviewForm from "./Review";
 
 interface Tour {
   id: number;
@@ -13,7 +11,15 @@ interface Tour {
   name: string;
   description: string;
   price: number;
+  location?: string;
+  metres?: string;
+  walk?: string;
+  car?: string;
+  days?: string;
+  seaLevel?: string;
+  cost?: string;
 }
+
 const tourCategory = [
   // Group tours
   {
@@ -310,164 +316,163 @@ const days = [
 const Detail = () => {
   const [modal, setModal] = useState(false);
   const [openDay, setOpenDay] = useState<number | null>(null);
-  const [bid, setBid] = useState(false);
+  const [chair, setChair] = useState(false);
 
   const { id } = useParams();
-
   if (!id) return notFound();
 
-  const tour = tourCategory.find((t: Tour) => t.id === Number(id));
-
+  const tour = tourCategory.find((t) => t.id === Number(id));
   if (!tour) return notFound();
 
   return (
-    <section className="">
-      <div className="flex  gap-15">
-        <div className="">
-          <img
-            src={tour.url}
-            alt={tour.name}
-            className="w-200 h-164 object-cover rounded-2xl mt-5 ml-6"
-            style={{
-              boxShadow: "0px 1px 4px 4px rgba(146, 247, 0, 0.28)",
-            }}
-          />
-        </div>
-
-        <div
-          className="flex pl-4 flex-col   rounded-2xl w-130 h-103 mt-26 text-gray-500"
-          style={{ boxShadow: "2px -2px 21px 0px rgba(34, 60, 80, 0.29)" }}
-        >
-          <h1 className="text-2xl mt-10 ml-12 ">Location: {tour.location}</h1>
-
-          <div className=" ">
-            <div className="flex flex-col   gap-9 mt-3 ">
-              <h2 className="flex gfont-roboto font-medium ml-12 text-[22px] leading-[100%] tracking-normal">
-                {tour.metres}
-              </h2>
-              <div className="w-80 h-0.5 ml-11 bg-gray-500"></div>
-
-              <div className="flex items-center gap-4">
-                <div className="flex flex-col ml-12 gap-3">
-                  <h2 className="font-roboto font-medium text-[22px] leading-[100%] tracking-normal">
-                    {tour.walk}
-                  </h2>
-                  <h2 className="font-roboto font-medium text-[22px] leading-[100%] tracking-normal">
-                    {tour.car}
-                  </h2>
-                </div>
-
-                <div className="w-0.5 h-16 bg-gray-500"></div>
-                <div className="flex flex-col ">
-                  <h2 className="font-roboto font-medium text-[22px] leading-[100%] tracking-normal">
-                    {tour.days}
-                  </h2>
-                  <h2 className="flex mt-4   font-roboto font-medium text-[25px] leading-[100%] tracking-[0] text-[#C29D38]">
-                    {tour.cost}
-                  </h2>
-                </div>
-              </div>
-            </div>
+    <>
+      <section className="container px-6 md:px-12 py-8">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-12">
+          <div className="">
+            <img
+              src={tour.url}
+              alt={tour.name}
+              className=" w-[300px]           
+      h-[460px]
+      md:w-[420px]        
+      md:h-[300px]
+      lg:w-[900px]         
+      lg:h-[370px]
+      object-cover
+      rounded-2xl
+      mt-5 md:mt-0"
+              style={{ boxShadow: "0px 1px 4px 4px rgba(146, 247, 0, 0.28)" }}
+            />
           </div>
 
-          <h2 className="text-2xl ml-12 mt-4">Sea Level: {tour.seaLevel}</h2>
-          <button
-            onClick={() => setModal(true)}
-            className="mt-5 w-95 h-15 ml-12 bg-[#5B9096] text-xl text-white rounded-lg font-medium hover:bg-[#5b909693]  transition ransform transform:translate(10px,-5px)"
+          <div
+            className="flex flex-col p-4 md:p-6 rounded-2xl w-full md:w-[420px] mr-[130px] h-[290px] md:h-80 mt-6 md:mt-12 text-gray-500 "
+            style={{ boxShadow: "2px -2px 21px 0px rgba(34, 60, 80, 0.29)" }}
           >
-            Submit a request for this selection
-          </button>
-        </div>
-      </div>
+            <h1 className="text-2xl md:text-xl mb-2">
+              Location: {tour.location}
+            </h1>
+            <h2 className="text-lg md:text-base font-medium">{tour.metres}</h2>
+            <div className="w-full h-px bg-gray-500 my-2"></div>
+            <div className="flex justify-between">
+              <div className="flex flex-col gap-2">
+                <span>{tour.walk}</span>
+                <span>{tour.car}</span>
+              </div>
+              <div className="w-px bg-gray-500"></div>
+              <div className="flex flex-col gap-2 ">
+                <span>{tour.days}</span>
+                <span className="text-[#C29D38] font-semibold">
+                  {tour.cost}
+                </span>
+              </div>
+            </div>
+            <h2 className="mt-4 text-lg md:text-base">
+              Sea Level: {tour.seaLevel}
+            </h2>
 
-      <div className="">
+            <button
+              onClick={() => setModal(true)}
+              className="mt-5 w-full md:w-[270px] h-10 bg-[#5B9096] text-white rounded-lg font-medium hover:bg-[#5b909693] transition"
+            >
+              Submit a request for this selection
+            </button>
+          </div>
+        </div>
+
+        {/* Modal */}
         {modal && (
-          <div className="fixed inset-0 z-50 flex justify-center bg-[] items-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${tour.url})` }}
+              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              onClick={() => setModal(false)}
             ></div>
 
-            <div className="absolute  inset-0 bg-black/20 backdrop-blur-sm"></div>
-
-            <div className="flex flex-col items-center gap-6 bg-white justify-center relative z-10 w-[620px] h-120 rounded-2xl border border-[#570979]  backdrop-blur-xl">
-              <h1 className="text-2xl text-black">Application for selection</h1>
+            <div className="relative z-10 bg-white w-[90%] md:w-[620px] p-6 rounded-2xl flex items-center justify-center flex-col gap-4">
+              <h1 className="text-2xl font-semibold">
+                Application for selection
+              </h1>
               <p>Submit a request for selection and reduce your search time</p>
               <input
                 type="text"
                 placeholder="Name"
-                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-4 rounded-xl"
               />
               <input
                 type="text"
                 placeholder="+996-___-___"
-                className="w-120 border-[1.5px] border-gray-400 py-2 px-10 rounded-xl"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-4 rounded-xl"
               />
-
               <input
                 type="text"
-                placeholder="Your criteria for a cottage (the more specific, the better)"
-                className="w-120 border-gray-400 border-[1.5px] py-6 px-10 rounded-xl"
+                placeholder="Your criteria for a cottage"
+                className="w-120 border-[1.5px] border-gray-400 py-4 px-4 rounded-xl"
               />
-
               <button
-                className="bg-[#5B9096] text-white py-2 px-7 rounded-xl cursor-pointer  font-medium hover:bg-cyan-100 hover:text-gray-600 transition ransform transform:translate(10px,-5px)"
-                onClick={() => setModal(false)}
+                onClick={() => {
+                  setModal(false), setChair(true);
+                }}
+                className="bg-[#5B9096] w-50 h-12 text-white py-2 px-4 rounded-xl font-medium hover:bg-cyan-100 hover:text-gray-600 transition"
               >
                 Submit a request
               </button>
             </div>
           </div>
         )}
-      </div>
+        {chair && (
+          <div className="fixed  inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              onClick={() => setChair(false)}
+            ></div>
+            <div className="relative z-10 bg-white w-110 h-70 p-6 rounded-2xl flex flex-col  items-center justify-center gap-7">
+              <h1 className="text-3xl">Application sent!</h1>
+              <p className="text-xl text-center">
+                A specialist will contact you within 15 minutes and provide
+                advice.
+              </p>
 
-      <div className="">
-        {bid && (
-          <div className="bg-white w-[400px] p-10 rounded-lg flex flex-col items-center gap-5">
-            <h3 className="text-2xl font-medium">Заявка отправлена!</h3>
-            <p className="text-center">
-              В течение 15 минут с вами свяжется специалист и проконсультирует.
-            </p>
-
-            <button className="bg-[#0a8791] text-white py-2 px-7 rounded-full hover:bg-[#05585e]">
-              Закрыть
-            </button>
+              <button
+                onClick={() => setChair(false)}
+                className="w-40 h-13 rounded-2xl bg-[#0A8791] text-amber-50 text-2xl"
+              >
+                close
+              </button>
+            </div>
           </div>
         )}
-      </div>
 
-      <div className=" flex gap-12 items-start mt-12 pb-17 ">
-        <div className="flex flex-col  gap-5 ml-7">
-          <div className=" flex flex-col gap-2">
-            <h1 className="text-2xl">Description:</h1>
-            <p className="w-140 pb-5">{tour.description}</p>
+        {/* Description */}
+        <div className="mt-12 flex flex-col md:flex-row gap-8">
+          <div className="flex-1">
+            <h1 className="text-2xl mb-2">Description:</h1>
+            <p>{tour.description}</p>
+          </div>
+
+          {/* Route */}
+          <div className="flex-1">
+            <h1 className="text-2xl mb-2">Route</h1>
+            <div className="flex flex-col gap-2">
+              {days.map((day, index) => (
+                <div key={index} className="">
+                  <h2
+                    onClick={() => setOpenDay(openDay === index ? null : index)}
+                    className="flex justify-between items-center bg-gray-300 p-2 cursor-pointer"
+                  >
+                    {day.title}
+                    {openDay === index ? <SlArrowUp /> : <SlArrowDown />}
+                  </h2>
+                  {openDay === index && (
+                    <p className="bg-gray-100 p-2 text-sm">{day.content}</p>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-
-        <div className="">
-          <h1>Route</h1>
-          <div className="flex flex-col gap-4 mt-5">
-            {days.map((day, index) => (
-              <div key={index} className="w-200">
-                <h2
-                  onClick={() => setOpenDay(openDay === index ? null : index)}
-                  className="flex items-center justify-between bg-[#D9D9D9] w-200 h-10 pl-5 pr-5 cursor-pointer"
-                >
-                  {day.title}
-                  {openDay === index ? <SlArrowUp /> : <SlArrowDown />}
-                </h2>
-
-                {openDay === index && (
-                  <p className="bg-[#EFEFEF] p-3 text-[14px] leading-4">
-                    {day.content}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+      <ReviewForm />
+    </>
   );
 };
 
