@@ -28,9 +28,9 @@ const Popular = () => {
             key={idx}
             className="w-auto max-w-[320px] rounded-2xl overflow-hidden shadow-md bg-white"
           >
-            {/* Image section */}
+
             <div className="relative h-[200px] sm:h-[220px] bg-gray-200">
-              {/* Badge */}
+
               <div className="absolute top-3 right-3 bg-white/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 text-sm">
                 <svg width="16" height="16" fill="none" stroke="currentColor">
                   <circle cx="8" cy="5" r="3" strokeWidth="1.5"></circle>
@@ -39,7 +39,6 @@ const Popular = () => {
                 <span>до 30</span>
               </div>
 
-              {/* Heart */}
               <button className="absolute bottom-4 right-4 bg-white shadow rounded-full p-2">
                 <svg width="20" height="20" fill="none" stroke="currentColor">
                   <path
@@ -51,7 +50,6 @@ const Popular = () => {
               </button>
             </div>
 
-            {/* Content */}
             <div className="p-5">
               <h3 className="text-lg font-semibold mb-3">Балыкчы</h3>
 
@@ -78,7 +76,6 @@ const Popular = () => {
         ))}
       </div>
 
-      {/* Button */}
       <button
         onClick={() => router.push("/hotel/category")}
         className="mt-10 mx-auto w-[200px] h-10 bg-[#0a8791] text-white text-sm flex items-center justify-center rounded-lg cursor-pointer active:scale-95 transition-all"

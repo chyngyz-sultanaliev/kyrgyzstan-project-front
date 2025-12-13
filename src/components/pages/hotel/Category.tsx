@@ -223,10 +223,7 @@ const Category = () => {
             </div>
           </div>
         </div>  
-
-
-         <div className="md:hidden w-screen mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex flex-col gap-2">
-          {/* Left: Image */}
+         <div className="md:hidden w-screen mx-auto md:h-72 bg-white rounded-2xl shadow-md h-auto p-4 flex flex-col gap-2">
           <div className="w-full">
             <img
               src="https://thumbs.dreamstime.com/b/hotel-room-beautiful-orange-sofa-included-43642330.jpg"
@@ -243,8 +240,7 @@ const Category = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              {/* Features */}
+            <div className="flex items-center justify-between px-2">
               <div className="flex flex-col gap-2 mt-3 text-gray-700 text-sm">
                 <div className="flex items-center ">🛏 25 спальных мест</div>
                 <div className="flex items-center">🏓 Настольный теннис</div>
@@ -252,7 +248,6 @@ const Category = () => {
                 <div className="flex items-center">🔥 Сауна</div>
               </div>
 
-              {/* Prices */}
               <div className="flex justify-between mt-4 text-sm gap-2">
                 <div className="text-gray-500 flex flex-col gap-2">
                   <h3>Будни</h3>

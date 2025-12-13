@@ -67,7 +67,7 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-48">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-48">
           <div>
             <div className="md:gap-12 flex items-center justify-center gap-8 border-b-2 w-screen md:w-fit pb-3 pt-10 border-gray-600">
               <h3 className="md:text-xl text-sm">
@@ -168,7 +168,7 @@ const Detail = () => {
             <h2 className="text-2xl font-medium">
               <span className="text-sm font-light">
                 Январские празднкии (сутки)
-              </span>{" "}
+              </span>
               от 30 000 ₽
             </h2>
             <button
@@ -178,33 +178,8 @@ const Detail = () => {
                 setSuccess(false);
               }}
             >
-              Оставить заявку на этот выбор{" "}
+              Оставить заявку на этот выбор
             </button>
-          </div>
-        </div>
-        <div className="flex items-center justify-between mt-16">
-          {/* <video controls className="w-[560px] h-[360px]">
-            <source src="/video/hotel.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> */}
-          <div className="w-[560px] h-[360px] flex flex-col gap-6">
-            <h3 className="text-2xl font-medium">Отзывы</h3>
-            <div className="bg-gray-300 p-4 rounded-md">
-              <img src="/images/userr.avif" alt="" className="w-14 h-14" />
-              <p className="">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Obcaecati deleniti nostrum facere laborum expedita labore est
-                eum adipisci eligendi ratione!
-              </p>
-            </div>
-            <div className="bg-gray-300 p-4 rounded-md">
-              <img src="/images/userr.avif" alt="" className="w-14 h-14" />
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Obcaecati deleniti nostrum facere laborum expedita labore est
-                eum adipisci eligendi ratione!
-              </p>
-            </div>
           </div>
         </div>
         {form && (
