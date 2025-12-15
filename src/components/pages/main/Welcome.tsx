@@ -21,12 +21,12 @@ export default function Welcome() {
     },
     {
       title: "horseback-riding",
-      img: "https://media.istockphoto.com/id/156209467/photo/horse-and-mountains.jpg",
+      img: "https://media.istockphoto.com/id/156209467/photo/horse-and-mountains.jpg?s=612x612&w=0&k=20&c=lrKB7724ExU5tiTOZ9RG03n80QJqufk0GA2bhqE4Pl4=",
       full: "Horseback riding tours in Kyrgyzstan offer a unique way to explore remote alpine valleys, high mountain pastures and ancient nomadic routes. Travelers experience traditional horse culture, stay in yurts and traverse breathtaking landscapes that are inaccessible by vehicle, making these tours an authentic and immersive adventure.",
     },
     {
       title: "excursions",
-      img: "https://cabar.asia/wp-content/uploads/2024/09/Zapovednik-Kyrgyz-Ata-Oshskaya-oblast-Kyrgyzstan.jpeg",
+      img: "https://cabar.asia/wp-content/uploads/2024/09/Zapovednik-Kyrgyz-Ata-Oshskaya-oblast-Kyrgyzstan.-Foto-PROON-Kyrgyzstan.jpeg",
       full: "Excursion tours across Kyrgyzstan combine natural beauty, cultural heritage and historical exploration. These journeys include visits to national parks, mountain gorges, ancient caravan routes and UNESCO-recognized sites, offering deep insight into the country’s history, traditions and diverse landscapes.",
     },
     {
@@ -41,13 +41,8 @@ export default function Welcome() {
     },
     {
       title: "mountaineering",
-      img: "https://images.locationscout.net/2024/09/ala-kul-lake-viewpoint-kyrgyz-republic-g6rh.jpg",
+      img: "https://images.locationscout.net/2024/09/ala-kul-lake-viewpoint-kyrgyz-republic-g6rh.jpg?w=1080&q=60",
       full: "Mountaineering expeditions in Kyrgyzstan are designed for experienced climbers seeking high-altitude challenges. These tours include ascents of iconic peaks, glacier travel and technical routes, supported by professional guides and safety-focused logistics.",
-    },
-    {
-      title: "photography-tours",
-      img: "https://cdn.explorekazakhstan.net/images/tours/47/1_1000x560.webp",
-      full: "Photography tours focus on capturing Kyrgyzstan’s dramatic landscapes, nomadic life and natural light. Led by experienced guides, these journeys are timed for optimal conditions and include remote locations, cultural encounters and scenic viewpoints ideal for both amateur and professional photographers.",
     },
   ];
 

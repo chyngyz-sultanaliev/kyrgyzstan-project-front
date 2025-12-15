@@ -6,7 +6,7 @@ import { HiArrowLongRight } from "react-icons/hi2";
 
 const HireCar = () => {
   const router = useRouter();
-  const handleClick = (type: String) => {
+  const handleClick = (type: string) => {
     router.push(`/car/category/?type=${type}`);
   };
   return (
