@@ -170,8 +170,8 @@ const Category = () => {
       : tourCategory.filter((tour) => tour.category === selectedCategory);
 
   return (
-    <section className="container  p-11">
-      <div className="flex items-center justify-around text-2xl mb-10 border-b pb-3 ">
+    <section className="container mx-auto sm:px-5  p-11">
+      <div className="flex items-center justify-around text-2xl mb-10 hidden sm:flex md:text-xl border-b pb-3  ">
         {categories.map((cat) => (
           <button
             key={cat}
@@ -184,17 +184,30 @@ const Category = () => {
           </button>
         ))}
       </div>
+      <div className="block sm:hidden mb-6">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="w-full border rounded-lg p-2 text-sm"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex flex-wrap gap-8 justify-center mt-6">
         {filteredTours.map((tour) => (
           <div
             key={tour.id}
-            className="flex flex-col rounded-3xl justify-center w-94 h-90 bg-white shadow-md p-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-[#f5f5f5]"
+            className="flex flex-col rounded-3xl justify-center w-[394px] h-[435px] md:w-[290px] md:h-[300px] bg-white shadow-md p-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-[#f5f5f5]"
           >
             <img
               src={tour.url}
               alt={tour.name}
-              className="w-80 h-55 object-cover rounded-2xl ml-3"
+              className="w-[340px] h-[265px] object-cover rounded-2xl ml-3 md:ml-[1] md:pt-[4] md:w-[275px] md:h-[165px]"
             />
             <div className="ml-3 mt-2">
               <h2 className="font-szemibold">{tour.name}</h2>
@@ -202,7 +215,9 @@ const Category = () => {
               <h2>{tour.category}</h2>
             </div>
             <Link href={`/tour/${tour.id}`}>
-              <Button className="bg-[#5B9096]  ml-46">Plan Your Trip</Button>
+              <button className="bg-[#5B9096] w-[120px] h-[43px] md:w-[81px] md:h-[33px] md:text-[10px] md:ml-[181px] text-amber-50 text-sm rounded-xl  ml-60">
+                Plan Your Trip
+              </button>
             </Link>
           </div>
         ))}

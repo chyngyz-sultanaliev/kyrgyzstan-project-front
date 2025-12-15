@@ -15,7 +15,7 @@ const Detail = () => {
   }
   return (
     <>
-      <section className="px-20 py-10">
+      <section className="px-4 py-10 md:px-20">
         <div className="flex items-center justify-between pb-7">
           {" "}
           <h1 className="text-3xl font-medium">
@@ -67,34 +67,34 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-48">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-48">
           <div>
-            <div className="flex items-center gap-12 border-b-2 w-fit pb-3 pt-10 border-gray-600">
-              <h3 className="text-xl">
+            <div className="md:gap-12 flex items-center justify-center gap-8 border-b-2 w-screen md:w-fit pb-3 pt-10 border-gray-600">
+              <h3 className="md:text-xl text-sm">
                 <span className="text-gray-600 text-sm">Тип жилья</span> <br />{" "}
                 Уникальное жилье
               </h3>
-              <h3 className="text-xl">
+              <h3 className="md:text-xl text-sm">
                 <span className="text-gray-600 text-sm">Этажи</span> <br /> 2
                 этажа
               </h3>
-              <h3 className="text-xl">
+              <h3 className="md:text-xl text-sm">
                 <span className="text-gray-600 text-sm">Площадь</span> <br />
                 234 м2
               </h3>
-              <h3 className="text-xl">
+              <h3 className="md:text-xl text-sm">
                 <span className="text-gray-600 text-sm">Участок</span> <br />
                 12 соток
               </h3>
             </div>
-            <div className="flex gap-28 pt-3">
-              <h3>25 спальных мест</h3>
-              <h3>5 спален</h3>
-              <h3>до 35 человек</h3>
+            <div className="flex justify-center gap-8 pt-3 md:gap-28">
+              <h3 className="md:text-xl text-sm">25 спальных мест</h3>
+              <h3 className="md:text-xl text-sm">5 спален</h3>
+              <h3 className="md:text-xl text-sm">до 35 человек</h3>
             </div>
-            <div className="flex flex-col gap-4 pt-8">
+            <div className="flex flex-col items-center gap-4 pt-8">
               <h3 className="text-xl font-medium">Описание</h3>
-              <p className="w-xl">
+              <p className="w-[340px] md:w-xl">
                 Наши апартаменты отличаются большим удобством и
                 функциональностью всего пространства. В них с комфортом могут
                 разместиться до трех человек. Большие панорамные окна и отделка
@@ -102,7 +102,7 @@ const Detail = () => {
                 лофт.
               </p>
               <h3 className="text-xl font-medium">Дополнительные платы</h3>
-              <p className="w-xl">
+              <p className="w-[340px] md:w-xl">
                 Наши апартаменты отличаются большим удобством и
                 функциональностью всего пространства. В них с комфортом могут
                 разместиться до трех человек. Большие панорамные окна и отделка
@@ -110,7 +110,7 @@ const Detail = () => {
                 лофт.
               </p>
               <h3 className="text-xl font-medium">Важная информация</h3>
-              <p className="w-xl">
+              <p className="w-[340px] md:w-xl">
                 Наши апартаменты отличаются большим удобством и
                 функциональностью всего пространства. В них с комфортом могут
                 разместиться до трех человек. Большие панорамные окна и отделка
@@ -119,7 +119,7 @@ const Detail = () => {
               </p>
             </div>
           </div>
-          <div className="p-10 shadow-2xl rounded-xl mt-20">
+          <div className="p-10 shadow-2xl rounded-xl mt-0 md:mt-20">
             <h3 className="text-xl font-medium">Стоимость</h3>
             <div className="flex items-start gap-10">
               <div className="grid grid-cols-2 gap-4 border-r-[1.2px] border-gray-500 pr-10">
@@ -168,7 +168,7 @@ const Detail = () => {
             <h2 className="text-2xl font-medium">
               <span className="text-sm font-light">
                 Январские празднкии (сутки)
-              </span>{" "}
+              </span>
               от 30 000 ₽
             </h2>
             <button
@@ -178,33 +178,8 @@ const Detail = () => {
                 setSuccess(false);
               }}
             >
-              Оставить заявку на этот выбор{" "}
+              Оставить заявку на этот выбор
             </button>
-          </div>
-        </div>
-        <div className="flex items-center justify-between mt-16">
-          {/* <video controls className="w-[560px] h-[360px]">
-            <source src="/video/hotel.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> */}
-          <div className="w-[560px] h-[360px] flex flex-col gap-6">
-            <h3 className="text-2xl font-medium">Отзывы</h3>
-            <div className="bg-gray-300 p-4 rounded-md">
-              <img src="/images/userr.avif" alt="" className="w-14 h-14" />
-              <p className="">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Obcaecati deleniti nostrum facere laborum expedita labore est
-                eum adipisci eligendi ratione!
-              </p>
-            </div>
-            <div className="bg-gray-300 p-4 rounded-md">
-              <img src="/images/userr.avif" alt="" className="w-14 h-14" />
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Obcaecati deleniti nostrum facere laborum expedita labore est
-                eum adipisci eligendi ratione!
-              </p>
-            </div>
           </div>
         </div>
         {form && (

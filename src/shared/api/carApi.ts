@@ -55,4 +55,8 @@ export const carApi = createApi({
   }),
 });
 
-export const { useGetCarsQuery, useGetCarByIdQuery, util: carApiUtil } = carApi;
+export const {
+  useGetCarsQuery,
+  useGetCarByIdQuery,
+  util: carApiUtil,
+} = carApi;

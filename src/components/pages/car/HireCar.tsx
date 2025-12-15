@@ -6,6 +6,9 @@ import { HiArrowLongRight } from "react-icons/hi2";
 
 const HireCar = () => {
   const router = useRouter();
+  const handleClick = (type: String) => {
+    router.push(`/car/category/?type=${type}`);
+  };
   return (
     <section className="h-full relative py-10 w-full min-h-screen bg-gray-100">
       <div className="container mx-auto ">
@@ -34,7 +37,7 @@ const HireCar = () => {
               </h1>
 
               <button
-                onClick={() => router.push("/car/category")}
+                onClick={() => handleClick("passenger")}
                 className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
                    flex items-center justify-center gap-2 
                    text-white text-[18px] font-medium
@@ -75,6 +78,7 @@ const HireCar = () => {
               </h1>
 
               <button
+                onClick={() => handleClick("offroad")}
                 className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
                    flex items-center justify-center gap-2 
                    text-white text-[18px] font-medium
@@ -115,6 +119,7 @@ const HireCar = () => {
                 Minibus car
               </h1>
               <button
+                onClick={() => handleClick("minibus")}
                 className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
                    flex items-center justify-center gap-2 
                    text-white text-[18px] font-medium
@@ -153,6 +158,7 @@ const HireCar = () => {
               <h1 className="text-[28px] font-semibold text-[#333]">Bus car</h1>
 
               <button
+                onClick={() => handleClick("bus")}
                 className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
                    flex items-center justify-center gap-2 
                    text-white text-[18px] font-medium
@@ -177,4 +183,4 @@ const HireCar = () => {
     </section>
   );
 };
-export default HireCar; 
+export default HireCar;
