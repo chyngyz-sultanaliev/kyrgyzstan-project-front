@@ -1,181 +1,100 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
 import { FaUser } from "react-icons/fa";
 import { HiArrowLongRight } from "react-icons/hi2";
 
 const HireCar = () => {
   const router = useRouter();
-  const handleClick = (type: String) => {
+
+  const handleClick = (type: string) => {
     router.push(`/car/category/?type=${type}`);
   };
+
+  const cardClass =
+    "w-[90%] max-w-4xl min-h-[240px] bg-[#F3F3F3] rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-10 py-6 gap-6 sm:gap-0 shadow-xl relative";
+
+  const imgClass =
+    "w-[180px] sm:w-[300px] mx-auto sm:mx-0 drop-shadow-md";
+
+  const textClass =
+    "flex flex-col gap-4 items-center sm:items-start text-center sm:text-left";
+
+  const btnClass =
+    "w-full sm:w-[200px] min-h-[44px] px-4 bg-[#0A8791] rounded-lg flex items-center justify-center gap-2 text-white text-[16px] sm:text-[18px] font-medium hover:bg-[#0c9da6] transition whitespace-nowrap";
+
+  const badgeClass =
+    "absolute top-4 right-4 w-[70px] h-[38px] bg-[#0A8791] rounded-lg flex items-center justify-center gap-2 px-2";
+
   return (
-    <section className="h-full relative py-10 w-full min-h-screen bg-gray-100">
-      <div className="container mx-auto ">
-        <h1 className="font-[400] text-[19px]">
+    <section className="w-full min-h-screen py-10 bg-gray-100">
+      <div className="container mx-auto">
+        <h1 className="text-[19px] font-normal ml-0 sm:ml-6 md:ml-16 lg:ml-[144px]">
           Find cheap car hire in Kyrgyzstan
         </h1>
-        <div className="blocks flex flex-col items-center column-center gap-10 mt-10">
-          {/* {Passanger car} */}
-          <div
-            className="block w-[90%] max-w-4xl min-h-[240px] bg-[#F3F3F3] 
-                  rounded-3xl flex items-center justify-between 
-                  px-10 py-6 shadow-xl relative hover:shadow-2xl 
-                  transition-shadow duration-300"
-          >
-            {/* Image */}
-            <img
-              className="w-[300px] drop-shadow-md"
-              src="/images/Toyota-Camry-PNG-image (1).png"
-              alt=""
-            />
 
-            {/* Text & Button */}
-            <div className="blockText flex flex-col gap-6">
-              <h1 className="text-[28px] font-semibold text-[#333]">
-                Passenger car
-              </h1>
-
-              <button
-                onClick={() => handleClick("passenger")}
-                className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
-                   flex items-center justify-center gap-2 
-                   text-white text-[18px] font-medium
-                   hover:bg-[#0c9da6] transition"
-              >
-                see options <HiArrowLongRight className="text-[23px]" />
+        <div className="flex flex-col items-center gap-10 mt-10">
+          {/* Passenger */}
+          <div className={cardClass}>
+            <img className={imgClass} src="/images/Toyota-Camry-PNG-image (1).png" />
+            <div className={textClass}>
+              <h1 className="text-[28px] font-semibold">Passenger car</h1>
+              <button onClick={() => handleClick("passenger")} className={btnClass}>
+                see options
+                <HiArrowLongRight className="text-[22px] shrink-0" />
               </button>
             </div>
-
-            {/* Badge number */}
-            <div
-              className="place w-[70px] h-[38px] bg-[#0A8791] rounded-lg 
-             flex items-center justify-center 
-             absolute top-4 right-4 gap-2 px-2"
-            >
-              <FaUser className="text-white text-[16px]" />
-              <span className="text-white font-semibold text-[13px]">4</span>
+            <div className={badgeClass}>
+              <FaUser className="text-white" />
+              <span className="text-white text-[13px] font-semibold">4</span>
             </div>
           </div>
-          {/* {Off-Road car} */}
-          <div
-            className="block w-[90%] max-w-4xl min-h-[240px] bg-[#F3F3F3] 
-                  rounded-3xl flex items-center justify-between 
-                  px-10 py-6 shadow-xl relative hover:shadow-2xl 
-                  transition-shadow duration-300"
-          >
-            {/* Image */}
-            <img
-              className="w-[300px] drop-shadow-md"
-              src="/images/Toyota-Land-Cruiser-Prado-No-Background.png"
-              alt=""
-            />
 
-            {/* Text & Button */}
-            <div className="blockText flex flex-col gap-6">
-              <h1 className="text-[28px] font-semibold text-[#333]">
-                Off-Road car
-              </h1>
-
-              <button
-                onClick={() => handleClick("offroad")}
-                className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
-                   flex items-center justify-center gap-2 
-                   text-white text-[18px] font-medium
-                   hover:bg-[#0c9da6] transition"
-              >
-                see options <HiArrowLongRight className="text-[23px]" />
+          {/* Off-road */}
+          <div className={cardClass}>
+            <img className={imgClass} src="/images/Toyota-Land-Cruiser-Prado-No-Background.png" />
+            <div className={textClass}>
+              <h1 className="text-[28px] font-semibold">Off-road car</h1>
+              <button onClick={() => handleClick("offroad")} className={btnClass}>
+                see options
+                <HiArrowLongRight className="text-[22px] shrink-0" />
               </button>
             </div>
-
-            {/* Badge number */}
-            <div
-              className="place w-[70px] h-[38px] bg-[#0A8791] rounded-lg 
-             flex items-center justify-center 
-             absolute top-4 right-4 gap-2 px-2"
-            >
-              <FaUser className="text-white text-[16px]" />
-              <span className="text-white font-semibold text-[13px]">7</span>
+            <div className={badgeClass}>
+              <FaUser className="text-white" />
+              <span className="text-white text-[13px] font-semibold">7</span>
             </div>
           </div>
-          {/* {Minibus car} */}
-          <div
-            className="block w-[90%] max-w-4xl min-h-[240px] bg-[#F3F3F3] 
-                  rounded-3xl flex items-center justify-between 
-                  px-10 py-6 shadow-xl relative hover:shadow-2xl 
-                  transition-shadow duration-300"
-          >
-            {/* Image */}
-            <img
-              className="w-[300px] drop-shadow-md"
-              src="/images/sprinter-car.png"
-              alt=""
-            />
 
-            {/* Text & Button */}
-            <div className="blockText flex flex-col gap-6">
-              <h2 className="font-[400] text-[#4A4A4A]">With driver</h2>
-              <h1 className="text-[28px] font-semibold text-[#333]">
-                Minibus car
-              </h1>
-              <button
-                onClick={() => handleClick("minibus")}
-                className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
-                   flex items-center justify-center gap-2 
-                   text-white text-[18px] font-medium
-                   hover:bg-[#0c9da6] transition"
-              >
-                see options <HiArrowLongRight className="text-[23px]" />
+          {/* Minibus */}
+          <div className={cardClass}>
+            <img className={imgClass} src="/images/sprinter-car.png" />
+            <div className={textClass}>
+              <span className="text-sm text-gray-500">With driver</span>
+              <h1 className="text-[28px] font-semibold">Minibus car</h1>
+              <button onClick={() => handleClick("minibus")} className={btnClass}>
+                see options
+                <HiArrowLongRight className="text-[22px] shrink-0" />
               </button>
             </div>
-
-            {/* Badge number */}
-            <div
-              className="place w-[70px] h-[38px] bg-[#0A8791] rounded-lg 
-             flex items-center justify-center 
-             absolute top-4 right-4 gap-2 px-2"
-            >
-              <FaUser className="text-white text-[16px]" />
-              <span className="text-white font-semibold text-[13px]">16</span>
+            <div className={badgeClass}>
+              <FaUser className="text-white" />
+              <span className="text-white text-[13px] font-semibold">16</span>
             </div>
           </div>
-          {/* {Bus car} */}
-          <div
-            className="block w-[90%] max-w-4xl min-h-[240px] bg-[#F3F3F3] 
-                  rounded-3xl flex items-center justify-between 
-                  px-10 py-6 shadow-xl relative hover:shadow-2xl 
-                  transition-shadow duration-300"
-          >
-            {/* Image */}
-            <img
-              className="w-[300px] drop-shadow-md"
-              src="/images/Bus-car.webp"
-              alt=""
-            />
 
-            {/* Text & Button */}
-            <div className="blockText flex flex-col gap-6">
-              <h1 className="text-[28px] font-semibold text-[#333]">Bus car</h1>
-
-              <button
-                onClick={() => handleClick("bus")}
-                className="w-[200px] h-[40px] bg-[#0A8791] rounded-lg 
-                   flex items-center justify-center gap-2 
-                   text-white text-[18px] font-medium
-                   hover:bg-[#0c9da6] transition"
-              >
-                see options <HiArrowLongRight className="text-[23px]" />
+          {/* Bus */}
+          <div className={cardClass}>
+            <img className={imgClass} src="/images/Bus-car.webp" />
+            <div className={textClass}>
+              <h1 className="text-[28px] font-semibold">Bus car</h1>
+              <button onClick={() => handleClick("bus")} className={btnClass}>
+                see options
+                <HiArrowLongRight className="text-[22px] shrink-0" />
               </button>
             </div>
-
-            {/* Badge number */}
-            <div
-              className="place w-[70px] h-[38px] bg-[#0A8791] rounded-lg 
-             flex items-center justify-center 
-             absolute top-4 right-4 gap-2 px-2"
-            >
-              <FaUser className="text-white text-[16px]" />
-              <span className="text-white font-semibold text-[13px]">40+</span>
+            <div className={badgeClass}>
+              <FaUser className="text-white" />
+              <span className="text-white text-[13px] font-semibold">40+</span>
             </div>
           </div>
         </div>
@@ -183,4 +102,5 @@ const HireCar = () => {
     </section>
   );
 };
+
 export default HireCar;
