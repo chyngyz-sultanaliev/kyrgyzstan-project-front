@@ -1,136 +1,195 @@
 "use client";
 
 const Detail = () => {
-  const fake = {
-    name: "Toyota Rav4",
-    image: "/car.png",
-    seats: 4,
-    withDriver: false,
-    description:
-      "Ошол мынча красивыйга көзү түшүп, дептир у жигит — ооой тэб не пошутылся",
-    details: {
-      engine: "Petrol",
-      transmission: "Automatic",
-      places: "4 places",
-      year: "2020 year",
-      volume: "2.3L",
-      drive: "4WD",
-      minAge: 18,
-      price: 5500,
-    },
-    rental: [
-      { period: "1-2 days", price: "1180 som" },
-      { period: "3-6 days", price: "1180 som" },
-      { period: "7-14 days", price: "1180 som" },
-      { period: "From 25 days", price: "1180 som" },
-    ],
-  };
-
   return (
-    <div className="w-full flex flex-col gap-16 p-6 md:p-14">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-10">
 
-      {/* TOP SECTION */}
-      <div className="flex flex-wrap gap-6 justify-center md:justify-between w-full">
+      {/* ===== TOP ===== */}
+      <div className="flex flex-col md:flex-row gap-6">
 
-        {/* Left Image */}
-        <div className="w-[500px] h-[300px] bg-white rounded-xl shadow-xl overflow-hidden flex items-center justify-center">
-          <img
-            src={fake.image}
-            alt={fake.name}
-            className="w-full h-full object-cover"
-          />
+        {/* IMAGE */}
+        <div className="md:w-1/2 bg-[#E5E5E5] rounded-2xl shadow flex items-center justify-center p-6">
+          <div className="w-full max-w-[420px] aspect-[16/10] bg-gray-300 rounded-xl" />
         </div>
 
-        {/* Right Info */}
-        <div className="w-[500px] bg-white rounded-xl shadow-xl p-6 flex flex-col gap-4">
-          <h2 className="text-xl font-semibold">{fake.name}</h2>
-          <p className="text-gray-600 text-sm">{fake.description}</p>
+        {/* INFO */}
+        <div className="md:w-1/2 bg-[#F1F1F1] rounded-2xl shadow p-6 flex flex-col justify-between">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold mb-2">
+              Toyota Rav4
+            </h1>
 
-          <div className="text-sm grid grid-cols-2 gap-y-1 mt-3">
-            <p>{fake.details.engine}</p>
-            <p className="text-right">{fake.details.transmission}</p>
+            <p className="text-sm text-gray-600 mb-6">
+              Ыңгайлуу жана ишенимдүү кроссовер шаарда жана жолдон тышкары айдоо үчүн
+            </p>
 
-            <p>{fake.details.places}</p>
-            <p className="text-right">{fake.details.year}</p>
-
-            <p>{fake.details.volume}</p>
-            <p className="text-right">{fake.details.drive}</p>
-
-            <p>Min driver age: {fake.details.minAge}</p>
+            <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
+              <span>Fuel: Petrol</span>
+              <span>Transmission: Automatic</span>
+              <span>Seats: 4</span>
+              <span>Year: 2020</span>
+              <span>Engine: 2.5L</span>
+              <span>Drive: 4WD</span>
+              <span className="col-span-2">
+                Minimum driver age: 18 years
+              </span>
+            </div>
           </div>
 
-          <p className="font-semibold mt-3">
-            {fake.details.price} som/per day
-          </p>
-
-          <button className="w-full bg-teal-700 text-white py-2 rounded-xl mt-2">
-            Book
-          </button>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-8">
+            <span className="text-xl font-semibold">
+              5500 som / day
+            </span>
+            <button className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition">
+              Book now
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Rental Cost Table */}
-      <div className="w-full max-w-4xl mx-auto">
-        <h3 className="font-semibold text-lg mb-3">{fake.name} Rental Cost</h3>
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left py-2">Rental period</th>
-              <th className="text-right py-2">Price per day</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fake.rental.map((row, i) => (
-              <tr key={i} className="border-b">
-                <td className="py-2">{row.period}</td>
-                <td className="py-2 text-right">{row.price}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* ===== DESCRIPTION ===== */}
+      <div className="mt-14 max-w-3xl">
+        <h2 className="text-lg font-semibold mb-3">Description</h2>
+        <p className="text-sm text-gray-600 leading-relaxed">
+          Toyota Rav4 — бул шаарда да, тоолуу аймактарда да ишенимдүү
+          колдонууга ылайыкташкан универсал кроссовер.
+          Кең салону, үнөмдүү күйүүчү май керектөөсү жана
+          4WD системасы аны үй-бүлөлүк саякаттар жана узак жолдор үчүн
+          мыкты тандоо кылат.
+        </p>
       </div>
 
-      {/* Bid Form */}
-      <div className="w-full max-w-xl mx-auto flex flex-col items-center gap-6">
-        <h3 className="text-xl font-semibold">Bid</h3>
-        <p className="text-gray-500 text-center text-sm">
-          Submit a request for selection and reduce your search time
+      {/* ===== GALLERY ===== */}
+      <div className="mt-14">
+        <h2 className="text-lg font-semibold mb-4">Gallery</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="aspect-square bg-gray-300 rounded-xl"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ===== RENTAL COST ===== */}
+      <div className="mt-14 max-w-xl">
+        <h2 className="text-lg font-semibold mb-4">
+          Rental cost
+        </h2>
+
+        <div className="border rounded-lg overflow-hidden text-sm">
+          <div className="flex justify-between px-4 py-2 bg-gray-100 font-medium">
+            <span>Period</span>
+            <span>Price / day</span>
+          </div>
+
+          {[
+            "1–2 days",
+            "3–6 days",
+            "7–14 days",
+            "from 26 days",
+          ].map((label) => (
+            <div
+              key={label}
+              className="flex justify-between px-4 py-2 border-t"
+            >
+              <span>{label}</span>
+              <span>1100 som</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ===== INCLUDED / NOT INCLUDED ===== */}
+      <div className="mt-14 grid sm:grid-cols-2 gap-10 max-w-3xl">
+        <div>
+          <h3 className="font-medium mb-3">Included</h3>
+          <ul className="text-sm text-gray-600 space-y-2">
+            <li>✔ Insurance</li>
+            <li>✔ Child seat</li>
+            <li>✔ Free cancellation</li>
+            <li>✔ 24/7 support</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-medium mb-3">Not included</h3>
+          <ul className="text-sm text-gray-600 space-y-2">
+            <li>✖ Fuel</li>
+            <li>✖ Driver services</li>
+            <li>✖ штрафтар</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* ===== CONDITIONS ===== */}
+      <div className="mt-14 max-w-3xl">
+        <h2 className="text-lg font-semibold mb-4">
+          Rental conditions
+        </h2>
+
+        <ul className="text-sm text-gray-600 space-y-2">
+          <li>• Passport or ID required</li>
+          <li>• Deposit: 10 000 som</li>
+          <li>• Fuel policy: same level</li>
+          <li>• Daily mileage limit: 300 km</li>
+          <li>• Smoking in car is prohibited</li>
+        </ul>
+      </div>
+
+      {/* ===== TRUST ===== */}
+      <div className="mt-16 bg-gray-100 rounded-2xl p-6 text-center">
+        <p className="text-sm text-gray-700">
+          ✔ 120+ successful rentals &nbsp; • &nbsp;
+          ✔ Verified owner &nbsp; • &nbsp;
+          ✔ Support 24/7
+        </p>
+      </div>
+
+      {/* ===== BID FORM ===== */}
+      <div className="mt-20 text-center">
+        <h2 className="text-lg font-semibold">Bid</h2>
+        <p className="text-sm text-gray-500 mt-2 mb-8">
+          Leave a request and we will contact you
         </p>
 
-        <input
-          type="text"
-          placeholder="Name"
-          className="w-full border rounded-full py-3 px-5 text-sm"
-        />
+        <div className="max-w-md mx-auto space-y-4">
+          {[
+            "Name",
+            "+996 ___ ___ ___",
+            "Number of people",
+          ].map((placeholder) => (
+            <input
+              key={placeholder}
+              placeholder={placeholder}
+              className="
+                w-full
+                border
+                rounded-full
+                px-5 py-3
+                text-sm
+                outline-none
+                focus:ring-2 focus:ring-teal-500
+              "
+            />
+          ))}
 
-        <input
-          type="text"
-          placeholder="+996 ___ __ __ __"
-          className="w-full border rounded-full py-3 px-5 text-sm"
-        />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              placeholder="Entry"
+              className="w-full border rounded-full px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-teal-500"
+            />
+            <input
+              placeholder="Departure"
+              className="w-full border rounded-full px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-teal-500"
+            />
+          </div>
 
-        <input
-          type="number"
-          placeholder="Number of people"
-          className="w-full border rounded-full py-3 px-5 text-sm"
-        />
-
-        <div className="flex w-full gap-4">
-          <input
-            type="text"
-            placeholder="Entry"
-            className="w-1/2 border rounded-full py-3 px-5 text-sm"
-          />
-          <input
-            type="text"
-            placeholder="Departure"
-            className="w-1/2 border rounded-full py-3 px-5 text-sm"
-          />
+          <button className="w-full bg-teal-600 text-white py-3 rounded-full hover:bg-teal-700 transition">
+            Leave a request
+          </button>
         </div>
-
-        <button className="bg-teal-700 text-white py-3 px-10 rounded-full text-sm">
-          Leave a request
-        </button>
       </div>
     </div>
   );
