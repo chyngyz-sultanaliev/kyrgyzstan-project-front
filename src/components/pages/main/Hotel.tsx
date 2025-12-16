@@ -41,12 +41,13 @@ const Hotel = () => {
   }, []);
 
   return (
-    <div className="mt-16 sm:mt-20 px-4">
+    <div className="mt-16 sm:mt-20">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="w-full flex justify-center z-10 my-8 sm:my-10"
+        className="w-full flex justify-center z-10 my-8 sm:my-10 px-4"
+
       >
         <div className="bg-white/20 backdrop-blur-xl px-6 sm:px-10 py-4 rounded-2xl shadow-xl text-center">
           <h3 className="text-xl sm:text-2xl font-semibold">
@@ -54,26 +55,31 @@ const Hotel = () => {
           </h3>
         </div>
       </motion.div>
-
-      <div className="flex flex-wrap gap-5 justify-center">
+      {/* CARDS */}
+      <div className="flex flex-wrap justify-center gap-6 px-4">
         {hotels.map((cat, i) => (
           <motion.div
             key={i}
             animate={{
-              scale: i === catIndex ? 1 : 0.85,
-              opacity: i === catIndex ? 1 : 0.5,
+              scale: i === catIndex ? 1.1 : 1,
+              opacity: i === catIndex ? 1 : 0.9,
             }}
             transition={{ duration: 0.6 }}
             className="cursor-pointer"
             onClick={() => setCatIndex(i)}
           >
             <div
-              className="bg-white/10 backdrop-blur-xl
-              overflow-hidden w-50 sm:w-[180px] lg:w-[200px]
-              h-[260px] sm:h-[300px] lg:h-[340px] rounded-2xl
-              shadow-xl hover:scale-105 transition-transform duration-300"
+
+              className="
+                  bg-white/10 backdrop-blur-xl
+                  overflow-hidden
+                  w-32 sm:w-48 lg:w-56
+                  h-60 sm:h-72 lg:h-80
+                  rounded-2xl
+                  shadow-xl
+                "
             >
-              <Link href="/car">
+              <Link href="/hotel">
                 <img
                   src={cat.img}
                   alt={cat.title}

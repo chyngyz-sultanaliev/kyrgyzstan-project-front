@@ -1,10 +1,10 @@
 "use client";
-
+import Detail from "@/components/pages/car/Detail";
 import { useParams } from "next/navigation";
 
 const page = () => {
   const { id } = useParams();
-
+  
   // 🔥 Фейк данный (категориялар)
   const fakeCategories: any = {
     "1": {
@@ -34,9 +34,8 @@ const page = () => {
   };
 
   const data = fakeCategories[id as string];
-
   if (!data) return <p>Category not found</p>;
-
+  
   return (
     <div className="p-10">
       <h1 className="text-3xl font-bold mb-4">{data.name}</h1>
@@ -46,7 +45,6 @@ const page = () => {
         alt={data.name}
         className="w-full max-w-lg rounded-xl shadow-xl mb-6"
       />
-
       <p>Seats: {data.seats}</p>
       <p>With driver: {data.withDriver ? "Yes" : "No"}</p>
     </div>

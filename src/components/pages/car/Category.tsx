@@ -1,7 +1,4 @@
-// FULLY FIXED & WORKING CATEGORY COMPONENT WITH FAKE DATA
-
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import { useGetCarsCategoryQuery } from "@/shared/api/carApi";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
