@@ -18,32 +18,30 @@ export default function Reset() {
 
   const onSubmit = (data: ForgotPasswordValues) => {
     console.log("Восстановление пароля:", data);
-    // dispatch(forgotPassword(data.email));
   };
 
   return (
-    <div className="">
+    <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-md mx-auto mt-60"
+        className="max-w-md mx-auto mt-40 sm:mt-50 md:mt-64 px-4 sm:px-0"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center">
-          Восстановление пароля!
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center">
+          Восстановление пароля
         </h2>
 
         {/* Email */}
         <div className="mb-4">
-          <label className="block mb-1 font-medium text-gray-400">Email</label>
+          <label className="block mb-1 font-medium text-gray-400 text-sm sm:text-base">
+            Email
+          </label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="email"
               placeholder="Введите вашу почту"
-              className={`w-full pl-10 px-4 py-2 border rounded focus:outline-none transition ${
-                errors.email
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-primary"
-              }`}
+              className={`w-full pl-10 px-4 py-3 border rounded focus:outline-none transition
+                ${errors.email ? "border-red-500" : "border-gray-300"}`}
               {...register("email", {
                 required: "Email обязателен",
                 pattern: {
@@ -54,13 +52,15 @@ export default function Reset() {
             />
           </div>
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className="text-red-500 text-xs sm:text-sm mt-1">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
-        {/* Подтверждение */}
-        <p className="text-sm text-gray-500 mb-4">
-          На указанную почту придёт код со ссылкой для восстановления пароля.
+        {/* Подсказка */}
+        <p className="text-xs sm:text-sm text-gray-500 mb-6 text-center">
+          На указанную почту придёт ссылка для восстановления пароля.
         </p>
 
         {/* Кнопка */}
@@ -72,9 +72,10 @@ export default function Reset() {
         >
           Отправить
         </Button>
+
         <div className="flex justify-center mt-4 text-sm text-[#0A8791]">
           <Link href="/login" className="hover:underline">
-            Войти
+            Войти!
           </Link>
         </div>
       </form>

@@ -2,50 +2,84 @@
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useGetCarsCategoryQuery } from "@/shared/api/carApi";
+import Image from "next/image";
+import { useGetCarCategoriesQuery } from "@/shared/api/carCategoryApi";
 
 const seatOptions = ["1-3", "4-6", "6+"] as const;
 type SeatRange = (typeof seatOptions)[number];
 
+const MAX_PRICE = 50000;
+
 const Category = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "passenger";
+  const type = searchParams.get("type") ?? "passenger";
 
-  const { isLoading } = useGetCarsCategoryQuery(type);
+  /* ✅ RTK Query — принимает string */
+  const { isLoading } = useGetCarCategoriesQuery(type);
 
   const [seatRange, setSeatRange] = useState<SeatRange>("1-3");
-  const [price, setPrice] = useState(50000);
+  const [price, setPrice] = useState<number>(MAX_PRICE);
 
   const lineRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
 
-  const getCirclePosition = () => (price / 50000) * 100;
+  /* ---------------- SLIDER LOGIC ---------------- */
+  const getCirclePosition = () => (price / MAX_PRICE) * 100;
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
       if (!dragging || !lineRef.current) return;
+
       const rect = lineRef.current.getBoundingClientRect();
       const percent = Math.min(
         Math.max((e.clientX - rect.left) / rect.width, 0),
         1
       );
-      setPrice(Math.round(percent * 50000));
+
+      setPrice(Math.round(percent * MAX_PRICE));
     };
 
+    const stop = () => setDragging(false);
+
     document.addEventListener("mousemove", move);
-    document.addEventListener("mouseup", () => setDragging(false));
+    document.addEventListener("mouseup", stop);
+
     return () => {
       document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", stop);
     };
   }, [dragging]);
 
-  const cars = [
-    { id: 1, title: "Toyota Camry", seats: 4, price: 5500, image: "/car.png" },
-    { id: 2, title: "Hyundai Starex", seats: 7, price: 12000, image: "/car.png" },
-    { id: 3, title: "Kia Rio", seats: 4, price: 4500, image: "/car.png" },
-  ];
+  /* ---------------- MOCK DATA ---------------- */
+  const cars = useMemo(
+    () => [
+      {
+        id: 1,
+        title: "Toyota Camry",
+        seats: 4,
+        price: 5500,
+        image: "/car.png",
+      },
+      {
+        id: 2,
+        title: "Hyundai Starex",
+        seats: 7,
+        price: 12000,
+        image: "/car.png",
+      },
+      {
+        id: 3,
+        title: "Kia Rio",
+        seats: 4,
+        price: 4500,
+        image: "/car.png",
+      },
+    ],
+    []
+  );
 
+  /* ---------------- FILTER ---------------- */
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
       const seatMatch =
@@ -57,15 +91,16 @@ const Category = () => {
 
       return seatMatch && car.price <= price;
     });
-  }, [seatRange, price]);
+  }, [seatRange, price, cars]);
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading) {
+    return <p className="text-center py-20">Loading...</p>;
+  }
 
   return (
     <section className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-[320px_1fr] gap-8">
-
-        {/* FILTER */}
+        {/* ---------------- FILTER ---------------- */}
         <aside className="bg-white rounded-2xl shadow p-6 space-y-8">
           <h2 className="text-lg font-semibold">Filters</h2>
 
@@ -92,11 +127,16 @@ const Category = () => {
 
           {/* Price */}
           <div>
-            <p className="font-medium mb-4">Max price: {price} som</p>
+            <p className="font-medium mb-4">
+              Max price: <span className="font-semibold">{price}</span> som
+            </p>
+
             <div ref={lineRef} className="relative h-1 bg-gray-200 rounded">
               <div
                 className="absolute w-4 h-4 bg-teal-600 rounded-full -top-1.5 cursor-pointer"
-                style={{ left: `calc(${getCirclePosition()}% - 8px)` }}
+                style={{
+                  left: `calc(${getCirclePosition()}% - 8px)`,
+                }}
                 onMouseDown={() => setDragging(true)}
               />
             </div>
@@ -105,7 +145,7 @@ const Category = () => {
           <button
             onClick={() => {
               setSeatRange("1-3");
-              setPrice(50000);
+              setPrice(MAX_PRICE);
             }}
             className="text-sm text-gray-500 hover:text-teal-600"
           >
@@ -113,7 +153,7 @@ const Category = () => {
           </button>
         </aside>
 
-        {/* LIST */}
+        {/* ---------------- LIST ---------------- */}
         <main>
           <h1 className="text-2xl font-semibold mb-6 capitalize">
             {type} cars
@@ -128,7 +168,13 @@ const Category = () => {
                   key={car.id}
                   className="bg-white rounded-xl shadow hover:shadow-lg transition p-6 flex flex-col md:flex-row gap-6"
                 >
-                  <img src={car.image} className="w-52 mx-auto" />
+                  <Image
+                    src={car.image}
+                    alt={car.title}
+                    width={208}
+                    height={140}
+                    className="mx-auto"
+                  />
 
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold">{car.title}</h2>
@@ -140,7 +186,9 @@ const Category = () => {
                   <div className="flex flex-col items-end gap-3">
                     <p className="text-lg font-bold">{car.price} som</p>
                     <button
-                      onClick={() => router.push(`/car/category/${car.id}`)}
+                      onClick={() =>
+                        router.push(`/car/category/${car.id}`)
+                      }
                       className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700"
                     >
                       More details

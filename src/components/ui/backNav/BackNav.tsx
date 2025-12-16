@@ -8,7 +8,7 @@ export default function BackNav() {
   return (
     <button
       onClick={() => router.back()}
-      className="flex items-center gap-2 text-[#0A8791] absolute top-12 left-12 z-99"
+      className="flex items-center gap-2 text-[#0A8791] absolute sm:top-12 top-6 left-6 sm:left-12 z-99"
     >
       <BsArrowLeft size={26} />
       <span>Назад</span>

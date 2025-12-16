@@ -48,7 +48,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <div className="mx-auto h-[87vh] overflow-y-auto hide-scrollbar">
         {faqData.map((item, index) => {
           const isOpen = openIndex === index;
@@ -62,19 +62,28 @@ export default function Faq() {
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 className="
                   w-full flex justify-between items-center 
-                  text-left px-6 py-4 text-lg font-medium text-gray-600
-                  hover:bg-gray-200 transition-colors
+                  text-left px-4 sm:px-6 py-4 text-base sm:text-lg font-medium text-gray-600
+                  hover:bg-gray-50 transition-colors
                 "
               >
-                <span>
+                <span className="pr-4">
                   {index + 1}. {item.question}
                 </span>
-                {isOpen ? <ChevronUp size={22} /> : <ChevronDown size={22} />}
+                <span className="flex-shrink-0">
+                  {isOpen ? <ChevronUp size={22} /> : <ChevronDown size={22} />}
+                </span>
               </button>
 
-              {isOpen && (
-                <p className="px-6 pb-4 text-xl text-gray-700">{item.answer}</p>
-              )}
+              <div
+                className={`
+                  overflow-hidden transition-all duration-300 ease-in-out
+                  ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
+                `}
+              >
+                <p className="px-4 sm:px-6 pb-4 text-base sm:text-lg text-gray-700">
+                  {item.answer}
+                </p>
+              </div>
             </div>
           );
         })}
