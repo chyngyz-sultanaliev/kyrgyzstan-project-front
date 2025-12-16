@@ -9,6 +9,7 @@ export async function fetchApi<T>(
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!baseUrl) throw new Error("NEXT_PUBLIC_API_URL не задан");
 
+  
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers && !(options.headers instanceof Headers)

@@ -26,7 +26,7 @@ const Popular = () => {
         {[1, 2, 3, 4].map((_, idx) => (
           <div
             key={idx}
-            className="w-full max-w-[320px] rounded-2xl overflow-hidden shadow-md bg-white"
+            className="w-auto max-w-[320px] rounded-2xl overflow-hidden shadow-md bg-white"
           >
             {/* Image section */}
             <div className="relative h-[200px] sm:h-[220px] bg-gray-200">
