@@ -3,26 +3,52 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
 
-export const Welcome: FC = () => {
+const Welcome: FC = () => {
   const text = "Car hire in Kyrgyzstan".split("");
 
   return (
     <section className="relative w-full h-screen overflow-hidden">
       {/* Background video */}
-      <div className="absolute inset-0">
-        <video
-          className="fixed top-0 left-0 w-full h-full object-cover -z-10"
-          autoPlay
-          loop
-          muted
-        >
-          <source src="/images/IMG_4761.MP4" type="video/mp4" />
-        </video>
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="fixed top-0 left-0 w-full h-full -z-10 flex">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-1/3 h-full object-cover"
+          >
+            <source src="/images/hire-car.mp4" type="video/mp4" />
+          </video>
+
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-1/3 h-full object-cover"
+          >
+            <source src="/images/IMG_4761.MP4" type="video/mp4" />
+          </video>
+
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-1/3 h-full object-cover"
+          >
+            <source src="/images/inst.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50 z-0" />
 
         {/* Content */}
         <div
           className="
-            relative z-20
+            relative z-10
             flex flex-col items-center justify-center
             h-full gap-8
             w-full
