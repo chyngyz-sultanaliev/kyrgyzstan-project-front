@@ -10,6 +10,7 @@ const Main = () => {
       <Hotel/>
       <Car />
       <News />
+      
     </>
   );
 };

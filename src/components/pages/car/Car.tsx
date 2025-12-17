@@ -1,6 +1,5 @@
-import Category from "./Category";
 import HireCar from "./HireCar";
-import { Welcome } from "./Welcome";
+import  Welcome  from "./Welcome";
 
 const Car = () => {
   return (
