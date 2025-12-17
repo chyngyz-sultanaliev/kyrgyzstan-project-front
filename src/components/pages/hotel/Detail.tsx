@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { CiHeart, CiShare2 } from "react-icons/ci";
+import Review from "./Review";
 
 const Detail = () => {
   const [form, setForm] = useState(false);
@@ -262,6 +263,7 @@ const Detail = () => {
           </div>
         )}
       </section>
+      <Review/>
     </>
   );
 };
