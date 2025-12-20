@@ -171,7 +171,7 @@ const Category = () => {
 
   return (
     <section className="container mx-auto sm:px-5  p-11">
-      <div className="flex items-center justify-around text-2xl mb-10 hidden sm:flex md:text-xl border-b pb-3  ">
+      <div className="flex items-center justify-around text-2xl mb-10 md:text-xl border-b pb-3  ">
         {categories.map((cat) => (
           <button
             key={cat}
@@ -183,19 +183,6 @@ const Category = () => {
             {cat}
           </button>
         ))}
-      </div>
-      <div className="block sm:hidden mb-6">
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="w-full border rounded-lg p-2 text-sm"
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
       </div>
 
       <div className="flex flex-wrap gap-8 justify-center mt-6">

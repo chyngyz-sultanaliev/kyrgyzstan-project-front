@@ -332,7 +332,7 @@ const Detail = () => {
             <img
               src={tour.url}
               alt={tour.name}
-              className=" w-full           
+              className=" w-[300px]           
       h-[460px]
       md:w-[420px]        
       md:h-[300px]
@@ -396,23 +396,23 @@ const Detail = () => {
               <input
                 type="text"
                 placeholder="Name"
-                className="w-full  border-[1.5px] md:w-[390px] border-gray-400 py-4 px-4 rounded-xl"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-4 rounded-xl"
               />
               <input
                 type="text"
                 placeholder="+996-___-___"
-                className="w-full border-[1.5px] md:w-[390px] border-gray-400 py-4 px-4 rounded-xl"
+                className="w-120 border-[1.5px] border-gray-400 py-2 px-4 rounded-xl"
               />
               <input
                 type="text"
                 placeholder="Your criteria for a cottage"
-                className="w-full border-[1.5px] md:w-[390px] border-gray-400 py-4 px-4 rounded-xl"
+                className="w-120 border-[1.5px] border-gray-400 py-4 px-4 rounded-xl"
               />
               <button
                 onClick={() => {
                   setModal(false), setChair(true);
                 }}
-                className="bg-[#5B9096] w-50 h-12 text-white py-2 px-4 rounded-xl font-medium hover:bg-[#5b909693] transition"
+                className="bg-[#5B9096] w-50 h-12 text-white py-2 px-4 rounded-xl font-medium hover:bg-cyan-100 hover:text-gray-600 transition"
               >
                 Submit a request
               </button>
@@ -425,8 +425,8 @@ const Detail = () => {
               className="absolute inset-0 bg-black/20 backdrop-blur-sm"
               onClick={() => setChair(false)}
             ></div>
-            <div className="relative z-10 bg-white w-full md:w-[340px] max-w-[350px] h-70 p-6 rounded-2xl flex flex-col  items-center justify-center gap-7">
-              <h1 className="text-3xl ">Application sent!</h1>
+            <div className="relative z-10 bg-white w-110 h-70 p-6 rounded-2xl flex flex-col  items-center justify-center gap-7">
+              <h1 className="text-3xl">Application sent!</h1>
               <p className="text-xl text-center">
                 A specialist will contact you within 15 minutes and provide
                 advice.
@@ -434,7 +434,7 @@ const Detail = () => {
 
               <button
                 onClick={() => setChair(false)}
-                className="w-30 md:w-[135px] h-10 rounded-2xl bg-[#5B9096] hover:bg-[#5b909693] transition sm:w-[60px] text-amber-50 text-xl"
+                className="w-40 h-13 rounded-2xl bg-[#0A8791] text-amber-50 text-2xl"
               >
                 close
               </button>
