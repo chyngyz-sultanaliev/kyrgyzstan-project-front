@@ -3,13 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import Img from "../../../../public/footer_logo.png";
 import Button from "@/components/ui/Button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useGetProfileQuery } from "@/shared/api/profileApi";
 
 const Header = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: profile, isLoading } = useGetProfileQuery();
 
   const navLinks = [
     { href: "/", label: "Main" },
@@ -17,10 +19,22 @@ const Header = () => {
     { href: "/car", label: "Car" },
     { href: "/hotel", label: "Hotel" },
   ];
+  
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
 
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
   return (
     <header className="sticky top-0 z-50 bg-[linear-gradient(90deg,#3C5F63_19.23%,#5B9096_63.46%,#3B8C95_100%)] shadow-lg">
-      <div className="container mx-auto px-4 py-3 sm:py-4">
+      <div className=" relative container mx-auto px-4 py-3 sm:py-4">
         <div className="flex justify-between items-center">
           {/* Logo and Title */}
           <Link
@@ -70,21 +84,38 @@ const Header = () => {
 
             {/* Desktop User Actions */}
             <div className="flex items-center gap-3">
-              <Link href="/login">
-                <Button variant="primary" className="px-5">
-                  Войти
-                </Button>
-              </Link>
-              <Link
-                href="/admin"
-                className="w-9 h-9 rounded-full overflow-hidden bg-white/20 hover:bg-white/30 transition-all cursor-pointer flex-shrink-0 ring-2 ring-white/50"
-                aria-label="Admin profile"
-              ></Link>
-              <Link
-                href="/profile"
-                className="w-9 h-9 rounded-full overflow-hidden bg-white/20 hover:bg-white/30 transition-all cursor-pointer flex-shrink-0 ring-2 ring-white/50"
-                aria-label="User profile"
-              ></Link>
+              {!profile && !isLoading && (
+                <Link href="/login">
+                  <Button variant="primary" className="px-5">
+                    Войти
+                  </Button>
+                </Link>
+              )}
+
+              {isLoading && (
+                <div className="w-9 h-9 rounded-full bg-white/30 animate-pulse" />
+              )}
+
+              {profile && (
+                <Link
+                  href={profile.isAdmin ? "/admin" : "/profile"}
+                  className="w-9 h-9 rounded-full overflow-hidden bg-white/20 hover:bg-white/30 transition-all ring-2 ring-white/50 flex items-center justify-center"
+                  title={profile.isAdmin ? "Admin panel" : profile.username}
+                >
+                  {profile.avatar ? (
+                    <Image
+                      src={profile.avatar}
+                      alt="Profile avatar"
+                      width={36}
+                      height={36}
+                    />
+                  ) : (
+                    <span className="text-white text-sm font-semibold">
+                      {profile.username?.[0]?.toUpperCase()}
+                    </span>
+                  )}
+                </Link>
+              )}
             </div>
           </div>
 
@@ -128,25 +159,37 @@ const Header = () => {
                   <p className="text-xs text-gray-500 mb-3 uppercase tracking-wide">
                     Account
                   </p>
-                  <div className="flex items-center gap-3">
+
+                  {!profile && !isLoading && (
                     <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                       <Button variant="primary" className="text-sm">
                         Login
                       </Button>
                     </Link>
+                  )}
+
+                  {profile && (
                     <Link
-                      href="/admin"
-                      className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 hover:bg-gray-300 transition-all cursor-pointer flex-shrink-0"
+                      href={profile.isAdmin ? "/admin" : "/profile"}
                       onClick={() => setIsMenuOpen(false)}
-                      aria-label="Admin profile"
-                    ></Link>
-                    <Link
-                      href="/profile"
-                      className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 hover:bg-gray-300 transition-all cursor-pointer flex-shrink-0"
-                      onClick={() => setIsMenuOpen(false)}
-                      aria-label="User profile"
-                    ></Link>
-                  </div>
+                      className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 hover:bg-gray-300 transition flex items-center justify-center"
+                      aria-label={profile.isAdmin ? "Admin panel" : "Profile"}
+                    >
+                      {profile.avatar ? (
+                        <Image
+                          src={profile.avatar}
+                          alt="User avatar"
+                          width={48}
+                          height={48}
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span className="text-gray-600 text-sm font-semibold">
+                          {profile.username?.[0]?.toUpperCase()}
+                        </span>
+                      )}
+                    </Link>
+                  )}
                 </div>
 
                 {/* Navigation Links */}

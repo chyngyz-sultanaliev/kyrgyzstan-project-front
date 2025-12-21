@@ -4,24 +4,39 @@ import { useState } from "react";
 import { Eye, EyeOff, Mail, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 import Button from "@/components/ui/Button/Button";
-
+import { useLoginUserMutation } from "@/redux/api/auth";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
 export default function LoginForm() {
+  const [login, { isLoading }] = useLoginUserMutation();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginFormValues>({ mode: "onChange" });
-
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log("Логин:", data);
-    // redux dispatch(login(data))
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      const response = await login(data).unwrap();
+      // localStorage.setItem("token", response.token);
+      Cookies.set("token", response.token);
+      router.push("/");
+    } catch (error: unknown) {
+      const err = error as AUTH.Error;
+      if (err.data?.message) {
+        setServerError(err.data.message);
+      } else {
+        setServerError("Произошла ошибка. Попробуйте ещё раз.");
+      }
+    }
   };
 
   return (
@@ -97,13 +112,18 @@ export default function LoginForm() {
               {errors.password.message}
             </p>
           )}
+          {serverError && (
+            <p className="text-red-500 text-xs text-center  sm:text-sm mt-1">
+              {serverError}
+            </p>
+          )}
         </div>
 
         <Button
           type="submit"
-          variant="primary"
-          disabled={!isValid}
           className="w-full"
+          loading={isLoading}
+          disabled={!isValid || isLoading}
         >
           Войти
         </Button>

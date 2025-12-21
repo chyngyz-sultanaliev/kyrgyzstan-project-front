@@ -7,9 +7,11 @@ import { tourCategoryApi } from "@/shared/api/tourCategoryApi";
 import { carCategoryApi } from "@/shared/api/carCategoryApi";
 import { hotelCategoryApi } from "@/shared/api/hotelCategoryApi";
 import { profileApi } from "@/shared/api/profileApi";
+import { api } from "./api";
 
 export const store = configureStore({
   reducer: {
+    [api.reducerPath]: api.reducer,
     [tourApi.reducerPath]: tourApi.reducer,
     [carApi.reducerPath]: carApi.reducer,
     [hotelApi.reducerPath]: hotelApi.reducer,
@@ -21,6 +23,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
+      .concat(api.middleware)
       .concat(tourApi.middleware)
       .concat(carApi.middleware)
       .concat(hotelApi.middleware)

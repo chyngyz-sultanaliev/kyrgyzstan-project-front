@@ -28,13 +28,12 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center cursor-pointer rounded-xl text-md  font-medium hover:scale-105 transition-transform duration-300   active:scale-95 transition-transform duration-150";
+    "inline-flex items-center justify-center cursor-pointer rounded-xl text-md font-medium hover:scale-105 transition-transform duration-300 active:scale-95";
 
   const variants: Record<ButtonVariant, string> = {
     primary: "bg-[#0A8791] text-white",
-    secondary: "bg-white border-1 border-[#0A8791] text-[#0A8791] ",
-    gradient:
-      "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white text-[10px] sm:text-[18px]",
+    secondary: "bg-white border border-[#0A8791] text-[#0A8791]",
+    gradient: "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white",
   };
 
   return (
@@ -42,20 +41,17 @@ export default function Button({
       className={cn(
         baseStyles,
         variants[variant],
-        fullWidth ? "w-full h-[25px] sm:h-[58px]" : "px-4 py-2",
+        fullWidth ? "w-full h-12 sm:h-14" : "px-4 py-2",
+        (disabled || loading) && "opacity-50 cursor-not-allowed",
         className
       )}
       disabled={disabled || loading}
       {...props}
     >
       {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-      {!loading && icon && iconPosition === "left" && (
-        <span className="mr-2">{icon}</span>
-      )}
+      {!loading && icon && iconPosition === "left" && <span className="mr-2">{icon}</span>}
       {children}
-      {!loading && icon && iconPosition === "right" && (
-        <span className="ml-2">{icon}</span>
-      )}
+      {!loading && icon && iconPosition === "right" && <span className="ml-2">{icon}</span>}
     </button>
   );
 }
