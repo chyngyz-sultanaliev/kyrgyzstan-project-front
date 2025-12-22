@@ -7,7 +7,10 @@ export interface News {
   image: string;
   createdAt: string;
   updatedAt: string;
-  news?: News[];
+}
+export interface NewsRes {
+  success: string;
+  news: News[];
 }
 
 export const newsApi = createApi({
@@ -16,7 +19,7 @@ export const newsApi = createApi({
   endpoints: (builder) => ({
     getNews: builder.query<News[], void>({
       query: () => "/news",
-      transformResponse: (res: News[]) => res,
+      transformResponse: (res: NewsRes) => res.news,
     }),
   }),
 });

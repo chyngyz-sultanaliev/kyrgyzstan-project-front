@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -8,6 +9,7 @@ const News = () => {
   const { data, isLoading } = useGetNewsQuery();
 
   const news = Array.isArray(data) ? data : data ?? [];
+  console.log(news);
 
   useEffect(() => {
     if (news.length < 2) return;
