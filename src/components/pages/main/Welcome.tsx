@@ -61,17 +61,21 @@ export default function Welcome() {
               className="relative w-full h-full transform-3d"
             >
               {data?.map((cat, i) => {
-                const angle = (360 / data.length) * i;
+                const count = data.length;
+                const angle = 360 / count;
+                const radius = Math.min(Math.max(count * 40, 160), 420);
 
                 return (
                   <div
                     key={cat.id}
                     className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center"
                     style={{
-                      transform: `rotateY(${angle}deg) translateZ(260px)`,
+                      transform: `rotateY(${
+                        i * angle
+                      }deg) translateZ(${radius}px)`,
                     }}
                   >
-                    <div className="w-44 sm:w-56 h-64 sm:h-80 bg-white/10 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl transition-transform duration-500 hover:scale-110">
+                    <div className="w-54 sm:w-60 h-70 sm:h-80 bg-white/10 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl transition-transform duration-500 hover:scale-110">
                       <Link href="/tour">
                         <img
                           src={cat.image ?? "/placeholder.jpg"}
