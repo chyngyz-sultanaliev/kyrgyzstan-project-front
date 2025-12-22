@@ -1,7 +1,7 @@
 "use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import {
   User,
   Settings,
@@ -14,6 +14,8 @@ import {
 import { MdTour } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
+import { useGetProfileQuery } from "@/shared/api/profileApi";
+import Cookies from "js-cookie";
 
 interface SidebarProps {
   open: boolean;
@@ -22,7 +24,8 @@ interface SidebarProps {
 
 const Sidebar = ({ open, setOpen }: SidebarProps) => {
   const pathname = usePathname();
-
+  const { data: profile } = useGetProfileQuery();
+const router = useRouter();
   const menu = [
     { label: "Profile", href: "/admin", icon: <User size={20} /> },
     { label: "Car", href: "/admin/car", icon: <Car size={20} /> },
@@ -57,6 +60,11 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
     icon: <HelpCircle size={20} />,
   };
 
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.push("/login");
+  };
+
   return (
     <>
       {/* Затемнение фона на мобилке */}
@@ -82,7 +90,25 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
             <ul className="min-[900px]:space-y-3 space-y-6">
               {/* Мобильная шапка */}
               <div className="min-[900px]:hidden flex items-start justify-between gap-5 mb-6">
-                <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-200 cursor-pointer"></div>
+                <Link
+                  href="/admin"
+                  className="w-14 h-14 rounded-full overflow-hidden bg-gray-200 cursor-pointer flex items-center justify-center"
+                  onClick={() => setOpen(false)}
+                >
+                  {profile?.avatar ? (
+                    <Image
+                      src={profile.avatar}
+                      alt={"Admin"}
+                      width={56}
+                      height={56}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-gray-600 text-sm font-semibold">
+                      {profile?.username?.[0]?.toUpperCase()}
+                    </span>
+                  )}
+                </Link>
                 <button
                   className="text-[#0A8791] text-3xl"
                   onClick={() => setOpen(false)}
@@ -135,7 +161,10 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                 </Link>
               </li>
               <li>
-                <button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors w-full">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors w-full"
+                >
                   <LogOut size={20} />
                   <span className="text-sm sm:text-base">Выйти</span>
                 </button>

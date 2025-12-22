@@ -11,8 +11,7 @@ interface HeaderProps {
 const ProfileHeader = ({ open, setOpen }: HeaderProps) => {
   return (
     <header className="sticky top-0 w-full bg-white border-b border-gray-200 z-30">
-      <div className="w-full flex items-center justify-between px-6 py-3">
-        {/* Мобильный бургер */}
+      <div className="w-full flex items-center justify-between px-6 py-5">
         <button
           onClick={() => setOpen(!open)}
           className="min-[900px]:hidden text-[#0A8791] text-3xl"
@@ -33,11 +32,6 @@ const ProfileHeader = ({ open, setOpen }: HeaderProps) => {
             </h1>
           </div>
         </Link>
-
-        {/* Десктоп аватар */}
-        <div className="hidden min-[900px]:flex items-center gap-5">
-          <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-200 cursor-pointer"></div>
-        </div>
       </div>
     </header>
   );

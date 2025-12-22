@@ -52,11 +52,16 @@ export const carApi = createApi({
       query: (id) => `/car/get/${id}`,
       transformResponse: (response: CarsResponse) => response.cars[0], // берём первый элемент
     }),
+    getCarsByCategory: builder.query<Car[], string>({
+      query: (categoryId) => `/cars/category/${categoryId}`,
+      transformResponse: (res: CarsResponse) => res.cars,
+    }),
   }),
 });
 
 export const {
   useGetCarsQuery,
   useGetCarByIdQuery,
+  useGetCarsByCategoryQuery,
   util: carApiUtil,
 } = carApi;

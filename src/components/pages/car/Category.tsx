@@ -131,6 +131,7 @@ const Category = () => {
               Max price: <span className="font-semibold">{price}</span> som
             </p>
 
+
             <div ref={lineRef} className="relative h-1 bg-gray-200 rounded">
               <div
                 className="absolute w-4 h-4 bg-teal-600 rounded-full -top-1.5 cursor-pointer"
