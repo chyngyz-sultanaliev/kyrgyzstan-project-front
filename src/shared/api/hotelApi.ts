@@ -19,7 +19,7 @@ export interface Hotel {
   id: string;
   title: string;
   description: string;
-  images: string[];
+  images: { img: string }[];
   sleepingPlaces: number;
   maxGuests: number;
   area: number;
@@ -68,7 +68,8 @@ export const hotelApi = createApi({
     }),
     getHotelById: builder.query<Hotel, string>({
       query: (id) => `/hotel/get/${id}`,
-      transformResponse: (response: HotelsResponse) => response.hotels[0],
+      transformResponse: (response: { success: boolean; hotels: Hotel }) =>
+        response.hotels,
     }),
   }),
 });
