@@ -18,6 +18,24 @@ namespace AUTH {
     password: string;
     username: string;
   };
+  export type RequestResset = {
+    email: string;
+  };
+
+  export type VerifyCode = {
+    email: string;
+    token: string;
+  };
+
+  export type ResetPassword = {
+    email: string;
+    token: string;
+    newPassword: string;
+  };
+
+  export type Message = {
+    message: string;
+  };
 
   export type AuthError = {
     success: boolean;

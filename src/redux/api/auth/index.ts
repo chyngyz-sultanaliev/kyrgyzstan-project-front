@@ -9,8 +9,42 @@ const api = index.injectEndpoints({
         body: data,
       }),
     }),
+    RegisterUser: build.mutation<AUTH.LoginResponse, AUTH.RegisterRequest>({
+      query: (data) => ({
+        url: "/auth/register",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    RequestReset: build.mutation<AUTH.Message, AUTH.RequestResset>({
+      query: (data) => ({
+        url: "/auth/request-reset",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    VerifyCode: build.mutation<AUTH.Message, AUTH.VerifyCode>({
+      query: (data) => ({
+        url: "/auth/verify-code",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    ResetPassword: build.mutation<AUTH.Message, AUTH.ResetPassword>({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
-  overrideExisting: false, // чтобы не перезаписывать существующие endpoints
+  overrideExisting: false,
 });
 
-export const { useLoginUserMutation } = api;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useRequestResetMutation,
+  useVerifyCodeMutation,
+  useResetPasswordMutation,
+} = api;

@@ -5,26 +5,42 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff, User, Mail, LockKeyhole } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useRegisterUserMutation } from "@/redux/api/auth";
+import Cookies from "js-cookie";
 
 interface RegisterFormValues {
-  fullName: string;
+  username: string;
   email: string;
   password: string;
 }
 
 export default function Register() {
+  const [registers, { isLoading }] = useRegisterUserMutation();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<RegisterFormValues>({ mode: "onChange" });
-
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const onSubmit = (data: RegisterFormValues) => {
-    console.log("Регистрация:", data);
+  const onSubmit = async (data: RegisterFormValues) => {
+    try {
+      const response = await registers(data).unwrap();
+      // localStorage.setItem("token", response.token);
+      Cookies.set("token", response.token);
+      router.push("/");
+    } catch (error: unknown) {
+      const err = error as AUTH.Error;
+      if (err.data?.message) {
+        setServerError(err.data.message);
+      } else {
+        setServerError("Произошла ошибка. Попробуйте ещё раз.");
+      }
+    }
   };
-
   return (
     <div>
       <form
@@ -46,8 +62,8 @@ export default function Register() {
               type="text"
               placeholder="Введите ФИО"
               className={`w-full pl-10 px-4 py-3 border rounded focus:outline-none transition
-                ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
-              {...register("fullName", {
+                ${errors.username ? "border-red-500" : "border-gray-300"}`}
+              {...register("username", {
                 required: "Ф.И.О обязательно",
                 minLength: {
                   value: 3,
@@ -56,9 +72,9 @@ export default function Register() {
               })}
             />
           </div>
-          {errors.fullName && (
+          {errors.username && (
             <p className="text-red-500 text-xs sm:text-sm mt-1">
-              {errors.fullName.message}
+              {errors.username.message}
             </p>
           )}
         </div>
@@ -126,12 +142,18 @@ export default function Register() {
               {errors.password.message}
             </p>
           )}
+          {serverError && (
+            <p className="text-red-500 text-xs text-center  sm:text-sm mt-1">
+              {serverError}
+            </p>
+          )}
         </div>
 
         <Button
           type="submit"
           variant="primary"
-          disabled={!isValid}
+          loading={isLoading}
+          disabled={!isValid || isLoading}
           className="w-full"
         >
           Зарегистрироваться!
