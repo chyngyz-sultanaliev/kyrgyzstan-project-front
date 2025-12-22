@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { tourApi } from "@/shared/api/tourApi";
 import { carApi } from "@/shared/api/carApi";
 import { hotelApi } from "@/shared/api/hotelApi";
+import { newsApi } from "@/shared/api/news";
 
 import { tourCategoryApi } from "@/shared/api/tourCategoryApi";
 import { carCategoryApi } from "@/shared/api/carCategoryApi";
@@ -12,6 +13,7 @@ import { reviewApi } from "@/shared/api/reviewApi";
 
 export const store = configureStore({
   reducer: {
+    [newsApi.reducerPath]: newsApi.reducer,
     [api.reducerPath]: api.reducer,
     [tourApi.reducerPath]: tourApi.reducer,
     [carApi.reducerPath]: carApi.reducer,
@@ -27,6 +29,7 @@ export const store = configureStore({
     getDefaultMiddleware()
       .concat(api.middleware)
       .concat(tourApi.middleware)
+      .concat(newsApi.middleware)
       .concat(carApi.middleware)
       .concat(hotelApi.middleware)
       .concat(tourCategoryApi.middleware)
