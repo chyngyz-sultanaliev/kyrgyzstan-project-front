@@ -1,44 +1,20 @@
 "use client";
+import { useGetHotelCategoriesQuery } from "@/shared/api/hotelCategoryApi";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Hotel = () => {
-  const hotels = [
-    {
-      title: "Aurora",
-      img: "https://t3.ftcdn.net/jpg/01/72/11/78/360_F_172117865_2JkKUkVzOG93FVeZIK7gHkxmvmD8JbOB.jpg",
-    },
-    {
-      title: "Baitur",
-      img: "https://media.istockphoto.com/id/156209467/photo/horse-and-mountains.jpg?s=612x612&w=0&k=20&c=lrKB7724ExU5tiTOZ9RG03n80QJqufk0GA2bhqE4Pl4=",
-    },
-    {
-      title: "Raduga",
-      img: "https://cabar.asia/wp-content/uploads/2024/09/Zapovednik-Kyrgyz-Ata-Oshskaya-oblast-Kyrgyzstan.-Foto-PROON-Kyrgyzstan.jpeg",
-    },
-    {
-      title: "Redens",
-      img: "https://eurasia.travel/wp-content/uploads/2024/09/kyrgyzstan-nature-3-1024x683.jpg",
-    },
-    {
-      title: "Kapriz",
-      img: "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a3lyZ3l6c3RhbnxlbnwwfHwwfHx8MA%3D%3D",
-    },
-    {
-      title: "Orion",
-      img: "https://images.locationscout.net/2024/09/ala-kul-lake-viewpoint-kyrgyz-republic-g6rh.jpg?w=1080&q=60",
-    },
-  ];
-
   const [catIndex, setCatIndex] = useState(0);
+  const { data = [] } = useGetHotelCategoriesQuery();
 
   useEffect(() => {
+    if (!data.length) return;
     const interval = setInterval(() => {
-      setCatIndex((i) => (i + 1) % hotels.length);
-    }, 5000);
+      setCatIndex((i) => (i + 1) % data.length);
+    }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [data]);
 
   return (
     <div className="mt-16 sm:mt-20">
@@ -56,8 +32,8 @@ const Hotel = () => {
       </motion.div>
 
       {/* CARDS */}
-      <div className="flex flex-wrap justify-center gap-6 px-4">
-        {hotels.map((cat, i) => (
+      <div className="flex flex-wrap justify-center gap-10 px-4">
+        {data?.map((cat, i) => (
           <motion.div
             key={i}
             animate={{
@@ -80,14 +56,14 @@ const Hotel = () => {
             >
               <Link href="/hotel">
                 <img
-                  src={cat.img}
-                  alt={cat.title}
+                  src={cat.image ?? "/placeholder.jpg"}
+                  alt={cat.name}
                   className="w-full h-full object-cover"
                 />
               </Link>
             </div>
             <p className="mt-2 sm:mt-3 text-center text-base sm:text-lg lg:text-xl font-medium">
-              {cat.title}
+              {cat.name}
             </p>
           </motion.div>
         ))}
