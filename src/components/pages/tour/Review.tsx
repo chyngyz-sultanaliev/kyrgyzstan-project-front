@@ -123,7 +123,7 @@ export default function Review() {
         <div className="flex-1">
           <div className="flex items-center justify-between  mb-2">
             <div className="flex items-center gap-3 ">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-300 rounded-full flex-shrink-0"></div>
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-300 rounded-full shrink-0"></div>
               <h4 className="font-medium text-teal-600 text-base sm:text-lg">
                 Полина
               </h4>

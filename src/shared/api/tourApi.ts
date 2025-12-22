@@ -44,7 +44,10 @@ export interface ToursResponse {
   success: boolean;
   tours: Tour[];
 }
-
+export interface TourResponse {
+  success: boolean;
+  tours: Tour;
+}
 export const tourApi = createApi({
   reducerPath: "tourApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
@@ -55,7 +58,7 @@ export const tourApi = createApi({
     }),
     getTourById: builder.query<Tour, string>({
       query: (id) => `/tour/get/${id}`,
-      transformResponse: (response: ToursResponse) => response.tours[0],
+      transformResponse: (response: TourResponse) => response.tours,
     }),
   }),
 });
