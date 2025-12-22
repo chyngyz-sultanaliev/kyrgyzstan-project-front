@@ -1,5 +1,12 @@
 import Detail from "@/components/pages/tour/Detail";
+import React from "react";
 
-const page = () => <Detail />;
+const page = () => {
+  return (
+    <div>
+      <Detail />
+    </div>
+  );
+};
 
 export default page;
