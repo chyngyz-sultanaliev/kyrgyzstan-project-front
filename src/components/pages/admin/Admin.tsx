@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState } from "react";
 import Image from "next/image";
@@ -13,14 +14,17 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
 import {
+  Favorite,
   useGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/shared/api/profileApi";
+import { Tour } from "@/shared/api/tourApi";
+import { Hotel } from "@/shared/api/hotelApi";
+import { Car } from "@/shared/api/carApi";
 
 const Admin = () => {
   const { data: profile, isLoading } = useGetProfileQuery();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
-
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -120,6 +124,10 @@ const Admin = () => {
       setError(err?.data?.message || "Произошла ошибка. Попробуйте ещё раз.");
     }
   };
+  const filteredFavorites =
+    activeFilter === "ALL"
+      ? profile.favorites
+      : profile.favorites.filter((fav) => fav.itemType === activeFilter);
 
   return (
     <div className="p-4 sm:p-6 mx-auto h-[87vh] overflow-y-auto">
@@ -204,20 +212,118 @@ const Admin = () => {
         </div>
 
         {/* Cards Grid */}
-        {profile.favorites.length === 0 ? (
+        {filteredFavorites.length === 0 ? (
           <div className="text-center py-16 text-gray-500">
             <p className="text-lg">У вас пока нет избранных элементов</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
-            {profile.favorites.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white border border-gray-300 rounded-lg p-3 h-48 min-h-[12rem] hover:shadow-md transition-shadow flex items-center justify-center text-gray-400"
-              >
-                Избранный элемент #{index + 1}
-              </div>
-            ))}
+            {filteredFavorites.map((fav: Favorite) => {
+              const item = fav.item;
+
+              if (fav.itemType === "HOTEL") {
+                const hotel = item as Hotel;
+                return (
+                  <div
+                    key={fav.id}
+                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    {/* Image */}
+                    <div className="h-32 bg-gray-100">
+                      {hotel.images?.[0]?.img && (
+                        <img
+                          src={hotel.images[0].img}
+                          alt={hotel.title}
+                          width={300}
+                          height={200}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                    {/* Content */}
+                    <div className="p-3 space-y-1">
+                      <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+                        {hotel.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 line-clamp-1">
+                        {hotel.address}
+                      </p>
+                      <p className="text-xs text-gray-700 font-medium">
+                        {hotel.priceWeekday} сом / сутки
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (fav.itemType === "CAR") {
+                const car = item as Car;
+                return (
+                  <div
+                    key={fav.id}
+                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <div className="h-32 bg-gray-100">
+                      {car.image && (
+                        <img
+                          src={car.image[0].img}
+                          alt={car.title}
+                          width={300}
+                          height={200}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="p-3 space-y-1">
+                      <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+                        {car.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 line-clamp-1">
+                        Двигатель: {car.engine}, Трансмиссия: {car.transmission}
+                      </p>
+                      <p className="text-xs text-gray-700 font-medium">
+                        {car.pricePerDay} сом / сутки
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (fav.itemType === "TOUR") {
+                const tour = item as Tour;
+                return (
+                  <div
+                    key={fav.id}
+                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <div className="h-32 bg-gray-100">
+                      {tour.image && (
+                        <img
+                          src={tour.image}
+                          alt={tour.title}
+                          width={300}
+                          height={200}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="p-3 space-y-1">
+                      <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+                        {tour.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 line-clamp-1">
+                        {tour.location}
+                      </p>
+                      <p className="text-xs text-gray-700 font-medium">
+                        {tour.price} сом
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+
+              return null;
+            })}
           </div>
         )}
       </div>
