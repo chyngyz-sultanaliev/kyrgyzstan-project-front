@@ -1,6 +1,11 @@
+import { Hotel } from "./hotelApi";
+import { Car } from "./carApi";
 // src/shared/api/profileApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
+import { Tour } from "./tourApi";
+
+export type FavoriteItem = Car | Hotel | Tour;
 
 export interface Favorite {
   id: string;
@@ -8,6 +13,7 @@ export interface Favorite {
   itemId: string;
   itemType: "CAR" | "HOTEL" | "TOUR";
   createdAt: string;
+  item: FavoriteItem;
 }
 
 export interface ProfileUser {

@@ -1,6 +1,8 @@
-// src/shared/api/car
+// src/shared/api/car.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
 
+// Интерфейсы
 export interface User {
   username: string;
   avatar: string | null;
@@ -19,7 +21,7 @@ export interface Car {
   id: string;
   title: string;
   description: string;
-  image: string;
+  image: { img: string }[];
   transmission: string;
   seat: number;
   year: number;
@@ -39,22 +41,56 @@ export interface CarsResponse {
   success: boolean;
   cars: Car[];
 }
+export interface CarResponse {
+  success: boolean;
+  cars: Car;
+}
 
 export const carApi = createApi({
   reducerPath: "carApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    prepareHeaders: (headers) => {
+      const token = Cookies.get("token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      // Примечание: Content-Type для FormData браузер установит САМ автоматически
+      // вместе с boundary. Руками его ставить НЕЛЬЗЯ.
+      return headers;
+    },
+  }),
+
+  tagTypes: ["Car"],
   endpoints: (builder) => ({
     getCars: builder.query<Car[], void>({
-      query: () => "/cars/get",
-      transformResponse: (response: CarsResponse) => response.cars,
+      query: () => "/car/get",
+      transformResponse: (res: CarsResponse) => res.cars,
+      providesTags: [{ type: "Car", id: "LIST" }],
     }),
     getCarById: builder.query<Car, string>({
       query: (id) => `/car/get/${id}`,
-      transformResponse: (response: CarsResponse) => response.cars[0], // берём первый элемент
+      transformResponse: (res: CarResponse) => res.cars,
+      providesTags: (result, error, id) => [{ type: "Car", id }],
     }),
-    getCarsByCategory: builder.query<Car[], string>({
-      query: (categoryId) => `/cars/category/${categoryId}`,
-      transformResponse: (res: CarsResponse) => res.cars,
+    // ОСНОВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ: разрешаем передавать FormData
+    updateCar: builder.mutation<Car, { id: string; data: FormData | Partial<Car> }>({
+      query: ({ id, data }) => ({
+        url: `/car/put/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Car", id },
+        { type: "Car", id: "LIST" },
+      ],
+    }),
+    deleteCar: builder.mutation<{ success: boolean }, string>({
+      query: (id) => ({
+        url: `/car/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "Car", id: "LIST" }],
     }),
   }),
 });
@@ -62,6 +98,6 @@ export const carApi = createApi({
 export const {
   useGetCarsQuery,
   useGetCarByIdQuery,
-  useGetCarsByCategoryQuery,
-  util: carApiUtil,
+  useUpdateCarMutation,
+  useDeleteCarMutation,
 } = carApi;
