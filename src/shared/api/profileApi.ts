@@ -8,6 +8,7 @@ import { Tour } from "./tourApi";
 export type FavoriteItem = Car | Hotel | Tour;
 
 export interface Favorite {
+  [x: string]: any;
   id: string;
   userId: string;
   itemId: string;
@@ -53,7 +54,7 @@ export const profileApi = createApi({
     }),
     updateProfile: builder.mutation<
       ProfileResponse,
-      { username?: string; email?: string; avatar?: string }
+      FormData | { username?: string; email?: string; avatar?: string }
     >({
       query: (body) => ({
         url: "/auth/update",
