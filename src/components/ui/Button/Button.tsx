@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/components/utils/cn";
 
-type ButtonVariant = "primary" | "secondary" | "gradient";
+type ButtonVariant = "primary" | "secondary" | "gradient" | "delete";
 type IconPosition = "left" | "right";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -32,6 +32,7 @@ export default function Button({
 
   const variants: Record<ButtonVariant, string> = {
     primary: "bg-[#0A8791] text-white",
+    delete: "bg-red-500   text-white",
     secondary: "bg-white border border-[#0A8791] text-[#0A8791]",
     gradient: "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white",
   };

@@ -1,14 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Button from "@/components/ui/Button/Button";
+import StatusMessage from "@/components/ui/status/Status";
 import { useGetCarsQuery } from "@/shared/api/carApi";
 import Link from "next/link";
 
 const CarAdmin = () => {
-  const { data: cars, isLoading, isError } = useGetCarsQuery();
+  const { data: cars, isLoading, error } = useGetCarsQuery();
 
-  if (isLoading) return <div>Загрузка...</div>;
-  if (isError) return <div>Ошибка при загрузке машин</div>;
+  if (isLoading) return <StatusMessage variant="loading" />;
+  if (error)
+    return (
+      <StatusMessage
+        variant="error"
+        message={`${(error as AUTH.Error)?.data?.message}`}
+      />
+    );
 
   const handleDelete = (id: string) => {
     console.log("Удалить машину с ID:", id);
@@ -24,7 +31,11 @@ const CarAdmin = () => {
           {/* Image */}
           <div className="h-40 bg-gray-100 relative">
             {car.image && (
-              <img src={car.image[0].img} alt={car.title} className="object-cover" />
+              <img
+                src={car.image[0].img}
+                alt={car.title}
+                className="object-cover"
+              />
             )}
           </div>
 
@@ -47,6 +58,7 @@ const CarAdmin = () => {
               </Button>
             </Link>
             <Button
+              variant="delete"
               className="flex-1 bg-red"
               onClick={() => handleDelete(car.id)}
             >
