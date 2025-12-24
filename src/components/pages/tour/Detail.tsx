@@ -59,8 +59,12 @@ const Detail = () => {
           <p>{tour.description}</p>
         </div>
       </section>
-
-      <ReviewForm />
+      <ReviewForm
+        review={
+          tour.reviews && tour.reviews.length > 0 ? tour.reviews : undefined
+        }
+        id={tourId}
+      />
     </>
   );
 };
