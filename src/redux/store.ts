@@ -10,6 +10,7 @@ import { hotelCategoryApi } from "@/shared/api/hotelCategoryApi";
 import { profileApi } from "@/shared/api/profileApi";
 import { api } from "./api";
 import { reviewApi } from "@/shared/api/reviewApi";
+import { favoriteApi } from "@/shared/api/favoriteApi";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     [carApi.reducerPath]: carApi.reducer,
     [hotelApi.reducerPath]: hotelApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
+    [favoriteApi.reducerPath]: favoriteApi.reducer,
 
     [tourCategoryApi.reducerPath]: tourCategoryApi.reducer,
     [carCategoryApi.reducerPath]: carCategoryApi.reducer,
@@ -36,7 +38,8 @@ export const store = configureStore({
       .concat(carCategoryApi.middleware)
       .concat(hotelCategoryApi.middleware)
       .concat(profileApi.middleware)
-      .concat(reviewApi.middleware),
+      .concat(reviewApi.middleware)
+      .concat(favoriteApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
