@@ -229,49 +229,99 @@ const Detail = () => {
       </div>
 
       {/* Modal */}
-      {form && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center"
-          onClick={() => setForm(false)}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white p-6 rounded-xl w-[90%] max-w-md"
+    {form && (
+  <div
+    className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+    onClick={() => setForm(false)}
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="bg-white rounded-3xl shadow-lg w-[90%] max-w-sm p-6 space-y-4"
+    >
+      {!success ? (
+        <>
+          <h1 className="text-2xl font-bold text-center">Заявка на подбор</h1>
+          <p className="text-center text-gray-500 text-sm">
+            Оставьте заявку на подбор и сократите свое время на поиск
+          </p>
+
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
           >
-            {!success ? (
-              <>
-                <h3 className="text-xl font-medium mb-3">Заявка</h3>
-                {Object.keys(formData).map((key) => (
-                  <input
-                    key={key}
-                    name={key}
-                    value={(formData as any)[key]}
-                    onChange={handleChange}
-                    placeholder={key}
-                    className="w-full border py-2 px-4 rounded-full mb-2"
-                  />
-                ))}
-                <button
-                  onClick={handleSend}
-                  className="bg-[#0a8791] text-white py-2 px-6 rounded-full w-full cursor-pointer"
-                >
-                  Отправить
-                </button>
-              </>
-            ) : (
-              <div className="text-center">
-                <h3 className="text-xl font-medium">Заявка отправлена ✅</h3>
-                <button
-                  onClick={() => setForm(false)}
-                  className="mt-4 bg-[#0a8791] text-white py-2 px-6 rounded-full cursor-pointer"
-                >
-                  Закрыть
-                </button>
-              </div>
-            )}
-          </div>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Имя"
+              className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+            />
+
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="+996 ___-___-___"
+              className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+            />
+
+            <input
+              type="text"
+              name="guests"
+              value={formData.guests}
+              onChange={handleChange}
+              placeholder="Количество человек"
+              className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+            />
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                name="checkIn"
+                value={formData.checkIn}
+                onChange={handleChange}
+                placeholder="Въезд"
+                className="w-1/2 px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              />
+              <input
+                type="text"
+                name="checkOut"
+                value={formData.checkOut}
+                onChange={handleChange}
+                placeholder="Отъезд"
+                className="w-1/2 px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
+            >
+              Оставить заявку
+            </button>
+          </form>
+        </>
+      ) : (
+        <div className="text-center space-y-4">
+          <h3 className="text-xl font-medium">Заявка отправлена ✅</h3>
+          <button
+            onClick={() => setForm(false)}
+            className="mt-2 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
+          >
+            Закрыть
+          </button>
         </div>
       )}
+    </div>
+  </div>
+)}
+
+
 
       {/* Reviews */}
       <Review hotelId={hotel.id} />
