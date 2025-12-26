@@ -1,31 +1,55 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "./hotelApi";
-
+import Cookies from "js-cookie";
 
 export interface Review {
   id: string;
+  text: string;
   rating: number;
-  comment: string;
-  Images: string[];
   createdAt: string;
-  user: User;
+  user: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface CreateReviewDto {
+  hotelId: string;
+  text: string;
+  rating: number;
+  Images?: string[];
 }
 
 export const reviewApi = createApi({
   reducerPath: "reviewApi",
+  tagTypes: ["Review"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
-    credentials: "include", // эгер auth cookie болсо
+    prepareHeaders: (headers) => {
+      const token = Cookies.get("token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
-    createReview: builder.mutation<Review, FormData>({
-      query: (formData) => ({
-        url: "/review/create",
+    getHotelReviews: builder.query<any[], string>({
+      query: (hotelId) => `/review/hotel/${hotelId}`, 
+      providesTags: ["Review"],
+    }),
+
+    addHotelReview: builder.mutation<
+      any,
+      { hotelId: string; rating: number; comment: string }
+    >({
+      query: (body) => ({
+        url: "/review/hotel",
         method: "POST",
-        body: formData,
+        body,
       }),
+      invalidatesTags: ["Review"],
     }),
   }),
 });
 
-export const { useCreateReviewMutation } = reviewApi;
+export const { useGetHotelReviewsQuery, useAddHotelReviewMutation } = reviewApi;
