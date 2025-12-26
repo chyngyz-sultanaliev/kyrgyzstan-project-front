@@ -2,7 +2,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useGetNewsQuery } from "@/shared/api/news";
+import { useGetNewsQuery } from "@/shared/api/newsApi";
 
 const News = () => {
   const [active, setActive] = useState(0);

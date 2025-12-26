@@ -28,6 +28,7 @@ import {
 import { useGetHotelCategoriesQuery } from "@/shared/api/hotelCategoryApi";
 import Button from "@/components/ui/Button/Button";
 import StatusMessage from "@/components/ui/status/Status";
+import toast from "react-hot-toast";
 
 interface HotelForm {
   title: string;
@@ -199,10 +200,11 @@ export default function HotelEdit() {
 
     try {
       await updateHotel(payload).unwrap();
-      alert("Отель успешно обновлен!");
-    } catch (err) {
-      console.error("Ошибка при обновлении отеля:", err);
-      alert("Ошибка при обновлении отеля");
+      toast.success("Отель успешно обновлен!");
+    } catch (error) {
+      const err = error as AUTH.Error;
+      console.error(error);
+      toast.error(`${err.data?.message}`);
     }
   };
 

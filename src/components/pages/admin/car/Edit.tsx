@@ -18,6 +18,7 @@ import { useGetCarByIdQuery, useUpdateCarMutation } from "@/shared/api/carApi";
 import { useGetCarCategoriesQuery } from "@/shared/api/carCategoryApi";
 import Button from "@/components/ui/Button/Button";
 import StatusMessage from "@/components/ui/status/Status";
+import toast from "react-hot-toast";
 
 interface CarForm {
   title: string;
@@ -117,13 +118,13 @@ export default function Edit() {
         image: imageUrls.map((url) => ({ img: url })),
       },
     };
-
     try {
       await updateCar(payload).unwrap();
-      alert("Машина успешно обновлена!");
-    } catch (err) {
-      console.error("Ошибка при обновлении машины:", err);
-      alert("Ошибка при обновлении машины");
+      toast.success("Машина успешно обновлена!");
+    } catch (error) {
+      const err = error as AUTH.Error;
+      console.error(error);
+      toast.error(`${err.data?.message}`);
     }
   };
 
@@ -132,9 +133,7 @@ export default function Edit() {
     return (
       <StatusMessage
         variant="error"
-        message={`${
-          (error as AUTH.Error)?.data?.message 
-        }`}
+        message={`${(error as AUTH.Error)?.data?.message}`}
       />
     );
   return (

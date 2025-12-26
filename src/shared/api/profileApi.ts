@@ -8,7 +8,6 @@ import { Tour } from "./tourApi";
 export type FavoriteItem = Car | Hotel | Tour;
 
 export interface Favorite {
-  [x: string]: any;
   id: string;
   userId: string;
   itemId: string;
