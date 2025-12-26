@@ -18,9 +18,6 @@ const Detail = () => {
   const { id } = useParams();
   const [isFavLocal, setIsFavLocal] = useState(false);
 
-    // ---- Drag refs ----
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<HTMLDivElement>(null);
   // ---- API ----
   const { data: hotel, isLoading } = useGetHotelByIdQuery(String(id));
   const { data: favorites } = useGetFavoritesQuery();
@@ -34,9 +31,8 @@ const Detail = () => {
       )
     : undefined;
 
-  const isFavorite = Boolean(favorite);
-
   // ---- Form state ----
+  const isFavorite = Boolean(favorite);
   const [form, setForm] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -47,6 +43,13 @@ const Detail = () => {
     checkOut: "",
   });
 
+  // ---- Double click handler ----
+  const [togglePosition, setTogglePosition] = useState(false);
+  const handleDoubleClick = () => setTogglePosition(!togglePosition);
+
+  // ---- Drag refs ----
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
   // ---- Scroll lock ----
   useEffect(() => {
     document.body.style.overflow = form ? "hidden" : "auto";
@@ -79,12 +82,8 @@ const Detail = () => {
 
   if (isLoading)
     return <div className="text-center py-20 text-lg">Загрузка...</div>;
-  if (!hotel) return <div className="text-center py-20 text-lg">Отель не найден</div>;
-
-
-  // ---- Double click handler ----
-  const [togglePosition, setTogglePosition] = useState(false);
-  const handleDoubleClick = () => setTogglePosition(!togglePosition);
+  if (!hotel)
+    return <div className="text-center py-20 text-lg">Отель не найден</div>;
 
   return (
     <section className="px-4 py-10 md:px-20">
