@@ -20,6 +20,9 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { useCreateHotelMutation } from "@/shared/api/hotelApi";
+import { useGetHotelCategoriesQuery } from "@/shared/api/hotelCategoryApi";
+import toast from "react-hot-toast";
 
 interface HotelForm {
   title: string;
@@ -54,7 +57,7 @@ interface HotelForm {
   categoryId: string;
 }
 
-export default function CreateHotel() {
+export default function Create() {
   const {
     register,
     handleSubmit,
@@ -98,45 +101,39 @@ export default function CreateHotel() {
     mode: "onSubmit",
   });
 
-  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const { data: categories } = useGetHotelCategoriesQuery();
+  const [create, { isLoading }] = useCreateHotelMutation();
+  const [uploadedImage, setUploadedImage] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const filesArray = Array.from(e.target.files);
 
-    // Добавляем новые изображения к существующим
-    const allFiles = [...uploadedImages, ...filesArray];
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => URL.createObjectURL(file));
 
-    // Ограничение до 5 изображений
-    const limitedFiles = allFiles.slice(0, 5);
-    const previews = limitedFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prev) => [...prev, ...previews].slice(0, 5));
+    setUploadedImage((prev) => [...prev, ...files].slice(0, 5));
+    setValue("images", [...uploadedImage, ...files].slice(0, 5), {
+      shouldValidate: true,
+    });
 
-    // Очищаем старые превью
-    imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-
-    setUploadedImages(limitedFiles);
-    setImagePreviews(previews);
-    setValue("images", limitedFiles, { shouldValidate: true });
-
-    // Очищаем input для возможности повторной загрузки того же файла
     e.target.value = "";
   };
 
   const removeImage = (index: number) => {
-    const newImages = uploadedImages.filter((_, i) => i !== index);
+    const newFiles = uploadedImage.filter((_, i) => i !== index);
     const newPreviews = imagePreviews.filter((_, i) => i !== index);
 
     URL.revokeObjectURL(imagePreviews[index]);
 
-    setUploadedImages(newImages);
+    setUploadedImage(newFiles);
     setImagePreviews(newPreviews);
-    setValue("images", newImages);
+    setValue("images", newFiles);
   };
-
-  const onSubmit = (data: HotelForm) => {
+  const onSubmit = async (data: HotelForm) => {
     // Проверяем наличие изображений
-    if (uploadedImages.length === 0) {
+    if (uploadedImage.length === 0) {
       alert("Пожалуйста, загрузите хотя бы одно изображение");
       return;
     }
@@ -156,23 +153,24 @@ export default function CreateHotel() {
       newYearPrice: Number(data.newYearPrice) || 0,
       januaryPrice: Number(data.januaryPrice) || 0,
       deposit: Number(data.deposit) || 0,
-      images: uploadedImages.map((file) => file.name),
+      images: uploadedImage.map((file) => ({
+        img: URL.createObjectURL(file),
+      })),
     };
 
-    //   const res = await fetch("/api/cars", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(data),
-    //   });
-    //   const result = await res.json();
-    //   console.log("Ответ сервера:", result);
-
-    console.log("Отправка на сервер:", payload);
+    try {
+      await create(payload);
+      toast.success("Машина успешно создана!");
+    } catch (error) {
+      const err = error as AUTH.Error;
+      console.error(error);
+      toast.error(`${err.data?.message}`);
+    }
 
     imagePreviews.forEach((url) => URL.revokeObjectURL(url));
 
     reset();
-    setUploadedImages([]);
+    setUploadedImage([]);
     setImagePreviews([]);
   };
 
@@ -251,9 +249,11 @@ export default function CreateHotel() {
                 {...register("categoryId", { required: "Выберите категорию" })}
               >
                 <option value="">Выберите категорию</option>
-                <option value="Luxury">Luxury</option>
-                <option value="Standard">Standard</option>
-                <option value="Budget">Budget</option>
+                {categories?.map((el) => (
+                  <option key={el.id} value={el.id}>
+                    {el.name}
+                  </option>
+                ))}
               </select>
             </div>
             {errors.categoryId && (
@@ -487,29 +487,28 @@ export default function CreateHotel() {
             <label className="block mb-1 font-medium text-gray-400">
               Изображения *
             </label>
-
             <div
-              className={`border-2 border-dashed rounded-lg p-6 text-center hover:border-[#0A8791] transition-colors ${
-                errors.images ? "border-red-500" : "border-gray-300"
+              className={`border-2 border-dashed rounded-lg p-6 text-center hover:border-[#0A8791] transition-colors cursor-pointer ${
+                isLoading ? "opacity-50 cursor-not-allowed" : "border-gray-300"
               }`}
+              onClick={() =>
+                !isLoading && document.getElementById("image-upload")?.click()
+              }
               onDragOver={(e) => e.preventDefault()}
-              onDrop={(e: React.DragEvent<HTMLDivElement>) => {
+              onDrop={(e) => {
                 e.preventDefault();
+                if (isLoading) return;
+
                 const files = Array.from(e.dataTransfer.files).filter((file) =>
                   file.type.startsWith("image/")
                 );
                 if (files.length === 0) return;
 
-                const allFiles = [...uploadedImages, ...files].slice(0, 5);
-                const previews = allFiles.map((file) =>
-                  URL.createObjectURL(file)
-                );
+                const previews = files.map((file) => URL.createObjectURL(file));
 
-                imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-
-                setUploadedImages(allFiles);
-                setImagePreviews(previews);
-                setValue("images", allFiles, { shouldValidate: true });
+                setImagePreviews((prev) => [...prev, ...previews].slice(0, 5));
+                setUploadedImage((prev) => [...prev, ...files].slice(0, 5));
+                setValue("images", [...uploadedImage, ...files].slice(0, 5));
               }}
             >
               <input
@@ -519,6 +518,7 @@ export default function CreateHotel() {
                 onChange={handleImageUpload}
                 className="hidden"
                 id="image-upload"
+                disabled={isLoading || uploadedImage.length >= 5}
               />
               <label
                 htmlFor="image-upload"
@@ -526,7 +526,9 @@ export default function CreateHotel() {
               >
                 <Upload className="w-10 h-10 text-gray-400" />
                 <span className="text-sm text-gray-600">
-                  Нажмите или перетащите изображения
+                  {isLoading
+                    ? "Загрузка..."
+                    : "Нажмите или перетащите изображения"}
                 </span>
                 <span className="text-xs text-gray-400">
                   Можно загрузить несколько файлов (максимум 5)
@@ -549,7 +551,7 @@ export default function CreateHotel() {
                   {imagePreviews.map((preview, index) => (
                     <div
                       key={index}
-                      className="relative group aspect-square rounded-lg overflow-hidden "
+                      className="relative group aspect-square rounded-lg overflow-hidden"
                     >
                       <img
                         src={preview}
@@ -564,7 +566,7 @@ export default function CreateHotel() {
                         <X className="w-4 h-4" />
                       </button>
                       <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
-                        {uploadedImages[index].name}
+                        {uploadedImage[index].name}
                       </div>
                     </div>
                   ))}

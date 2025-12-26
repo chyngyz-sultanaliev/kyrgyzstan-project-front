@@ -84,6 +84,15 @@ export const hotelApi = createApi({
         response.hotels,
       providesTags: (result, error, id) => [{ type: "Hotel", id }],
     }),
+    createHotel: builder.mutation<Hotel, FormData | Partial<Hotel>>({
+      query: (data) => ({
+        url: `/hotel/post`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "Hotel", id: "LIST" }],
+    }),
+
     updateHotel: builder.mutation<
       Hotel,
       { id: string; data: FormData | Partial<Hotel> }
@@ -111,6 +120,7 @@ export const hotelApi = createApi({
 export const {
   useGetHotelsQuery,
   useGetHotelByIdQuery,
+  useCreateHotelMutation,
   useUpdateHotelMutation,
   useDeleteHotelMutation,
   util: hotelApiUtil,
