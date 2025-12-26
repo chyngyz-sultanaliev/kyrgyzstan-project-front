@@ -18,6 +18,9 @@ const Detail = () => {
   const { id } = useParams();
   const [isFavLocal, setIsFavLocal] = useState(false);
 
+    // ---- Drag refs ----
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
   // ---- API ----
   const { data: hotel, isLoading } = useGetHotelByIdQuery(String(id));
   const { data: favorites } = useGetFavoritesQuery();
@@ -78,9 +81,6 @@ const Detail = () => {
     return <div className="text-center py-20 text-lg">Загрузка...</div>;
   if (!hotel) return <div className="text-center py-20 text-lg">Отель не найден</div>;
 
-  // ---- Drag refs ----
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<HTMLDivElement>(null);
 
   // ---- Double click handler ----
   const [togglePosition, setTogglePosition] = useState(false);
