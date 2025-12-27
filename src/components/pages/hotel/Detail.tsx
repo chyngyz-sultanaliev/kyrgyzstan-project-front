@@ -25,10 +25,7 @@ const Detail = () => {
   const [removeFavorite] = useRemoveFavoriteMutation();
 
   const favorite = hotel
-    ? favorites?.find(
-        (f) =>
-          f.itemType === "HOTEL" && (f.item as Hotel | null)?.id === hotel.id
-      )
+    ? favorites?.find((f) => f.itemType === "HOTEL" && f.item?.id === hotel.id)
     : undefined;
 
   // ---- Form state ----
@@ -107,22 +104,24 @@ const Detail = () => {
               }
             }}
           />
-          <FaHeart
+          {/* ❤️ Favorite */}
+          <CiHeart
             className={`transition ${
-              isFavLocal ? "text-red-600" : "text-gray-400"
+              isFavorite ? "text-red-600" : "text-gray-400"
             }`}
             onClick={async () => {
-              const prev = isFavLocal;
-              setIsFavLocal(!prev);
               try {
-                if (prev && favorite) {
-                  await removeFavorite(favorite.id).unwrap();
+                if (isFavorite && favorite) {
+                  await removeFavorite(favorite.id);
                 } else {
-                  await addFavorite({ itemId: hotel.id }).unwrap();
+                  await addFavorite({
+                    itemId: hotel.id, // <-- исправлено
+                  });
                 }
               } catch (err) {
-                setIsFavLocal(prev);
-                alert("Ошибка сервера");
+                console.error(err);
+                alert("Ошибка при добавлении/удалении из избранного");
+
               }
             }}
           />
@@ -252,69 +251,6 @@ const Detail = () => {
               handleSend();
             }}
           >
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Имя"
-              className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-            />
-
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="+996 ___-___-___"
-              className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-            />
-
-            <input
-              type="text"
-              name="guests"
-              value={formData.guests}
-              onChange={handleChange}
-              placeholder="Количество человек"
-              className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-            />
-
-            <div className="flex gap-2">
-              <input
-                type="text"
-                name="checkIn"
-                value={formData.checkIn}
-                onChange={handleChange}
-                placeholder="Въезд"
-                className="w-1/2 px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-              />
-              <input
-                type="text"
-                name="checkOut"
-                value={formData.checkOut}
-                onChange={handleChange}
-                placeholder="Отъезд"
-                className="w-1/2 px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
-            >
-              Оставить заявку
-            </button>
-          </form>
-        </>
-      ) : (
-        <div className="text-center space-y-4">
-          <h3 className="text-xl font-medium">Заявка отправлена ✅</h3>
-          <button
-            onClick={() => setForm(false)}
-            className="mt-2 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
-          >
-            Закрыть
-          </button>
         </div>
       )}
     </div>

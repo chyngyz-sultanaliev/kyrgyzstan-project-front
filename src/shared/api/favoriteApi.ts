@@ -70,7 +70,7 @@ export interface Favorite {
   id: string;
   itemType: "HOTEL" | "CAR" | "TOUR";
   createdAt: string;
-  item: Hotel | Car | Tour | null;
+  item?: Hotel | Car | Tour | null;
 }
 
 export const favoriteApi = createApi({
@@ -87,19 +87,25 @@ export const favoriteApi = createApi({
   endpoints: (builder) => ({
     getFavorites: builder.query<Favorite[], void>({
       query: () => "/favorite",
-      providesTags: ["Favorite"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map((fav) => ({
+                type: "Favorite" as const,
+                id: fav.id,
+              })),
+              { type: "Favorite", id: "LIST" },
+            ]
+          : [{ type: "Favorite", id: "LIST" }],
     }),
+    addFavorite: builder.mutation<Favorite, { itemId?: string }>({
 
-    addFavorite: builder.mutation<
-      Favorite,
-      { itemId: string }
-    >({
       query: (body) => ({
         url: "/favorite",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Favorite"],
+      invalidatesTags: [{ type: "Favorite", id: "LIST" }],
     }),
 
     removeFavorite: builder.mutation<void, string>({
@@ -107,7 +113,7 @@ export const favoriteApi = createApi({
         url: `/favorite/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Favorite"],
+      invalidatesTags: (result, error, id) => [{ type: "Favorite", id }],
     }),
   }),
 });
