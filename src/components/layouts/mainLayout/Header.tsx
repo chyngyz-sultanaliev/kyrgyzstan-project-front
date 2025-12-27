@@ -5,13 +5,15 @@ import Img from "../../../../public/footer_logo.png";
 import Button from "@/components/ui/Button/Button";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useGetProfileQuery } from "@/shared/api/profileApi";
+import { animatePageOut } from "@/components/utils/animations";
 
 const Header = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: profile, isLoading } = useGetProfileQuery();
+  const router = useRouter();
 
   const navLinks = [
     { href: "/", label: "Main" },
@@ -19,7 +21,7 @@ const Header = () => {
     { href: "/car", label: "Car" },
     { href: "/hotel", label: "Hotel" },
   ];
-  
+
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -60,9 +62,11 @@ const Header = () => {
                 const isActive = pathname === link.href;
 
                 return (
-                  <Link
+                  <button
                     key={link.href}
-                    href={link.href}
+                    onClick={() => {
+                      animatePageOut(link.href, router); // GSAP-анимация занавеса
+                    }}
                     className="relative group text-white text-base lg:text-lg font-medium transition-colors"
                   >
                     {link.label}
@@ -74,7 +78,7 @@ const Header = () => {
             ${isActive ? "w-full" : "w-0 group-hover:w-full"}
           `}
                     />
-                  </Link>
+                  </button>
                 );
               })}
             </nav>

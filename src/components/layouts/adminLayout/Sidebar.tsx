@@ -16,6 +16,7 @@ import { BiCategory } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { useGetProfileQuery } from "@/shared/api/profileApi";
 import Cookies from "js-cookie";
+import { animatePageOut } from "@/components/utils/animations";
 
 interface SidebarProps {
   open: boolean;
@@ -25,7 +26,7 @@ interface SidebarProps {
 const Sidebar = ({ open, setOpen }: SidebarProps) => {
   const pathname = usePathname();
   const { data: profile } = useGetProfileQuery();
-const router = useRouter();
+  const router = useRouter();
   const menu = [
     { label: "Profile", href: "/admin", icon: <User size={20} /> },
     { label: "Car", href: "/admin/car", icon: <Car size={20} /> },
@@ -123,10 +124,12 @@ const router = useRouter();
                 const isActive = pathname === href;
                 return (
                   <li key={label}>
-                    <Link
-                      onClick={() => setOpen(false)}
-                      href={href}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                    <button
+                      onClick={() => {
+                        setOpen(false); // закрыть Sidebar
+                        animatePageOut(href, router); // GSAP-анимация занавеса
+                      }}
+                        className={`flex w-full items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-[#0A8791] text-white"
                           : "text-gray-700 hover:bg-gray-100"
@@ -134,7 +137,7 @@ const router = useRouter();
                     >
                       {icon}
                       <span className="text-sm sm:text-base">{label}</span>
-                    </Link>
+                    </button>
                   </li>
                 );
               })}

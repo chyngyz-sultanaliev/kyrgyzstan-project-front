@@ -44,7 +44,7 @@ export default function StatusMessage({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center py-10 px-4 text-center gap-4">
+    <div className="flex flex-col h-[60vh] items-center justify-center py-10 px-4 text-center gap-4">
       {icon || defaultIcon}
       <p className="text-gray-600 text-sm md:text-base">{defaultMessage}</p>
       {action && (

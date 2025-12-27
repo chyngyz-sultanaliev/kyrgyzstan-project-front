@@ -1,11 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useGetTourCategoriesQuery } from "@/shared/api/tourCategoryApi";
+import { TourCategory } from "@/shared/api/tourCategoryApi";
 
-export default function Welcome() {
+
+
+interface WelcomeProps {
+  data: TourCategory[];
+}
+export default function Welcome({ data }: WelcomeProps) {
   const backgrounds = [
     "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0",
     "https://ipt.images.tshiftcdn.com/204440/x/0/12-day-kyrgyzstan-photo-tour-mountains-lakes-canyons.jpg",
@@ -16,7 +21,6 @@ export default function Welcome() {
 
   const [bgIndex, setBgIndex] = useState(0);
 
-  const { data } = useGetTourCategoriesQuery();
 
   return (
     <section className="relative min-h-screen text-white overflow-hidden">
