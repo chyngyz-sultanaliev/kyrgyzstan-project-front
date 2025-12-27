@@ -73,8 +73,19 @@ export const carApi = createApi({
       transformResponse: (res: CarResponse) => res.cars,
       providesTags: (result, error, id) => [{ type: "Car", id }],
     }),
+    createCar: builder.mutation<Car, FormData | Partial<Car>>({
+      query: (data) => ({
+        url: `/car/post`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "Car", id: "LIST" }],
+    }),
     // ОСНОВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ: разрешаем передавать FormData
-    updateCar: builder.mutation<Car, { id: string; data: FormData | Partial<Car> }>({
+    updateCar: builder.mutation<
+      Car,
+      { id: string; data: FormData | Partial<Car> }
+    >({
       query: ({ id, data }) => ({
         url: `/car/put/${id}`,
         method: "PUT",
@@ -85,10 +96,11 @@ export const carApi = createApi({
         { type: "Car", id: "LIST" },
       ],
     }),
-    deleteCar: builder.mutation<{ success: boolean }, string>({
-      query: (id) => ({
-        url: `/car/delete/${id}`,
+    deleteCar: builder.mutation<{ success: boolean }, { id: string }>({
+      query: ({ id }) => ({
+        url: `/car/delete`,
         method: "DELETE",
+        body: { id },
       }),
       invalidatesTags: [{ type: "Car", id: "LIST" }],
     }),
@@ -98,6 +110,7 @@ export const carApi = createApi({
 export const {
   useGetCarsQuery,
   useGetCarByIdQuery,
+  useCreateCarMutation,
   useUpdateCarMutation,
   useDeleteCarMutation,
 } = carApi;

@@ -16,11 +16,14 @@ import {
 import { useParams } from "next/navigation";
 import { useGetCarByIdQuery, useUpdateCarMutation } from "@/shared/api/carApi";
 import { useGetCarCategoriesQuery } from "@/shared/api/carCategoryApi";
+import Button from "@/components/ui/Button/Button";
+import StatusMessage from "@/components/ui/status/Status";
+import toast from "react-hot-toast";
 
 interface CarForm {
   title: string;
   description: string;
-  image: (File | string)[];
+  image: string[];
   transmission: string;
   seat: number;
   year: number;
@@ -36,79 +39,70 @@ interface CarForm {
 export default function Edit() {
   const { id } = useParams();
 
-  const { data: car, isLoading } = useGetCarByIdQuery(String(id));
+  const { data: car, isLoading, error } = useGetCarByIdQuery(String(id));
   const { data: categories } = useGetCarCategoriesQuery();
-  const [updateCar] = useUpdateCarMutation();
-  console.log(car);
+  const [updateCar, { isLoading: isUpdating }] = useUpdateCarMutation();
+  console.log(error);
 
   const {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<CarForm>({ defaultValues: { image: [] } });
 
-const [uploadedImage, setUploadedImage] = useState<File[]>([]);
-const [existingImages, setExistingImages] = useState<string[]>([]);
-const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   // Подгрузка данных машины
-useEffect(() => {
-  if (car) {
-    setValue("title", car.title);
-    setValue("description", car.description);
-    setValue("transmission", car.transmission);
-    setValue("seat", car.seat);
-    setValue("year", car.year);
-    setValue("engine", car.engine);
-    setValue("drive", car.drive);
-    setValue("fuelType", car.fuelType);
-    setValue("pricePerDay", car.pricePerDay);
-    setValue("minDriverAge", car.minDriverAge);
-    setValue("categoryId", car.categoryId);
-    setValue("withDriver", car.withDriver);
+  useEffect(() => {
+    if (car) {
+      setValue("title", car.title);
+      setValue("description", car.description);
+      setValue("transmission", car.transmission);
+      setValue("seat", car.seat);
+      setValue("year", car.year);
+      setValue("engine", car.engine);
+      setValue("drive", car.drive);
+      setValue("fuelType", car.fuelType);
+      setValue("pricePerDay", car.pricePerDay);
+      setValue("minDriverAge", car.minDriverAge);
+      setValue("categoryId", car.categoryId);
+      setValue("withDriver", car.withDriver);
 
-    // Преобразуем старые изображения в массив строк для preview
-   const oldImages = Array.isArray(car.image)
-      ? car.image.map((img) => (typeof img === "string" ? img : img.img))
-      : [];
-    setExistingImages(oldImages);
-    setImagePreviews(oldImages); // preview = всегда string[]
-  }
-}, [car, setValue]);
+      // Извлекаем URL из массива объектов [{img: "url"}]
+      const oldImages = Array.isArray(car.image)
+        ? car.image.map((img) => (typeof img === "string" ? img : img.img))
+        : [];
 
-console.log(imagePreviews);
-console.log(uploadedImage);
+      setImageUrls(oldImages);
+      setImagePreviews(oldImages);
+      setValue("image", oldImages);
+    }
+  }, [car, setValue]);
 
-const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (!e.target.files) return;
-  const filesArray = Array.from(e.target.files);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
 
-  const allFiles = [...uploadedImage, ...filesArray].slice(0, 5);
-  const previews = [...existingImages, ...allFiles.map(f => URL.createObjectURL(f))];
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    console.log(files);
 
-  setUploadedImage(allFiles);
-  setImagePreviews(previews);
-  setValue("image", allFiles, { shouldValidate: true });
+    setImagePreviews((prev) => [...prev, ...previews].slice(0, 5));
+    setImageUrls((prev) => [...prev, ...previews].slice(0, 5));
 
-  e.target.value = "";
-};
-
+    e.target.value = "";
+  };
 
   const removeImage = (index: number) => {
-    const newImage = uploadedImage.filter((_, i) => i !== index);
-    const newPreviews = imagePreviews.filter((_, i) => i !== index);
-
-    URL.revokeObjectURL(imagePreviews[index]);
-
-    setUploadedImage(newImage);
-    setImagePreviews(newPreviews);
-    setValue("image", newImage);
+    const newImages = imageUrls.filter((_, i) => i !== index);
+    setImageUrls(newImages);
+    setImagePreviews(newImages);
+    setValue("image", newImages);
   };
 
   const onSubmit = async (data: CarForm) => {
-    if (uploadedImage.length === 0) {
+    if (imageUrls.length === 0) {
       alert("Пожалуйста, загрузите хотя бы одно изображение");
       return;
     }
@@ -121,33 +115,35 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         seat: Number(data.seat),
         pricePerDay: Number(data.pricePerDay),
         minDriverAge: Number(data.minDriverAge),
-        image: {img: String(uploadedImage)},
+        image: imageUrls.map((url) => ({ img: url })),
       },
     };
-
     try {
       await updateCar(payload).unwrap();
-      console.log("Машина успешно обновлена");
-      reset();
-      setUploadedImage([]);
-      setImagePreviews([]);
-    } catch (err) {
-      console.error("Ошибка при обновлении машины:", err);
+      toast.success("Машина успешно обновлена!");
+    } catch (error) {
+      const err = error as AUTH.Error;
+      console.error(error);
+      toast.error(`${err.data?.message}`);
     }
   };
-  if (!id) {
-    return <div>Машина не найдена</div>;
-  }
-  if (isLoading) return <div>Загрузка...</div>;
 
+  if (isLoading) return <StatusMessage variant="loading" />;
+  if (error)
+    return (
+      <StatusMessage
+        variant="error"
+        message={`${(error as AUTH.Error)?.data?.message}`}
+      />
+    );
   return (
     <>
       <h1 className="text-2xl font-semibold m-4 text-gray-800 flex items-center gap-2">
         <CarIcon size={26} className="text-[#0A8791]" />
-        Добавить автомобиль
+        Редактировать автомобиль
       </h1>
 
-      <div className="max-w-5xl mx-auto bg-white p-4 rounded-xl  h-[80vh] hide-scrollbar overflow-y-auto">
+      <div className="max-w-5xl mx-auto bg-white p-4 rounded-xl h-[80vh] hide-scrollbar overflow-y-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -352,6 +348,7 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
               </p>
             )}
           </div>
+
           {/* Мин. возраст водителя */}
           <div className="mb-4">
             <label className="block mb-1 font-medium text-gray-400">
@@ -365,12 +362,11 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
                   (value >= 20 && value <= 50) ||
                   "Возраст должен быть от 20 до 50 лет",
               })}
-              className={`w-full px-4 py-2 border rounded focus:outline-none border-gray-300 focus:ring-primary ${
+              className={`w-full px-4 py-2 border rounded focus:outline-none ${
                 errors.minDriverAge
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-primary"
               }`}
-              defaultValue={0}
             >
               <option value={0}>Выберите возраст водителя</option>
               {Array.from({ length: 31 }, (_, i) => i + 20).map((age) => (
@@ -408,31 +404,31 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
             )}
           </div>
 
-          {/* Загрузка изображений */}
+          {/* Поля для изображений */}
           <div className="md:col-span-2">
             <label className="block mb-1 font-medium text-gray-400">
-              Изображения *
+              Изображения * (макс. 5)
             </label>
             <div
               className={`border-2 border-dashed rounded-lg p-6 text-center hover:border-[#0A8791] transition-colors cursor-pointer ${
-                errors.image ? "border-red-500" : "border-gray-300"
+                isUpdating ? "opacity-50 cursor-not-allowed" : "border-gray-300"
               }`}
-              onClick={() => document.getElementById("image-upload")?.click()}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e: React.DragEvent<HTMLDivElement>) => {
+              onClick={() =>
+                !isUpdating && document.getElementById("image-upload")?.click()
+              }
+              onDragOver={(e) => {
+                e.preventDefault(); // обязательно
+              }}
+              onDrop={(e) => {
                 e.preventDefault();
-                const files = Array.from(e.dataTransfer.files).filter((file) =>
-                  file.type.startsWith("image/")
-                );
-                if (files.length === 0) return;
-                const allFiles = [...uploadedImage, ...files].slice(0, 5);
-                const previews = allFiles.map((file) =>
-                  URL.createObjectURL(file)
-                );
-                imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-                setUploadedImage(allFiles);
-                setImagePreviews(previews);
-                setValue("image", allFiles, { shouldValidate: true });
+                if (isUpdating) return;
+
+                const files = Array.from(e.dataTransfer.files);
+                const previews = files.map((file) => URL.createObjectURL(file));
+
+                setImagePreviews((prev) => [...prev, ...previews].slice(0, 5));
+                setImageUrls((prev) => [...prev, ...previews].slice(0, 5));
+                setValue("image", [...imageUrls, ...previews].slice(0, 5));
               }}
             >
               <input
@@ -442,6 +438,7 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
                 onChange={handleImageUpload}
                 className="hidden"
                 id="image-upload"
+                disabled={isUpdating || imageUrls.length >= 5}
               />
               <label
                 htmlFor="image-upload"
@@ -449,25 +446,15 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
               >
                 <Upload className="w-10 h-10 text-gray-400" />
                 <span className="text-sm text-gray-600">
-                  Нажмите или перетащите изображения
-                </span>
-                <span className="text-xs text-gray-400">
-                  Можно загрузить несколько файлов (максимум 5)
+                  {isUpdating
+                    ? "Загрузка..."
+                    : "Нажмите, перетащите изображения или бросьте их сюда"}
                 </span>
               </label>
             </div>
 
-            {errors.image && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.image.message}
-              </p>
-            )}
-
             {imagePreviews.length > 0 && (
               <div className="mt-3">
-                <p className="text-sm text-gray-500 mb-2">
-                  Загружено: {imagePreviews.length} из 5
-                </p>
                 <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
                   {imagePreviews.map((preview, index) => (
                     <div
@@ -486,9 +473,6 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
                       >
                         <X className="w-4 h-4" />
                       </button>
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate">
-                        {/* {uploadedImage[index].name} */}
-                      </div>
                     </div>
                   ))}
                 </div>
@@ -520,23 +504,20 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
           {/* С водителем */}
           <div className="flex items-center gap-3">
             <label className="block mb-1 font-medium text-gray-400 flex items-center gap-2">
-              <User size={18} /> С водителем *
+              <User size={18} /> С водителем
             </label>
             <input
               type="checkbox"
               {...register("withDriver")}
-              onChange={(e) => setValue("withDriver", e.target.checked)}
+              className="w-5 h-5"
             />
           </div>
 
           {/* Кнопка */}
           <div className="md:col-span-2 flex justify-end">
-            <button
-              type="submit"
-              className="bg-[#0A8791] text-white px-7 py-2.5 rounded-lg hover:bg-[#086d72]"
-            >
-              Создать
-            </button>
+            <Button loading={isUpdating} type="submit" disabled={isUpdating}>
+              {isUpdating ? "Загрузка..." : "Обновить"}
+            </Button>
           </div>
         </form>
       </div>

@@ -12,6 +12,9 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { useCreateCarMutation } from "@/shared/api/carApi";
+import { useGetCarCategoriesQuery } from "@/shared/api/carCategoryApi";
+import toast from "react-hot-toast";
 
 interface CarForm {
   title: string;
@@ -54,62 +57,62 @@ export default function Create() {
     },
     mode: "onSubmit",
   });
-
+  const { data: categories } = useGetCarCategoriesQuery();
+  const [create, { isLoading }] = useCreateCarMutation();
   const [uploadedImage, setUploadedImage] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  // Очистка превью при unmount
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const filesArray = Array.from(e.target.files);
 
-    const allFiles = [...uploadedImage, ...filesArray];
-    const limitedFiles = allFiles.slice(0, 5);
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => URL.createObjectURL(file));
 
-    const previews = limitedFiles.map((file) => URL.createObjectURL(file));
-
-    imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-
-    setUploadedImage(limitedFiles);
-    setImagePreviews(previews);
-    setValue("image", limitedFiles, { shouldValidate: true });
+    setImagePreviews((prev) => [...prev, ...previews].slice(0, 5));
+    setUploadedImage((prev) => [...prev, ...files].slice(0, 5));
+    setValue("image", [...uploadedImage, ...files].slice(0, 5), {
+      shouldValidate: true,
+    });
 
     e.target.value = "";
   };
 
   const removeImage = (index: number) => {
-    const newImage = uploadedImage.filter((_, i) => i !== index);
+    const newFiles = uploadedImage.filter((_, i) => i !== index);
     const newPreviews = imagePreviews.filter((_, i) => i !== index);
 
     URL.revokeObjectURL(imagePreviews[index]);
 
-    setUploadedImage(newImage);
+    setUploadedImage(newFiles);
     setImagePreviews(newPreviews);
-    setValue("image", newImage);
+    setValue("image", newFiles);
   };
 
-  const onSubmit = (data: CarForm) => {
+  const onSubmit = async (data: CarForm) => {
     if (uploadedImage.length === 0) {
       alert("Пожалуйста, загрузите хотя бы одно изображение");
       return;
     }
-    const paylaod = {
+
+    const payload = {
       ...data,
       year: Number(data.year),
       seat: Number(data.seat),
       pricePerDay: Number(data.pricePerDay),
       minDriverAge: Number(data.minDriverAge),
-      image: uploadedImage.map((file) => file.name),
+      image: uploadedImage.map((file) => ({
+        img: URL.createObjectURL(file),
+      })),
     };
-    //   const res = await fetch("/api/cars", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(data),
-    //   });
-    //   const result = await res.json();
-    //   console.log("Ответ сервера:", result);
-    console.log("Отправка на сервер:", paylaod);
+
+    try {
+      await create(payload).unwrap();
+      toast.success("Машина успешно создана!");
+    } catch (error) {
+      const err = error as AUTH.Error;
+      console.error(error);
+      toast.error(`${err.data?.message}`);
+    }
     reset();
     setUploadedImage([]);
     setImagePreviews([]);
@@ -243,9 +246,11 @@ export default function Create() {
                 {...register("categoryId", { required: "Выберите категорию" })}
               >
                 <option value="">Выберите категорию</option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Business">Business</option>
+                {categories?.map((el) => (
+                  <option key={el.id} value={el.id}>
+                    {el.name}
+                  </option>
+                ))}
               </select>
             </div>
             {errors.categoryId && (
@@ -381,24 +386,26 @@ export default function Create() {
             </label>
             <div
               className={`border-2 border-dashed rounded-lg p-6 text-center hover:border-[#0A8791] transition-colors cursor-pointer ${
-                errors.image ? "border-red-500" : "border-gray-300"
+                isLoading ? "opacity-50 cursor-not-allowed" : "border-gray-300"
               }`}
-              onClick={() => document.getElementById("image-upload")?.click()}
+              onClick={() =>
+                !isLoading && document.getElementById("image-upload")?.click()
+              }
               onDragOver={(e) => e.preventDefault()}
-              onDrop={(e: React.DragEvent<HTMLDivElement>) => {
+              onDrop={(e) => {
                 e.preventDefault();
+                if (isLoading) return;
+
                 const files = Array.from(e.dataTransfer.files).filter((file) =>
                   file.type.startsWith("image/")
                 );
                 if (files.length === 0) return;
-                const allFiles = [...uploadedImage, ...files].slice(0, 5);
-                const previews = allFiles.map((file) =>
-                  URL.createObjectURL(file)
-                );
-                imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-                setUploadedImage(allFiles);
-                setImagePreviews(previews);
-                setValue("image", allFiles, { shouldValidate: true });
+
+                const previews = files.map((file) => URL.createObjectURL(file));
+
+                setImagePreviews((prev) => [...prev, ...previews].slice(0, 5));
+                setUploadedImage((prev) => [...prev, ...files].slice(0, 5));
+                setValue("image", [...uploadedImage, ...files].slice(0, 5));
               }}
             >
               <input
@@ -408,6 +415,7 @@ export default function Create() {
                 onChange={handleImageUpload}
                 className="hidden"
                 id="image-upload"
+                disabled={isLoading || uploadedImage.length >= 5}
               />
               <label
                 htmlFor="image-upload"
@@ -415,7 +423,9 @@ export default function Create() {
               >
                 <Upload className="w-10 h-10 text-gray-400" />
                 <span className="text-sm text-gray-600">
-                  Нажмите или перетащите изображения
+                  {isLoading
+                    ? "Загрузка..."
+                    : "Нажмите или перетащите изображения"}
                 </span>
                 <span className="text-xs text-gray-400">
                   Можно загрузить несколько файлов (максимум 5)
@@ -499,9 +509,10 @@ export default function Create() {
           <div className="md:col-span-2 flex justify-end">
             <button
               type="submit"
+              disabled={isLoading}
               className="bg-[#0A8791] text-white px-7 py-2.5 rounded-lg hover:bg-[#086d72]"
             >
-              Создать
+              {isLoading ? "Загрузка..." : "Создать"}
             </button>
           </div>
         </form>

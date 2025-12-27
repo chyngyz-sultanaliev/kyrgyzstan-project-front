@@ -1,83 +1,94 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState, useRef, ChangeEvent } from "react";
-import { Star, Camera, Paperclip } from "lucide-react";
+
+import React, { useState, useRef, useEffect } from "react";
+import { Star, Paperclip } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
 import { IoCloseCircle } from "react-icons/io5";
-import { useCreateReviewMutation } from "@/shared/api/reviewApi";
+import { useAddHotelReviewMutation, useGetHotelReviewsQuery } from "@/shared/api/reviewApi";
 
-interface ReviewProp {
+interface ReviewProps {
   hotelId: string;
 }
 
-export default function Review({ hotelId }: ReviewProp) {
-  const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+export default function Review({ hotelId }: ReviewProps) {
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
   const [files, setFiles] = useState<File[]>([]);
-  const [createReview, { isLoading }] = useCreateReviewMutation();
-  
-console.log("HOTEL ID:", hotelId, typeof hotelId);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+  const {
+    data: reviews,
+    isLoading: isReviewsLoading,
+    isError,
+  } = useGetHotelReviewsQuery(hotelId);
 
-    const selectedFiles = Array.from(e.target.files).slice(0, 5 - files.length);
+  const [addReview, { isLoading }] = useAddHotelReviewMutation();
 
-    setFiles((prev) => [...prev, ...selectedFiles]);
-  };
+  // preview (UI only)
   const previews = files.map((file) => URL.createObjectURL(file));
 
-  const handleSubmit = async () => {
-    if (!rating) return alert("Оценка обязательна");
+  // cleanup preview URLs
+  useEffect(() => {
+    return () => {
+      previews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [previews]);
 
-    const formData = new FormData();
-    formData.append("hotelId", hotelId);
-    formData.append("rating", String(rating));
-    formData.append("comment", comment);
+  const handleImageUpload = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!e.target.files) return;
 
-    files.forEach((file) => {
-      formData.append("images", file);
-    });
+    const selected = Array.from(e.target.files).slice(
+      0,
+      5 - files.length
+    );
+    setFiles((prev) => [...prev, ...selected]);
+  };
 
-    try {
-      await createReview(formData).unwrap();
+const handleSubmit = async () => {
+  if (!rating || !comment.trim()) return;
 
-      // reset
-      setRating(0);
-      setComment("");
-      setFiles([]);
+  try {
+    await addReview({
+      hotelId,
+      rating,
+      comment: comment.trim(), 
+    }).unwrap();
 
-      alert("Отзыв добавлен ✅");
-    } catch (err: any) {
-      console.log("RAW ERROR:", err);
+    // reset form
+    setRating(0);
+    setComment("");
+    setFiles([]);
+  } catch (err: any) {
+    console.log("FULL ERROR:", err);
 
-      if ("data" in err) {
-        console.log("BACKEND ERROR:", err.data);
-        alert(err.data?.message || "Ошибка от сервера");
-      } else {
-        alert("Неизвестная ошибка");
-      }
+    if (err?.status === 401) {
+      alert("Сначала войдите в аккаунт");
+    } else if (err?.data?.message) {
+      alert(err.data.message);
+    } else {
+      alert("Ошибка сервера");
     }
-  };
-  const handleButtonClick = () => {
-    fileInputRef.current?.click();
-  };
+  }
+};
+
 
   return (
     <div className="sm:w-[1080px] w-[360px] m-auto py-4 sm:p-6 lg:py-8 mt-8">
+      {/* Rating */}
       <div className="flex gap-5">
-        <h3 className="text-lg sm:text-xl text-gray-400 font-medium mb-4 sm:mb-6">
+        <h3 className="text-lg sm:text-xl text-gray-400 font-medium">
           Оценить:
         </h3>
 
-        <div className="flex items-center gap-2 sm:gap-3 mb-6">
+        <div className="flex items-center gap-2 sm:gap-3">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
+              type="button"
               onClick={() => setRating(star)}
-              className="transition-colors"
             >
               <Star
                 className={`w-5 h-5 sm:w-7 sm:h-7 ${
@@ -90,17 +101,18 @@ console.log("HOTEL ID:", hotelId, typeof hotelId);
           ))}
         </div>
       </div>
-      <div className="flex flex-col md:flex-row gap-4">
+
+      {/* Comment + images */}
+      <div className="flex flex-col md:flex-row gap-4 mt-4">
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Написать комментарий"
           className="w-full p-3 border border-gray-300 rounded-lg resize-none h-32 
-            focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+          focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
 
         <div className="sm:w-[500px] w-full flex flex-col gap-3">
-          {/* Hidden upload input */}
           <input
             type="file"
             accept="image/*"
@@ -110,23 +122,27 @@ console.log("HOTEL ID:", hotelId, typeof hotelId);
             className="hidden"
           />
 
-          {/* Upload button */}
           <Button
             variant="secondary"
-            className="w-full"
-            onClick={handleButtonClick}
+            onClick={() => fileInputRef.current?.click()}
             icon={<Paperclip />}
           >
-            Загрузите новое фото
+            Загрузите фото (пока не отправляется)
           </Button>
 
           <div className="flex gap-2">
             {previews.map((img, i) => (
               <div key={i} className="relative">
-                <img src={img} className="w-16 h-16 object-cover rounded-lg" />
+                <img
+                  src={img}
+                  className="w-16 h-16 object-cover rounded-lg"
+                />
                 <button
+                  type="button"
                   onClick={() =>
-                    setFiles((prev) => prev.filter((_, idx) => idx !== i))
+                    setFiles((prev) =>
+                      prev.filter((_, idx) => idx !== i)
+                    )
                   }
                   className="absolute -top-2 -right-2 text-red-500 text-xl"
                 >
@@ -137,43 +153,16 @@ console.log("HOTEL ID:", hotelId, typeof hotelId);
           </div>
         </div>
       </div>
+
+      {/* Submit */}
       <Button
         variant="primary"
         className="mt-8"
         onClick={handleSubmit}
-        disabled={isLoading}
+        disabled={isLoading || !rating || !comment.trim()}
       >
-        {isLoading ? "Отправка..." : "Добавить"}
+        {isLoading ? "Отправка..." : "Добавить отзыв"}
       </Button>
-
-      <div className="bg-white mt-8 rounded-lg shadow-[0px_0px_4px_0px_gray] p-4 sm:p-6 lg:p-8">
-        <div className="flex-1">
-          <div className="flex items-center justify-between  mb-2">
-            <div className="flex items-center gap-3 ">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-300 rounded-full shrink-0"></div>
-              <h4 className="font-medium text-teal-600 text-base sm:text-lg">
-                Полина
-              </h4>
-            </div>
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4].map((star) => (
-                <Star
-                  key={star}
-                  className="w-4 h-4 sm:w-5 sm:h-5 fill-yellow-400 text-yellow-400"
-                />
-              ))}
-              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
-            </div>
-          </div>
-          <p className="text-gray-700 text-sm sm:text-base mb-3">
-            Хорошенькие патчи, понравились очень 😍 буду брать ещё...
-          </p>
-          <div className="flex gap-3 flex-wrap">
-            <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
-            <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
