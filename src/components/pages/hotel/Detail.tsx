@@ -23,9 +23,7 @@ const Detail = () => {
 
   // ---- Favorite logic (SAFE) ----
   const favorite = hotel
-    ? favorites?.find(
-        (f) => f.itemType === "HOTEL" && f.hotel?.id === hotel.id
-      )
+    ? favorites?.find((f) => f.itemType === "HOTEL" && f.item?.id === hotel.id)
     : undefined;
 
   const isFavorite = Boolean(favorite);
@@ -102,24 +100,25 @@ const Detail = () => {
           />
 
           {/* ❤️ Favorite */}
- <CiHeart
-  className={`transition ${isFavorite ? "text-red-600" : "text-gray-400"}`}
-  onClick={async () => {
-    try {
-      if (isFavorite && favorite) {
-        await removeFavorite(favorite.id);
-      } else {
-        await addFavorite({
-          itemType: "HOTEL",
-          itemId: hotel.id, // <-- исправлено
-        });
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Ошибка при добавлении/удалении из избранного");
-    }
-  }}
-/>
+          <CiHeart
+            className={`transition ${
+              isFavorite ? "text-red-600" : "text-gray-400"
+            }`}
+            onClick={async () => {
+              try {
+                if (isFavorite && favorite) {
+                  await removeFavorite(favorite.id);
+                } else {
+                  await addFavorite({
+                    itemId: hotel.id, // <-- исправлено
+                  });
+                }
+              } catch (err) {
+                console.error(err);
+                alert("Ошибка при добавлении/удалении из избранного");
+              }
+            }}
+          />
         </div>
       </div>
 
@@ -184,9 +183,7 @@ const Detail = () => {
               </>
             ) : (
               <div className="text-center">
-                <h3 className="text-xl font-medium">
-                  Заявка отправлена ✅
-                </h3>
+                <h3 className="text-xl font-medium">Заявка отправлена ✅</h3>
                 <button
                   onClick={() => setForm(false)}
                   className="mt-4 bg-[#0a8791] text-white py-2 px-6 rounded-full"

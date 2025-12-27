@@ -9,9 +9,7 @@ export interface Favorite {
   id: string;
   itemType: "CAR" | "HOTEL" | "TOUR";
   createdAt: string;
-  hotel?: Hotel;
-  car?: Car;
-  tour?: Tour;
+  item?: Hotel | Car | Car;
 }
 
 export const favoriteApi = createApi({
@@ -29,25 +27,26 @@ export const favoriteApi = createApi({
     // 📌 GET favorites
     getFavorites: builder.query<Favorite[], void>({
       query: () => "/favorite",
-      providesTags: ["Favorite"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map((fav) => ({
+                type: "Favorite" as const,
+                id: fav.id,
+              })),
+              { type: "Favorite", id: "LIST" },
+            ]
+          : [{ type: "Favorite", id: "LIST" }],
     }),
 
     // ❤️ ADD favorite
-    addFavorite: builder.mutation<
-      Favorite,
-      {
-        itemType: "HOTEL" | "CAR" | "TOUR";
-        hotelId?: string;
-        carId?: string;
-        tourId?: string;
-      }
-    >({
+    addFavorite: builder.mutation<Favorite, { itemId?: string }>({
       query: (body) => ({
         url: "/favorite",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Favorite"],
+      invalidatesTags: [{ type: "Favorite", id: "LIST" }],
     }),
 
     // ❌ REMOVE favorite
@@ -56,7 +55,7 @@ export const favoriteApi = createApi({
         url: `/favorite/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Favorite"],
+      invalidatesTags: (result, error, id) => [{ type: "Favorite", id }],
     }),
   }),
 });
