@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { CiHeart, CiShare2 } from "react-icons/ci";
 import { useParams } from "next/navigation";
-import Review from "./Review";
 
 import { Hotel, useGetHotelByIdQuery } from "@/shared/api/hotelApi";
 import {
@@ -13,9 +12,12 @@ import {
   useRemoveFavoriteMutation,
 } from "@/shared/api/favoriteApi";
 import { FaHeart } from "react-icons/fa";
+import Review from "./Review";
 
 const Detail = () => {
   const { id } = useParams();
+  const hotelId = typeof id === "string" ? id : "";
+
   const [isFavLocal, setIsFavLocal] = useState(false);
 
   // ---- API ----
@@ -25,7 +27,10 @@ const Detail = () => {
   const [removeFavorite] = useRemoveFavoriteMutation();
 
   const favorite = hotel
-    ? favorites?.find((f) => f.itemType === "HOTEL" && f.item?.id === hotel.id)
+    ? favorites?.find(
+        (f) =>
+          f.itemType === "HOTEL" && (f.item as Hotel | null)?.id === hotel.id
+      )
     : undefined;
 
   // ---- Form state ----
@@ -104,24 +109,22 @@ const Detail = () => {
               }
             }}
           />
-          {/* ❤️ Favorite */}
-          <CiHeart
+          <FaHeart
             className={`transition ${
-              isFavorite ? "text-red-600" : "text-gray-400"
+              isFavLocal ? "text-red-600" : "text-gray-400"
             }`}
             onClick={async () => {
+              const prev = isFavLocal;
+              setIsFavLocal(!prev);
               try {
-                if (isFavorite && favorite) {
-                  await removeFavorite(favorite.id);
+                if (prev && favorite) {
+                  await removeFavorite(favorite.id).unwrap();
                 } else {
-                  await addFavorite({
-                    itemId: hotel.id, // <-- исправлено
-                  });
+                  await addFavorite({ itemId: hotel.id }).unwrap();
                 }
               } catch (err) {
-                console.error(err);
-                alert("Ошибка при добавлении/удалении из избранного");
-
+                setIsFavLocal(prev);
+                alert("Ошибка сервера");
               }
             }}
           />
@@ -228,39 +231,107 @@ const Detail = () => {
       </div>
 
       {/* Modal */}
-    {form && (
-  <div
-    className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-    onClick={() => setForm(false)}
-  >
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="bg-white rounded-3xl shadow-lg w-[90%] max-w-sm p-6 space-y-4"
-    >
-      {!success ? (
-        <>
-          <h1 className="text-2xl font-bold text-center">Заявка на подбор</h1>
-          <p className="text-center text-gray-500 text-sm">
-            Оставьте заявку на подбор и сократите свое время на поиск
-          </p>
-
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSend();
-            }}
+      {form && (
+        <div
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+          onClick={() => setForm(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl shadow-lg w-[90%] max-w-sm p-6 space-y-4"
           >
+            {!success ? (
+              <>
+                <h1 className="text-2xl font-bold text-center">
+                  Заявка на подбор
+                </h1>
+                <p className="text-center text-gray-500 text-sm">
+                  Оставьте заявку на подбор и сократите свое время на поиск
+                </p>
+
+                <form
+                  className="space-y-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSend();
+                  }}
+                >
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Имя"
+                    className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                  />
+
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+996 ___-___-___"
+                    className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                  />
+
+                  <input
+                    type="text"
+                    name="guests"
+                    value={formData.guests}
+                    onChange={handleChange}
+                    placeholder="Количество человек"
+                    className="w-full px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                  />
+
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="checkIn"
+                      value={formData.checkIn}
+                      onChange={handleChange}
+                      placeholder="Въезд"
+                      className="w-1/2 px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      name="checkOut"
+                      value={formData.checkOut}
+                      onChange={handleChange}
+                      placeholder="Отъезд"
+                      className="w-1/2 px-4 py-2 rounded-sm border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
+                  >
+                    Оставить заявку
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center space-y-4">
+                <h3 className="text-xl font-medium">Заявка отправлена ✅</h3>
+                <button
+                  onClick={() => setForm(false)}
+                  className="mt-2 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-sm transition cursor-pointer active:scale-95"
+                >
+                  Закрыть
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </div>
-  </div>
-)}
-
-
 
       {/* Reviews */}
-      <Review hotelId={hotel.id} />
+      <Review
+        review={
+          hotel.reviews && hotel.reviews.length > 0 ? hotel.reviews : undefined
+        }
+        id={hotelId}
+      />
     </section>
   );
 };
