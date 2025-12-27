@@ -19,8 +19,14 @@ import {
   useUpdateProfileMutation,
 } from "@/shared/api/profileApi";
 import { Tour } from "@/shared/api/tourApi";
-import { Hotel } from "@/shared/api/hotelApi";
+import { Hotel, useGetHotelByIdQuery, useGetHotelsQuery } from "@/shared/api/hotelApi";
 import { Car } from "@/shared/api/carApi";
+import { FaHeart } from "react-icons/fa";
+import {
+  useAddFavoriteMutation,
+  useGetFavoritesQuery,
+  useRemoveFavoriteMutation,
+} from "@/shared/api/favoriteApi";
 
 const Profile = () => {
   const { data: profile, isLoading } = useGetProfileQuery();
@@ -34,6 +40,13 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const { data: hotel } = useGetHotelsQuery();
+  const [isFavLocal, setIsFavLocal] = useState(false);
+  const { data: favorites } = useGetFavoritesQuery();
+  const [addFavorite] = useAddFavoriteMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
+
 
   if (isLoading) {
     return (
@@ -214,7 +227,7 @@ const Profile = () => {
         {/* Cards Grid */}
         {filteredFavorites.length === 0 ? (
           <div className="text-center py-16 text-gray-500">
-            <p className="text-lg">У вас пока нет избранных элементов</p>
+            <p className="text-lg select-none">У вас пока нет избранных элементов</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
@@ -226,8 +239,21 @@ const Profile = () => {
                 return (
                   <div
                     key={fav.id}
-                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow relative"
                   >
+                    <button
+  onClick={async () => {
+    try {
+      await removeFavorite(fav.id).unwrap();
+    } catch (e) {
+      alert("Ошибка сервера");
+    }
+  }}
+  className="absolute text-red-600 text-3xl cursor-pointer right-3 top-1"
+>
+  <FaHeart />
+</button>
+
                     {/* Image */}
                     <div className="h-32 bg-gray-100">
                       {hotel.images?.[0]?.img && (
