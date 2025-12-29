@@ -42,10 +42,7 @@ export default function Review({ review, id }: Props) {
 
   return (
     <div className="sm:w-[1080px] w-[360px] m-auto py-4 sm:p-6 lg:py-8 mt-8">
-      {/* Форма для нового отзыва */}
       <ReviewForm id={id} />
-
-      {/* Список существующих отзывов */}
       {review?.map((rev) => (
         <div
           key={rev.id}
