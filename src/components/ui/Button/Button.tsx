@@ -34,7 +34,8 @@ export default function Button({
     primary: "bg-[#0A8791] text-white",
     delete: "bg-red-500   text-white",
     secondary: "bg-white border border-[#0A8791] text-[#0A8791]",
-    gradient: "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white sm:text-xl",
+    gradient:
+      "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white sm:text-lg",
   };
 
   return (
@@ -50,9 +51,13 @@ export default function Button({
       {...props}
     >
       {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-      {!loading && icon && iconPosition === "left" && <span className="mr-2">{icon}</span>}
+      {!loading && icon && iconPosition === "left" && (
+        <span className="mr-2">{icon}</span>
+      )}
       {children}
-      {!loading && icon && iconPosition === "right" && <span className="ml-2">{icon}</span>}
+      {!loading && icon && iconPosition === "right" && (
+        <span className="ml-2">{icon}</span>
+      )}
     </button>
   );
 }

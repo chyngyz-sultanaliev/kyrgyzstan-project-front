@@ -170,7 +170,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors w-full"
                 >
                   <LogOut size={20} />
-                  <span className="text-sm sm:text-base">Выйти</span>
+                  <span className="text-sm sm:text-base">Logout</span>
                 </button>
               </li>
             </ul>

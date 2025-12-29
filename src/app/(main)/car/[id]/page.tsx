@@ -1,10 +1,10 @@
 "use client";
-import Category from "@/components/pages/car/Category";
+import Detail from "@/components/pages/car/Detail";
 
 const page = () => {
   return (
     <>
-      <Category />;
+      <Detail />;
     </>
   );
 };
