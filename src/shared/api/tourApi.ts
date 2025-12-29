@@ -1,5 +1,8 @@
 // src/shared/api/tourApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
+
+/* ===== TYPES ===== */
 
 export interface User {
   username: string;
@@ -45,17 +48,69 @@ export interface ToursResponse {
   tours: Tour[];
 }
 
+export interface TourResponse {
+  success: boolean;
+  tours: Tour; // если бекенд так возвращает
+}
+
+/* ===== API ===== */
+
 export const tourApi = createApi({
   reducerPath: "tourApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    prepareHeaders: (headers) => {
+      const token = Cookies.get("token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+
+  tagTypes: ["Tour"],
+
   endpoints: (builder) => ({
     getTours: builder.query<Tour[], void>({
       query: () => "/tour/get",
-      transformResponse: (response: ToursResponse) => response.tours,
+      transformResponse: (res: ToursResponse) => res.tours,
+      providesTags: [{ type: "Tour", id: "LIST" }],
     }),
+
     getTourById: builder.query<Tour, string>({
       query: (id) => `/tour/get/${id}`,
-      transformResponse: (response: ToursResponse) => response.tours[0],
+      transformResponse: (res: TourResponse) => res.tours,
+      providesTags: (result, error, id) => [{ type: "Tour", id }],
+    }),
+    createTour: builder.mutation<Tour, FormData | Partial<Tour>>({
+      query: (data) => ({
+        url: `/tour/post`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "Tour", id: "LIST" }],
+    }),
+    updateTour: builder.mutation<
+      Tour,
+      { id: string; data: Partial<Tour> | FormData }
+    >({
+      query: ({ id, data }) => ({
+        url: `/tour/put/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Tour", id },
+        { type: "Tour", id: "LIST" },
+      ],
+    }),
+
+    deleteTour: builder.mutation<{ success: boolean }, string>({
+      query: (id) => ({
+        url: `/tour/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "Tour", id: "LIST" }],
     }),
   }),
 });
@@ -63,5 +118,7 @@ export const tourApi = createApi({
 export const {
   useGetToursQuery,
   useGetTourByIdQuery,
-  util: tourApiUtil,
+  useUpdateTourMutation,
+  useDeleteTourMutation,
+  useCreateTourMutation,
 } = tourApi;

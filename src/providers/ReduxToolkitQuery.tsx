@@ -1,14 +1,14 @@
 "use client";
-import { store } from "@/store/store";
-import { FC, ReactNode } from "react";
+import { store } from "@/redux/store";
+import { ReactNode, FC } from "react";
 import { Provider } from "react-redux";
 
-interface IReduxToolkitQueryProps {
+interface ReduxProviderProps {
   children: ReactNode;
 }
 
-export const ReduxToolkitQuery: FC<IReduxToolkitQueryProps> = ({
-  children,
-}) => {
+const ReduxProvider: FC<ReduxProviderProps> = ({ children }) => {
   return <Provider store={store}>{children}</Provider>;
 };
+
+export default ReduxProvider;

@@ -1,14 +1,10 @@
 "use client";
-
-import Detail from "@/components/pages/car/Detail";
-import { useParams } from "next/navigation";
+import Category from "@/components/pages/car/Category";
 
 const page = () => {
-  const { id } = useParams();
-
   return (
     <>
-      <Detail />;
+      <Category />;
     </>
   );
 };

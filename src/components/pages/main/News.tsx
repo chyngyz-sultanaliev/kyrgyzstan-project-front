@@ -1,74 +1,42 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const news = [
-  {
-    title: "Cheap Airline Tickets",
-    content:
-      "In this digital generation where information can be easily obtained...",
-    images: "https://too.kg/wp-content/uploads/Ala-archa1-600x400.jpg",
-    date: "2025-01-12",
-  },
-  {
-    title: "Top Places In Kyrgyzstan",
-    content: "Discover mountains, lakes and nomadic culture.",
-    images:
-      "https://cf.youtravel.me/tr:w-1500/upload/chat/3c8/us6goy38i5f0ri6w9dm5gwyxyemyd8fe.jpeg",
-    date: "2025-01-18",
-  },
-  {
-    title: "Why Ala-Archa Is Popular",
-    content: "Nature, hiking and glaciers near Bishkek.",
-    images: "https://tourist.kg/wp-content/uploads/2023/07/348485-1024x680.jpg",
-    date: "2025-01-25",
-  },
-  {
-    title: "Best Lakes To Visit In Summer",
-    content: "Issyk-Kul, Son-Kul and Ala-Kul are perfect summer destinations.",
-    images:
-      "https://www.cbt-naryn.com/wp-content/uploads/2024/04/locat_kel_suu-20.jpg",
-    date: "2025-02-02",
-  },
-  {
-    title: "Winter Tourism In Kyrgyzstan",
-    content: "Ski resorts, snowy mountains and winter adventures await.",
-    images:
-      "https://www.advantour.com/img/kyrgyzstan/lakes/kyrgyzstan-nature-lakes-chatyr-kul.jpg",
-    date: "2025-02-08",
-  },
-  {
-    title: "Nomadic Culture And Traditions",
-    content: "Experience yurt life, horse games and traditional food.",
-    images:
-      "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a3lyZ3l6c3RhbnxlbnwwfHwwfHx8MA%3D%3D",
-    date: "2025-02-15",
-  },
-  {
-    title: "Hiking Routes Near Bishkek",
-    content: "The best hiking trails just a short drive from the capital.",
-    images:
-      "https://t4.ftcdn.net/jpg/05/54/61/61/360_F_554616196_qXa61MP7E2s1su8cTP9wk9zWmJFOtrAD.jpg",
-    date: "2025-02-20",
-  },
-  {
-    title: "Why Foreign Tourists Love Kyrgyzstan",
-    content: "Hospitality, nature and freedom make Kyrgyzstan special.",
-    images:
-      "https://www.undp.org/sites/g/files/zskgke326/files/styles/explore_more_desktop/public/2025-10/photo_2_2024-07-24_13-43-48.jpg?h=bce50f5e&itok=nIa0lX3n",
-    date: "2025-02-27",
-  },
-];
+import { useGetNewsQuery } from "@/shared/api/newsApi";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const News = () => {
   const [active, setActive] = useState(0);
+  const { data, isLoading } = useGetNewsQuery();
+
+  const news = Array.isArray(data) ? data : data ?? [];
 
   useEffect(() => {
+    if (news.length < 2) return;
+
     const timer = setInterval(() => {
       setActive((i) => (i + 1) % news.length);
     }, 5000);
+
     return () => clearInterval(timer);
-  }, []);
+  }, [news.length]);
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-20">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#0A8791] border-r-transparent"></div>
+        <p className="mt-4 text-gray-600">Загрузка новостей...</p>
+      </div>
+    );
+  }
+
+  if (!news.length) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-gray-600 text-lg">Новостей пока нет</p>
+      </div>
+    );
+  }
 
   const visibleCards = [
     news[(active - 1 + news.length) % news.length],
@@ -76,67 +44,166 @@ const News = () => {
     news[(active + 1) % news.length],
   ];
 
+  const handlePrev = () => {
+    setActive((active - 1 + news.length) % news.length);
+  };
+
+  const handleNext = () => {
+    setActive((active + 1) % news.length);
+  };
+
   return (
-    <section className="mx-auto max-w-[95%] px-4 py-16">
+    <section className="mx-auto max-w-[95%] px-4 py-8 md:py-16">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="w-full flex justify-center z-10 my-10 px-4"
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="w-full flex justify-center my-6 md:my-10 px-4"
       >
-        <div className="bg-white/20 backdrop-blur-xl px-6 sm:px-10 py-4 rounded-2xl shadow-xl text-center">
-          <h3 className="text-xl sm:text-2xl font-semibold ">Travel News</h3>
+        <div className="bg-white/20 backdrop-blur-xl px-4 md:px-6 py-3 md:py-4 rounded-2xl shadow-lg">
+          <h3 className="text-lg md:text-xl font-semibold text-gray-800">
+            Travel News
+          </h3>
         </div>
       </motion.div>
-      <div className="flex items-center justify-center gap-4 sm:gap-6">
+
+      {/* Desktop версия - 3 карточки */}
+      <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 relative">
+        {/* Кнопка влево */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-0 z-10 bg-white/80 hover:bg-white text-[#0A8791] p-3 rounded-full shadow-lg transition-all hover:scale-110"
+          aria-label="Предыдущая новость"
+        >
+          <FaChevronLeft className="w-5 h-5" />
+        </button>
+
         {visibleCards.map((item, i) => {
           const isActive = i === 1;
 
           return (
-            <div
-              key={i}
+            <motion.div
+              key={item.id || i}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ 
+                opacity: isActive ? 1 : 0.5, 
+                scale: isActive ? 1 : 0.9 
+              }}
+              transition={{ duration: 0.3 }}
               onClick={() =>
-                isActive
-                  ? null
-                  : setActive(
-                      (active + (i === 0 ? 1 : -1) + news.length) % news.length
-                    )
+                !isActive &&
+                setActive(
+                  (active + (i === 0 ? -1 : 1) + news.length) % news.length
+                )
               }
-              className={`
-                cursor-pointer
-                transition-all duration-300
-                ${
-                  isActive
-                    ? "scale-100 opacity-100"
-                    : "scale-90 opacity-50 hidden sm:block"
-                }
-              `}
+              className={`transition-all duration-300 cursor-pointer ${
+                isActive ? "" : "hover:opacity-70 hover:scale-95"
+              }`}
             >
-              <div
-                className="
-                  bg-white
-                   w-[200px] sm:w-[80%] lg:w-[90%]
-                  rounded-3xl
-                  shadow-2xl
-                  overflow-hidden
-                "
-              >
-                <img
-                  src={item.images}
-                  alt={item.title}
-                  className="w-full h-48 sm:h-56 lg:h-64 object-cover"
-                />
+              <div className="bg-white w-[250px] lg:w-[330px] rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow">
+                {item.image && (
+                  <div className="relative overflow-hidden h-48 lg:h-56">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                )}
                 <div className="p-5">
-                  <h3 className="font-bold text-lg">{item.title}</h3>
-                  <h4 className="text-sm text-black/70 mt-2">{item.content}</h4>
-                  <p className="text-sm text-right text-black/70 mt-2">
-                    {item.date}
+                  <h3 className="font-bold text-lg line-clamp-2 text-gray-800 mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-3">
+                    {item.content}
                   </p>
+                  {isActive && (
+                    <button className="mt-4 text-[#0A8791] font-semibold text-sm hover:underline">
+                      Читать далее →
+                    </button>
+                  )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
+
+        {/* Кнопка вправо */}
+        <button
+          onClick={handleNext}
+          className="absolute right-0 z-10 bg-white/80 hover:bg-white text-[#0A8791] p-3 rounded-full shadow-lg transition-all hover:scale-110"
+          aria-label="Следующая новость"
+        >
+          <FaChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Mobile версия - 1 карточка */}
+      <div className="md:hidden">
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.3 }}
+          className="flex justify-center"
+        >
+          <div className="bg-white w-full max-w-[340px] rounded-3xl shadow-2xl overflow-hidden">
+            {news[active]?.image && (
+              <div className="relative overflow-hidden h-48">
+                <img
+                  src={news[active].image}
+                  alt={news[active].title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="p-5">
+              <h3 className="font-bold text-lg text-gray-800 mb-2">
+                {news[active]?.title}
+              </h3>
+              <p className="text-sm text-gray-600 mt-2">
+                {news[active]?.content}
+              </p>
+              <button className="mt-4 text-[#0A8791] font-semibold text-sm hover:underline">
+                Читать далее →
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Индикаторы */}
+        <div className="flex justify-center gap-2 mt-6">
+          {news.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === active ? "bg-[#0A8791] w-8" : "bg-gray-300 w-2"
+              }`}
+              aria-label={`Перейти к новости ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Кнопки навигации */}
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            onClick={handlePrev}
+            className="bg-white/80 hover:bg-white text-[#0A8791] backdrop-blur-xl p-3 rounded-full shadow-lg transition-all hover:scale-110"
+            aria-label="Предыдущая новость"
+          >
+            <FaChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleNext}
+            className="bg-white/80 hover:bg-white text-[#0A8791] backdrop-blur-xl p-3 rounded-full shadow-lg transition-all hover:scale-110"
+            aria-label="Следующая новость"
+          >
+            <FaChevronRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </section>
   );

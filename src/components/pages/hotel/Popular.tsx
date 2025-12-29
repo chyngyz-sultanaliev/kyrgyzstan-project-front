@@ -1,90 +1,150 @@
 "use client";
 
+import {
+  useAddFavoriteMutation,
+  useGetFavoritesQuery,
+  useRemoveFavoriteMutation,
+} from "@/shared/api/favoriteApi";
+import { Hotel } from "@/shared/api/hotelApi";
 import { useRouter } from "next/navigation";
+import { FaHeart } from "react-icons/fa";
 
-const Popular = () => {
+interface Props {
+  popular: Hotel[];
+}
+
+const Popular = ({ popular }: Props) => {
   const router = useRouter();
+  const [addFavorite] = useAddFavoriteMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
+  const { data: favorites } = useGetFavoritesQuery();
+
+  // 4 эле элемент алабыз
+  const items = popular.slice(0, 4);
+
+  const isFavorite = (hotelId: string) =>
+    favorites?.find(
+      (f) => f.itemType === "HOTEL" && (f.item as Hotel)?.id === hotelId
+    );
+
   return (
-    <section className="py-20 bg-white flex items-center justify-center
-    flex-col">
-      <h1 className="text-2xl sm:text-3xl px-4 sm:px-7 pb-7">
-        Популярное
-      </h1>
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-12">
+          Популярное
+        </h1>
 
-      {/* GRID адаптив */}
-      <div
-        className="
-        grid 
-        grid-cols-1 
-        sm:grid-cols-2 
-        md:grid-cols-3 
-        lg:grid-cols-4 
-        gap-16
-        px-4
-      "
-      >
-        {[1, 2, 3, 4].map((_, idx) => (
-          <div
-            key={idx}
-            className="w-auto max-w-[320px] rounded-2xl overflow-hidden shadow-md bg-white"
+        <div
+          className="
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            md:grid-cols-3
+            lg:grid-cols-4
+            gap-10
+          "
+        >
+          {items.map((hotel) => {
+            const favorite = isFavorite(hotel.id);
+
+            return (
+              <div
+                key={hotel.id}
+                className="
+                bg-white
+                rounded-2xl
+                overflow-hidden
+                shadow-md
+                hover:shadow-xl
+                transition-all
+                duration-300
+              "
+              >
+                {/* IMAGE */}
+                <div className="relative h-[200px] bg-gray-200">
+                  {hotel.images?.length > 0 && (
+                    <img
+                      src={hotel.images[0].img}
+                      alt={hotel.title}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                  <button
+          onClick={async () => {
+            try {
+              if (favorite) {
+                await removeFavorite(favorite.id).unwrap();
+              } else {
+                await addFavorite({ itemId: hotel.id }).unwrap();
+              }
+            } catch {
+              alert("Ошибка сервера");
+            }
+          }}
+          className={`absolute text-3xl cursor-pointer left-3 top-3 ${
+            favorite ? "text-red-600" : "text-gray-300"
+          }`}
+        >
+          <FaHeart />
+        </button>
+                  {/* guests */}
+                  <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-sm shadow">
+                    до {hotel.maxGuests}
+                  </div>
+                </div>
+
+                {/* CONTENT */}
+                <div className="p-5">
+                  <h3 className="text-lg font-semibold mb-3 truncate">
+                    {hotel.title}
+                  </h3>
+
+                  <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                    <li>🛏 {hotel.sleepingPlaces} спальных мест</li>
+                    <li>👥 до {hotel.maxGuests} гостей</li>
+                    {hotel.pool && <li>🏊‍♂️ Бассейн</li>}
+                    {hotel.sauna && <li>🔥 Сауна</li>}
+                  </ul>
+
+                  <div className="flex items-center justify-between">
+                    <p className="font-semibold text-base">
+                      от {hotel.priceWeekday} ₽
+                      <span className="text-gray-500 text-sm"> / сутки</span>
+                    </p>
+
+                    <button
+                      onClick={() => router.push(`/hotel/category/${hotel.id}`)}
+                      className="text-[#0a8791] font-medium hover:underline cursor-pointer"
+                    >
+                      Подробнее
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* BUTTON */}
+        <div className="flex justify-center mt-12">
+          <button
+            onClick={() => router.push("/hotel/category")}
+            className="
+              cursor-pointer
+              w-[220px]
+              h-11
+              bg-[#0a8791]
+              text-white
+              rounded-lg
+              hover:bg-[#097a82]
+              active:scale-95
+              transition
+            "
           >
-            {/* Image section */}
-            <div className="relative h-[200px] sm:h-[220px] bg-gray-200">
-              {/* Badge */}
-              <div className="absolute top-3 right-3 bg-white/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 text-sm">
-                <svg width="16" height="16" fill="none" stroke="currentColor">
-                  <circle cx="8" cy="5" r="3" strokeWidth="1.5"></circle>
-                  <path d="M2 14c0-3 3-5 6-5s6 2 6 5" strokeWidth="1.5"></path>
-                </svg>
-                <span>до 30</span>
-              </div>
-
-              {/* Heart */}
-              <button className="absolute bottom-4 right-4 bg-white shadow rounded-full p-2">
-                <svg width="20" height="20" fill="none" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeWidth="1.5"
-                    d="M10 17s-6-4-6-9a3.5 3.5 0 0 1 7 0 3.5 3.5 0 0 1 7 0c0 5-6 9-6 9z"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="p-5">
-              <h3 className="text-lg font-semibold mb-3">Балыкчы</h3>
-
-              <ul className="space-y-2 text-gray-700 text-[15px]">
-                <li className="flex items-center gap-2">🛏 25 спальных мест</li>
-                <li className="flex items-center gap-2">
-                  🎲 Настольный теннис
-                </li>
-                <li className="flex items-center gap-2">🏊‍♂️ Бассейн</li>
-                <li className="flex items-center gap-2">🔥 Сауна</li>
-              </ul>
-
-              <div className="flex justify-between items-center mt-4">
-                <p className="font-semibold text-[17px]">
-                  от 10 000 ₽{" "}
-                  <span className="text-gray-500 text-sm">/ сутки</span>
-                </p>
-                <a className="text-teal-600 font-medium hover:underline cursor-pointer">
-                  Подробнее
-                </a>
-              </div>
-            </div>
-          </div>
-        ))}
+            Перейти в каталог
+          </button>
+        </div>
       </div>
-
-      {/* Button */}
-      <button
-        onClick={() => router.push("/hotel/category")}
-        className="mt-10 mx-auto w-[200px] h-10 bg-[#0a8791] text-white text-sm flex items-center justify-center rounded-lg cursor-pointer active:scale-95 transition-all"
-      >
-        Перейти в каталог
-      </button>
     </section>
   );
 };

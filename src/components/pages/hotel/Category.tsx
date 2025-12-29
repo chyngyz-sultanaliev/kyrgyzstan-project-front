@@ -1,226 +1,181 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { FaAngleRight } from "react-icons/fa";
 
-const Category = () => {
+import { Hotel, useGetHotelsQuery } from "@/shared/api/hotelApi";
+import { HotelCategory } from "@/shared/api/hotelCategoryApi";
+import { useRouter } from "next/navigation";
+import { FaHeart } from "react-icons/fa";
+import { useMemo, useState } from "react";
+import {
+  useAddFavoriteMutation,
+  useGetFavoritesQuery,
+  useRemoveFavoriteMutation,
+} from "@/shared/api/favoriteApi";
+
+interface CategoryProps {
+  hotel: Hotel[];
+  category: HotelCategory[];
+}
+
+const Category = ({ hotel, category }: CategoryProps) => {
   const router = useRouter();
 
+  // 🔥 optimistic favorites (frontend-only)
+  const [favLocal, setFavLocal] = useState<Set<string>>(new Set());
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [priceFilter, setPriceFilter] = useState("all");
+
+  const { data: favorites } = useGetFavoritesQuery();
+  const [addFavorite] = useAddFavoriteMutation();
+  const [removeFavorite] = useRemoveFavoriteMutation();
+
+  // 🔍 FILTER
+  const filteredHotels = useMemo(() => {
+    let result = [...hotel];
+
+    if (selectedCategory !== "all") {
+      result = result.filter(
+        (item) => item.categoryId === selectedCategory
+      );
+    }
+
+    if (priceFilter !== "all") {
+      const maxPrice = Number(priceFilter);
+      result = result.filter(
+        (item) => item.priceWeekday <= maxPrice
+      );
+    }
+
+    return result;
+  }, [hotel, selectedCategory, priceFilter]);
+
   return (
-    <section className="py-4">
-      <div className="hidden text-2xl justify-around lg:flex">
-        <h2
-          className="text-black px-10 py-0.5 border-2 border-[#0a8791] rounded-full cursor-pointer 
-               hover:bg-[#0a8791] hover:text-white transition-all"
+    <section className="py-6 min-h-screen bg-gray-50">
+      {/* FILTERS */}
+      <div className="flex flex-wrap justify-center gap-4 mb-8 px-4">
+        <button
+          onClick={() => setSelectedCategory("all")}
+          className={`px-5 py-1.5 border-2 rounded-full transition ${
+            selectedCategory === "all"
+              ? "bg-[#0a8791] text-white border-[#0a8791]"
+              : "border-[#0a8791] hover:bg-[#0a8791] hover:text-white"
+          }`}
         >
           Все
-        </h2>
-        <h2
-          className="text-black px-10 py-0.5 border-2 border-[#0a8791] rounded-full cursor-pointer 
-               hover:bg-[#0a8791] hover:text-white transition-all"
-        >
-          С бассейном
-        </h2>
-        <h2
-          className="text-black px-10 py-0.5 border-2 border-[#0a8791] rounded-full cursor-pointer 
-               hover:bg-[#0a8791] hover:text-white transition-all"
-        >
-          Семейные
-        </h2>
-        <h2
-          className="text-black px-10 py-0.5 border-2 border-[#0a8791] rounded-full cursor-pointer 
-               hover:bg-[#0a8791] hover:text-white transition-all"
-        >
-          Хиты продаж
-        </h2>
+        </button>
 
-        <select className="outline-0">
-          <option value="price" disabled selected hidden>
-            Цены
-          </option>
-          <option value="">до 400$</option>
-          <option value="">до 800$</option>
-          <option value="">до 1200$</option>
+        {category.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setSelectedCategory(cat.id)}
+            className={`px-5 py-1.5 border-2 rounded-full transition ${
+              selectedCategory === cat.id
+                ? "bg-[#0a8791] text-white border-[#0a8791]"
+                : "border-[#0a8791] hover:bg-[#0a8791] hover:text-white"
+            }`}
+          >
+            {cat.name}
+          </button>
+        ))}
+
+        <select
+          value={priceFilter}
+          onChange={(e) => setPriceFilter(e.target.value)}
+          className="border rounded px-3 py-1.5 outline-none"
+        >
+          <option value="all">Цены</option>
+          <option value="400">до 400$</option>
+          <option value="800">до 800$</option>
+          <option value="1200">до 1200$</option>
         </select>
       </div>
-      <div className="flex lg:hidden items-center justify-center gap-16">
-        <select>
-          <option value="categories" disabled selected hidden>
-            Категории
-          </option>
-          <option value="">Все</option>
-          <option value=""> С бассейном</option>
-          <option value="">Семейные</option>
-          <option value="">Хиты продаж</option>
-        </select>
-        <select className="outline-0">
-          <option value="price" disabled selected hidden>
-            Цены
-          </option>
-          <option value="">до 400$</option>
-          <option value="">до 800$</option>
-          <option value="">до 1200$</option>
-        </select>
-      </div>
-      <div className="flex py-12 flex-wrap gap-10">
-        <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-2">
-          {/* Left: Image */}
-          <div className="relative w-1/2">
-            <img
-              src="/house.jpg"
-              className="w-full h-full rounded-xl object-cover"
-              alt="house"
-            />
 
-            {/* Heart button */}
-            <button className="absolute top-3 left-3 bg-white/70 p-2 rounded-full backdrop-blur hover:bg-white transition">
-              ❤️
-            </button>
+      {/* 🔥 HOTEL GRID (2 колонка адаптивный) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 max-w-7xl mx-auto">
+        {filteredHotels.map((item) => {
+          const serverFavorite = favorites?.find(
+            (fav) =>
+              fav.itemType === "HOTEL" &&
+              (fav.item as Hotel | null)?.id === item.id
+          );
 
-            {/* Slider arrow */}
-            <button className="absolute top-1/2 right-2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
-              <FaAngleRight />
-            </button>
+          const isFavorite =
+            favLocal.has(item.id) || Boolean(serverFavorite);
 
-            {/* Slider dots */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-            </div>
-          </div>
+          return (
+<div
+  key={item.id}
+  className="relative bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col md:flex-row"
+>
+  {/* IMAGE */}
+  <div className="relative h-[220px] md:h-auto md:w-1/2">
+    {item.images?.length > 0 && (
+      <img
+        src={item.images[0].img}
+        alt={item.title}
+        className="w-full h-full object-cover"
+      />
+    )}
 
-          {/* Right: Info */}
-          <div className="w-1/2 flex flex-col justify-between">
-            {/* Title + subtitle */}
-            <div>
-              <h2 className="text-xl font-semibold">Горки-Сухаревские 1</h2>
-              <p className="text-gray-600">
-                Рублево-Успенское шоссе 24 км от МКАД
-              </p>
-            </div>
+    {/* ❤️ HEART */}
+    <button
+      className={`absolute top-4 left-4 text-3xl transition ${
+        isFavorite ? "text-red-600" : "text-gray-200"
+      }`}
+      onClick={async () => {
+        const prev = new Set(favLocal);
+        setFavLocal((s) => {
+          const next = new Set(s);
+          next.has(item.id)
+            ? next.delete(item.id)
+            : next.add(item.id);
+          return next;
+        });
 
-            <div className="flex items-center gap-3">
-              {/* Features */}
-              <div className="flex flex-col gap-2 mt-3 text-gray-700 text-sm">
-                <div className="flex items-center ">🛏 25 спальных мест</div>
-                <div className="flex items-center">🏓 Настольный теннис</div>
-                <div className="flex items-center">🏊 Бассейн</div>
-                <div className="flex items-center">🔥 Сауна</div>
-              </div>
+        try {
+          if (serverFavorite) {
+            await removeFavorite(serverFavorite.id).unwrap();
+          } else {
+            await addFavorite({ itemId: item.id }).unwrap();
+          }
+        } catch {
+          setFavLocal(prev);
+          alert("Ошибка сервера");
+        }
+      }}
+    >
+      <FaHeart />
+    </button>
+  </div>
 
-              {/* Prices */}
-              <div className="flex justify-between mt-4 text-sm gap-2">
-                <div className="text-gray-500 flex flex-col gap-2">
-                  <h3>Будни</h3>
-                  <h3>Пятница</h3>
-                  <h3>Суббота</h3>
-                  <h3>Воскресенье</h3>
-                </div>
+  {/* INFO */}
+  <div className="p-4 flex flex-col grow md:w-1/2">
+    <h2 className="text-lg font-semibold">{item.title}</h2>
+    <p className="text-gray-600 text-sm">{item.address}</p>
 
-                <div className="text-gray-900 font-semibold text-sm flex flex-col gap-2">
-                  <h3>от 8000</h3>
-                  <h3>от 10000</h3>
-                  <h3>от 12000</h3>
-                  <h3>от 14000</h3>
-                </div>
-              </div>
-            </div>
+    <div className="flex flex-wrap gap-3 mt-3 text-sm text-gray-700">
+      <span>🛏 {item.sleepingPlaces}</span>
+      <span>👥 до {item.maxGuests}</span>
+      {item.pool && <span>🏊 Бассейн</span>}
+      {item.sauna && <span>🔥 Сауна</span>}
+    </div>
 
-            {/* Bottom Links */}
-            <div className="flex justify-between text-sm mt-4">
-              <button className="text-gray-500 hover:text-black transition">
-                Показать на карте
-              </button>
+    <div className="mt-4 text-sm flex justify-between">
+      <span>Будни</span>
+      <span className="font-semibold">{item.priceWeekday}$</span>
+    </div>
 
-              <button
-                className="text-[#0a8791] hover:underline cursor-pointer"
-                onClick={() => router.push("/hotel/detail")}
-              >
-                Подробнее
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="w-2xl mx-auto h-72 bg-white rounded-2xl shadow-md p-4 flex gap-2">
-          {/* Left: Image */}
-          <div className="relative w-1/2">
-            <img
-              src="/house.jpg"
-              className="w-full h-full rounded-xl object-cover"
-              alt="house"
-            />
+    <button
+      onClick={() => router.push(`/hotel/category/${item.id}`)}
+      className="mt-auto pt-4 text-[#0a8791] hover:underline font-medium"
+    >
+      Подробнее
+    </button>
+  </div>
+</div>
 
-            {/* Heart button */}
-            <button className="absolute top-3 left-3 bg-white/70 p-2 rounded-full backdrop-blur hover:bg-white transition">
-              ❤️
-            </button>
-
-            {/* Slider arrow */}
-            <button className="absolute top-1/2 right-2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
-              <FaAngleRight />
-            </button>
-
-            {/* Slider dots */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-              <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-            </div>
-          </div>
-
-          {/* Right: Info */}
-          <div className="w-1/2 flex flex-col justify-between">
-            {/* Title + subtitle */}
-            <div>
-              <h2 className="text-xl font-semibold">Горки-Сухаревские 1</h2>
-              <p className="text-gray-600">
-                Рублево-Успенское шоссе 24 км от МКАД
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              {/* Features */}
-              <div className="flex flex-col gap-2 mt-3 text-gray-700 text-sm">
-                <div className="flex items-center ">🛏 25 спальных мест</div>
-                <div className="flex items-center">🏓 Настольный теннис</div>
-                <div className="flex items-center">🏊 Бассейн</div>
-                <div className="flex items-center">🔥 Сауна</div>
-              </div>
-
-              {/* Prices */}
-              <div className="flex justify-between mt-4 text-sm gap-2">
-                <div className="text-gray-500 flex flex-col gap-2">
-                  <h3>Будни</h3>
-                  <h3>Пятница</h3>
-                  <h3>Суббота</h3>
-                  <h3>Воскресенье</h3>
-                </div>
-
-                <div className="text-gray-900 font-semibold text-sm flex flex-col gap-2">
-                  <h3>от 8000</h3>
-                  <h3>от 10000</h3>
-                  <h3>от 12000</h3>
-                  <h3>от 14000</h3>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Links */}
-            <div className="flex justify-between text-sm mt-4">
-              <button className="text-gray-500 hover:text-black transition">
-                Показать на карте
-              </button>
-
-              <button
-                className="text-[#0a8791] hover:underline cursor-pointer"
-                onClick={() => router.push("/hotel/detail")}
-              >
-                Подробнее
-              </button>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </section>
   );

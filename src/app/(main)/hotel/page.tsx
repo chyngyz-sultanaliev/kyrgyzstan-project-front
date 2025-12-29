@@ -1,6 +1,7 @@
-import Hotel from '@/components/pages/hotel/Hotel';
-import React from 'react';
+import Hotel from "@/components/pages/hotel/Hotel";
 
-const page = () => <Hotel/>
+const Page = async () => {
+  return <Hotel />;
+};
 
-export default page;
+export default Page;
