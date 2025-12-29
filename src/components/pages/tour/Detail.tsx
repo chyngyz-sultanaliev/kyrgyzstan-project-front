@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import ReviewForm from "./Review";
 import { useGetTourByIdQuery } from "@/shared/api/tourApi";
 import { SlArrowDown } from "react-icons/sl";
@@ -10,6 +10,9 @@ import {
   useGetFavoritesQuery,
   useRemoveFavoriteMutation,
 } from "@/shared/api/favoriteApi";
+import axios from "axios";
+import StatusMessage from "@/components/ui/status/Status";
+import Button from "@/components/ui/Button/Button";
 
 interface TourDay {
   id: string;
@@ -23,42 +26,65 @@ interface Props {
 
 type ModalItem = {
   id: number;
-  name: string;
-  phone: string;
+  email: string;
+  num: string;
   description: string;
 };
 
 const Detail = ({ tourDays }: Props) => {
   const { id } = useParams();
   const tourId = typeof id === "string" ? id : "";
-  const { data: tour, isLoading } = useGetTourByIdQuery(String(tourId));
+  const { data: tour, isLoading, error } = useGetTourByIdQuery(String(tourId));
 
   const { data: favorites } = useGetFavoritesQuery();
   const [addFavorite] = useAddFavoriteMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
 
-  // const [chair, setChair] = useState(false);
   const [modal, setModal] = useState<ModalItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
-
   const [open, setOpen] = useState(false);
 
-  console.log(tour);
-
   if (!tourId) return <p>No ID</p>;
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <StatusMessage variant="loading" />;
   if (!tour) return <p>Not found</p>;
+  if (error)
+    return (
+      <StatusMessage
+        variant="error"
+        message={`${(error as AUTH.Error)?.data?.message}`}
+      />
+    );
 
-  const handleFavoriteClick = async () => {
+  const handleSubmit = async (e: FormEvent | any) => {
+    e?.preventDefault?.();
+
+    if (!modal[0]) return;
+
+    const modalData = modal[0];
+
     try {
-      if (isFavorite && favorite?.id) {
-        await removeFavorite(favorite.id);
-      } else if (tour?.id) {
-        await addFavorite({ itemType: "TOUR", tourId: tour.id });
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Ошибка при добавлении/удалении из избранного");
+      const chat_id = "-1002597947748";
+      const token = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
+      const api_url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+      const textMessage = `
+📧 Email: ${modalData.email}
+📞 Number: ${modalData.num}
+📝 Description: ${modalData.description}
+`;
+
+      await axios.post(api_url, {
+        chat_id,
+        parse_mode: "HTML",
+        text: textMessage,
+      });
+
+      alert("Подписка оформлена!");
+      setModal([]);
+      setSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка отправки. Попробуйте позже.");
     }
   };
 
@@ -66,16 +92,15 @@ const Detail = ({ tourDays }: Props) => {
     <>
       <section className="container px-6 md:px-12 py-8">
         <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-          <div className="">
+          <div>
             <img
               src={tour.image}
               alt="tour"
               className="w-full h-[460px] md:w-[420px] md:h-[300px] lg:w-[900px] lg:h-[370px] object-cover rounded-2xl mt-5 md:mt-0"
             />
-            <div className="absolute top-4 right-4 w-10 h-10 flex justify-center items-center rounded-full bg-white shadow-lg"></div>
           </div>
 
-          <div className="flex flex-col p-6 rounded-2xl w-full md:w-[420px] shadow-[0_10px_30px_rgba(0,0,0,0.25)] h-77  text-gray-500">
+          <div className="flex flex-col p-6 rounded-2xl w-full md:w-[420px] shadow-[0_10px_30px_rgba(0,0,0,0.25)] h-77 text-gray-500">
             <h1 className="text-xl mb-2 mt-7">Location: {tour.location}</h1>
             <h2>{tour.days} days</h2>
 
@@ -93,39 +118,39 @@ const Detail = ({ tourDays }: Props) => {
               onClick={() =>
                 setModal((prev) => [
                   ...prev,
-                  { id: Date.now(), name: "", phone: "", description: "" },
+                  { id: Date.now(), email: "", num: "", description: "" },
                 ])
               }
-              className="mt-5 w-full h-10 bg-[#5B9096] text-white rounded-lg"
+              className="mt-5 w-full h-10 bg-[#0A8791] text-white rounded-lg"
             >
-              Submit a request for this selection{" "}
+              Submit a request for this selection
             </button>
           </div>
         </div>
 
-        <div>
-          {/* Modal формасы */}
-          {modal.length > 0 &&
-            !submitted &&
-            modal.map((el) => (
-              <div
-                key={el.id}
-                className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60"
-              >
-                <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5">
-                  <h2 className="text-lg font-semibold text-center">
-                    Submit a request for selection and reduce your search time
-                  </h2>
+        {/* Modal */}
+        {modal.length > 0 && !submitted && (
+          <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
+            <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5">
+              <h2 className="text-lg font-semibold text-center">
+                Submit a request for selection
+              </h2>
 
+              {modal.map((el) => (
+                <form
+                  key={el.id}
+                  onSubmit={handleSubmit}
+                  className="flex flex-col gap-3"
+                >
                   <input
                     type="text"
-                    placeholder="Name..."
-                    value={el.name}
+                    placeholder="Email..."
+                    value={el.email}
                     onChange={(e) =>
                       setModal((prev) =>
                         prev.map((item) =>
                           item.id === el.id
-                            ? { ...item, name: e.target.value }
+                            ? { ...item, email: e.target.value }
                             : item
                         )
                       )
@@ -136,12 +161,12 @@ const Detail = ({ tourDays }: Props) => {
                   <input
                     type="text"
                     placeholder="Number..."
-                    value={el.phone}
+                    value={el.num}
                     onChange={(e) =>
                       setModal((prev) =>
                         prev.map((item) =>
                           item.id === el.id
-                            ? { ...item, phone: e.target.value }
+                            ? { ...item, num: e.target.value }
                             : item
                         )
                       )
@@ -166,44 +191,43 @@ const Detail = ({ tourDays }: Props) => {
                   />
 
                   <button
-                    onClick={() => {
-                      console.log(el); // backendке жибересиң
-                      setModal([]); // форма жабылат
-                      setSubmitted(true); // заявка отправлена
-                    }}
-                    className="bg-[#5B9096] text-white h-10 rounded-lg"
+                    type="submit"
+                    className="bg-[#0A8791] text-white h-10 rounded-lg"
                   >
-                    Submit a request
+                    Submit
                   </button>
-                </div>
-              </div>
-            ))}
-
-          {submitted && (
-            <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
-              <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5 text-center">
-                <h2 className="text-lg font-semibold">
-                  Your application has been sent!
-                </h2>
-                <p>
-                  A specialist will contact you within 15 minutes to help <br />
-                  you choose the ideal option and provide <br />
-                  advice on all matters.
-                </p>
-                <button
-                  className="bg-[#5B9096] text-white h-10 rounded-lg mt-4"
-                  onClick={() => setSubmitted(false)}
-                >
-                  Close
-                </button>
-              </div>
+                </form>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
+        {submitted && (
+          <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
+            <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5 text-center">
+              <h2 className="text-lg font-semibold">
+                Your application has been sent!
+              </h2>
+              <p>
+                A specialist will contact you within 15 minutes to help <br />
+                you choose the ideal option and provide <br />
+                advice on all matters.
+              </p>
+              <Button
+                onClick={() => {
+                  setSubmitted(false);
+                  setModal([]);
+                }}
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Tour Description */}
         <div className="mt-12 flex flex-col gap-4">
           <h1 className="text-2xl mb-2">Description</h1>
-
           <p>{tour.description}</p>
 
           <div className="w-110 h-auto bg-[#D9D9D9] flex flex-col">
@@ -212,11 +236,9 @@ const Detail = ({ tourDays }: Props) => {
               onClick={() => setOpen(!open)}
             >
               <h4>Day 1</h4>
-              <h4>
-                <SlArrowDown
-                  className={`transition-transform ${open ? "rotate-180" : ""}`}
-                />
-              </h4>
+              <SlArrowDown
+                className={`transition-transform ${open ? "rotate-180" : ""}`}
+              />
             </div>
 
             {open && (
@@ -243,10 +265,9 @@ const Detail = ({ tourDays }: Props) => {
           </div>
         </div>
       </section>
+
       <ReviewForm
-        review={
-          tour.reviews && tour.reviews.length > 0 ? tour.reviews : undefined
-        }
+        review={tour.reviews?.length ? tour.reviews : undefined}
         id={tourId}
       />
     </>
