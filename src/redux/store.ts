@@ -12,6 +12,7 @@ import { api } from "./api";
 import { hotelReviewApi } from "@/shared/api/hotelReviewApi";
 import { favoriteApi } from "@/shared/api/favoriteApi";
 import { tourDayApi } from "@/shared/api/tourDayApi";
+import { carReviewApi } from "@/shared/api/carReviewApi";
 
 export const store = configureStore({
   reducer: {
@@ -28,10 +29,12 @@ export const store = configureStore({
     [hotelCategoryApi.reducerPath]: hotelCategoryApi.reducer,
     [hotelReviewApi.reducerPath]: hotelReviewApi.reducer,
     [tourReviewApi.reducerPath]: tourReviewApi.reducer,
+    [carReviewApi.reducerPath]: carReviewApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(api.middleware)
+      .concat(carReviewApi.middleware)
       .concat(tourApi.middleware)
       .concat(newsApi.middleware)
       .concat(carApi.middleware)

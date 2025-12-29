@@ -21,7 +21,7 @@ export const hotelReviewApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    createReview: builder.mutation<any, CreateReviewDto>({
+    createReview: builder.mutation<CreateReviewDto, CreateReviewDto>({
       query: (body) => ({
         url: "/review/hotel",
         method: "POST",
