@@ -4,7 +4,7 @@ import React, { useState, useRef, ChangeEvent } from "react";
 import { Star, Camera, Paperclip } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
 import { IoCloseCircle } from "react-icons/io5";
-import { useCreateReviewMutation } from "@/shared/api/tourReviewApi";
+import { useCreateReviewMutation } from "@/shared/api/carReviewApi";
 interface ReviewFormProps {
   id: string;
 }
