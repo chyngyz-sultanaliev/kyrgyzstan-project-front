@@ -34,7 +34,6 @@ const Popular = ({ popular }: Props) => {
           Популярное
         </h1>
 
-        {/* GRID */}
         <div
           className="
             grid
