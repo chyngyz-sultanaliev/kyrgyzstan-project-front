@@ -1,13 +1,17 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
+import StatusMessage from "@/components/ui/status/Status";
+import { useGetCarCategoriesQuery } from "@/shared/api/carCategoryApi";
 import { useRouter } from "next/navigation";
 import { FaUser } from "react-icons/fa";
 import { HiArrowLongRight } from "react-icons/hi2";
 
 const HireCar = () => {
+  const { data: categories, isLoading, error } = useGetCarCategoriesQuery();
   const router = useRouter();
 
-  const handleClick = (type: string) => {
-    router.push(`/car/category/?type=${type}`);
+  const handleClick = (id: string) => {
+    router.push(`/car/category/${id}`);
   };
 
   const cardClass =
@@ -25,6 +29,14 @@ const HireCar = () => {
   const badgeClass =
     "absolute top-4 right-4 w-[70px] h-[38px] bg-[#0A8791] rounded-lg flex items-center justify-center gap-2 px-2";
 
+  if (isLoading) return <StatusMessage variant="loading" />;
+  if (error )
+    return (
+      <StatusMessage
+        variant="error"
+        message={`${(error as AUTH.Error)?.data?.message}`}
+      />
+    );
   return (
     <section className="w-full min-h-screen py-10 bg-gray-100">
       <div className="container mx-auto">
@@ -33,70 +45,25 @@ const HireCar = () => {
         </h1>
 
         <div className="flex flex-col items-center gap-10 mt-10">
-          {/* Passenger */}
-          <div className={cardClass}>
-            <img className={imgClass} src="/images/Toyota-Camry-PNG-image (1).png" />
-            <div className={textClass}>
-              <h1 className="text-[28px] font-semibold">Passenger car</h1>
-              <button onClick={() => handleClick("passenger")} className={btnClass}>
-                see options
-                <HiArrowLongRight className="text-[22px] shrink-0" />
-              </button>
+          {categories?.map((car) => (
+            <div key={car.id} className={cardClass}>
+              <img className={imgClass} src={car.images} alt={car.name} />
+              <div className={textClass}>
+                {car.withDriver && <span className="text-sm text-gray-500">With driver</span>}
+                <h1 className="text-[28px] font-semibold">{car.name}</h1>
+                <button onClick={() => handleClick(car.id)} className={btnClass}>
+                  see options
+                  <HiArrowLongRight className="text-[22px] shrink-0" />
+                </button>
+              </div>
+              <div className={badgeClass}>
+                <FaUser className="text-white" />
+                <span className="text-white text-[13px] font-semibold">
+                  {car.seats}+
+                </span>
+              </div>
             </div>
-            <div className={badgeClass}>
-              <FaUser className="text-white" />
-              <span className="text-white text-[13px] font-semibold">4</span>
-            </div>
-          </div>
-
-          {/* Off-road */}
-          <div className={cardClass}>
-            <img className={imgClass} src="/images/Toyota-Land-Cruiser-Prado-No-Background.png" />
-            <div className={textClass}>
-              <h1 className="text-[28px] font-semibold">Off-road car</h1>
-              <button onClick={() => handleClick("offroad")} className={btnClass}>
-                see options
-                <HiArrowLongRight className="text-[22px] shrink-0" />
-              </button>
-            </div>
-            <div className={badgeClass}>
-              <FaUser className="text-white" />
-              <span className="text-white text-[13px] font-semibold">7</span>
-            </div>
-          </div>
-
-          {/* Minibus */}
-          <div className={cardClass}>
-            <img className={imgClass} src="/images/sprinter-car.png" />
-            <div className={textClass}>
-              <span className="text-sm text-gray-500">With driver</span>
-              <h1 className="text-[28px] font-semibold">Minibus car</h1>
-              <button onClick={() => handleClick("minibus")} className={btnClass}>
-                see options
-                <HiArrowLongRight className="text-[22px] shrink-0" />
-              </button>
-            </div>
-            <div className={badgeClass}>
-              <FaUser className="text-white" />
-              <span className="text-white text-[13px] font-semibold">16</span>
-            </div>
-          </div>
-
-          {/* Bus */}
-          <div className={cardClass}>
-            <img className={imgClass} src="/images/Bus-car.webp" />
-            <div className={textClass}>
-              <h1 className="text-[28px] font-semibold">Bus car</h1>
-              <button onClick={() => handleClick("bus")} className={btnClass}>
-                see options
-                <HiArrowLongRight className="text-[22px] shrink-0" />
-              </button>
-            </div>
-            <div className={badgeClass}>
-              <FaUser className="text-white" />
-              <span className="text-white text-[13px] font-semibold">40+</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,15 +1,15 @@
-// src/shared/api/tourReviewApi.ts
+// src/shared/api/carReviewApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 export interface CreateReviewDto {
-  tourId: string;
+  carId: string;
   rating: number;
   comment: string;
   images?: string[];
 }
 
-export const tourReviewApi = createApi({
-  reducerPath: "tourReviewApi",
+export const carReviewApi = createApi({
+  reducerPath: "carReviewApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
     prepareHeaders: (headers) => {
@@ -23,7 +23,7 @@ export const tourReviewApi = createApi({
   endpoints: (builder) => ({
     createReview: builder.mutation<CreateReviewDto, CreateReviewDto>({
       query: (body) => ({
-        url: "/review/tour",
+        url: "/review/car",
         method: "POST",
         body,
       }),
@@ -32,4 +32,4 @@ export const tourReviewApi = createApi({
 });
 
 // ⬇️ МЫНА УШУ САП МААНИЛҮҮ
-export const { useCreateReviewMutation } = tourReviewApi;
+export const { useCreateReviewMutation } = carReviewApi;
