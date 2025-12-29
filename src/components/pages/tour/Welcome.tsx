@@ -1,32 +1,40 @@
+/* eslint-disable @next/next/no-img-element */
 const Welcome = () => {
   return (
-    <section className="w-full bg-slate-400 relative min-h-[300px] sm:min-h-[700px]  py-10">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-16">
-        <div className="relative w-full h-[390px] flex items-start lg:items-center">
+    <section className="relative w-full h-[60vh] md:h-[90vh] bg-slate-400 py-8">
+      <div className="container mx-auto h-full px-4 sm:px-6 lg:px-16">
+        <div className="relative h-full w-full rounded-3xl overflow-hidden shadow-[2px_-2px_21px_0_rgba(146,247,0,0.29)]">
+
+          {/* Background image */}
           <img
             src="https://i.pinimg.com/originals/83/34/ae/8334aee26e027fb348be0a0253452784.jpg"
-            alt="img"
-            className="w-full h-full md:h-[630px] bottom-7 md:mt-60 object-cover rounded-3xl shadow-[2px_-2px_21px_0_rgba(146,247,0,0.29)]"
+            alt="Asian Patagonia"
+            className="absolute inset-0 w-full h-full object-cover"
           />
 
-          <div
-            className="absolute top-40 left-5 md:mr-[50px] sm:ml-[60px] md:mt-[50px]
-                   flex flex-col items-start gap-1 sm:gap-4 md:gap-5 
-                   text-amber-50"
-          >
-            <h1 className="font-roboto font-semibold text-xl sm:text-xl md:text-3xl lg:text-5xl xl:text-6xl leading-snug">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/40" />
+
+          {/* Content */}
+          <div className="relative z-10 h-full flex flex-col justify-center px-4 sm:px-8 lg:px-16 text-amber-50 max-w-2xl">
+            <h1 className="font-roboto font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight">
               Your extreme hike <br />
               to Asian Patagonia
             </h1>
-            <h3 className="font-roboto font-medium text-[10px] sm:text-xl md:text-sm lg:text-xl xl:text-2xl leading-snug mt-2">
+
+            <p className="font-roboto font-medium text-sm sm:text-base md:text-lg lg:text-xl mt-4 leading-relaxed">
               Discover untouched mountains, <br />
               crystal lakes, and the hospitality of <br />
               Central Asia’s hidden gem.
-            </h3>
-            <button className="font-roboto font-medium text-sm sm:text-base md:text-[12] ml-1 lg:text-xl w-36 sm:w-44 md:w-37 lg:w-60 h-[22px] sm:h-12 md:h-12 rounded-xl bg-[#d9d9d97e] sm:bg-[#d9d9d950] mt-3 sm:mt-4 mx-auto">
+            </p>
+
+            <button className="mt-6 w-40 sm:w-48 lg:w-60 h-10 sm:h-12 rounded-xl 
+                               bg-white/30 hover:bg-white/40 transition 
+                               text-sm sm:text-base lg:text-lg font-medium backdrop-blur">
               Plan Your Trip
             </button>
           </div>
+
         </div>
       </div>
     </section>

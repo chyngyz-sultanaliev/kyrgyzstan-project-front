@@ -10,13 +10,13 @@ import {
   Car,
   Hotel,
   Newspaper,
+  Home,
 } from "lucide-react";
 import { MdTour } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { useGetProfileQuery } from "@/shared/api/profileApi";
 import Cookies from "js-cookie";
-import { animatePageOut } from "@/components/utils/animations";
 
 interface SidebarProps {
   open: boolean;
@@ -28,6 +28,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
   const { data: profile } = useGetProfileQuery();
   const router = useRouter();
   const menu = [
+    { label: "Home", href: "/", icon: <Home size={20} /> },
     { label: "Profile", href: "/admin", icon: <User size={20} /> },
     { label: "Car", href: "/admin/car", icon: <Car size={20} /> },
     { label: "Tour", href: "/admin/tour", icon: <MdTour size={20} /> },
@@ -124,12 +125,12 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                 const isActive = pathname === href;
                 return (
                   <li key={label}>
-                    <button
+                    <Link
+                      href={href}
                       onClick={() => {
-                        setOpen(false); // закрыть Sidebar
-                        animatePageOut(href, router); // GSAP-анимация занавеса
+                        setOpen(false);
                       }}
-                        className={`flex w-full items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                      className={`flex w-full items-center gap-3 px-3 py-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-[#0A8791] text-white"
                           : "text-gray-700 hover:bg-gray-100"
@@ -137,7 +138,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
                     >
                       {icon}
                       <span className="text-sm sm:text-base">{label}</span>
-                    </button>
+                    </Link>
                   </li>
                 );
               })}

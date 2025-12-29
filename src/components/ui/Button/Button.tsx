@@ -34,7 +34,7 @@ export default function Button({
     primary: "bg-[#0A8791] text-white",
     delete: "bg-red-500   text-white",
     secondary: "bg-white border border-[#0A8791] text-[#0A8791]",
-    gradient: "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white",
+    gradient: "bg-gradient-to-r from-[#0A8791] to-[#00C9D1] text-white sm:text-xl",
   };
 
   return (
