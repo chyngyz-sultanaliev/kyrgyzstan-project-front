@@ -8,6 +8,8 @@ const Hotel = () => {
   const [catIndex, setCatIndex] = useState(0);
   const { data = [] } = useGetHotelCategoriesQuery();
 
+
+  
   useEffect(() => {
     if (!data.length) return;
     const interval = setInterval(() => {
