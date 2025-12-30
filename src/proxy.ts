@@ -1,7 +1,9 @@
+// proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
@@ -10,17 +12,37 @@ export function proxy(req: NextRequest) {
     pathname.startsWith("/register") ||
     pathname.startsWith("/reset");
 
-  const isPublicPage = 
+  const isPublicPage =
     pathname === "/" ||
     pathname.startsWith("/about") ||
     pathname.startsWith("/contact");
 
+  // 🔐 Неавторизован
   if (!token && !isAuthPage && !isPublicPage) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
+  // 🔁 Авторизован → нельзя на auth-страницы
   if (token && isAuthPage) {
     return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // 🛑 АДМИНКА
+  if (pathname.startsWith("/admin")) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    try {
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const { payload } = await jwtVerify(token, secret);
+
+      if (!payload.isAdmin) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+    } catch {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
   }
 
   return NextResponse.next();

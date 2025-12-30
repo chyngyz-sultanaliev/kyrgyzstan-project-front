@@ -14,22 +14,23 @@ import {
 } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
 import {
-  Favorite,
+  FavoriteItem,
   useGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/shared/api/profileApi";
 import { Tour } from "@/shared/api/tourApi";
-import { Hotel, useGetHotelByIdQuery, useGetHotelsQuery } from "@/shared/api/hotelApi";
+import { Hotel } from "@/shared/api/hotelApi";
 import { Car } from "@/shared/api/carApi";
-import { FaHeart } from "react-icons/fa";
+import StatusMessage from "@/components/ui/status/Status";
 import {
-  useAddFavoriteMutation,
+  Favorite,
   useGetFavoritesQuery,
   useRemoveFavoriteMutation,
 } from "@/shared/api/favoriteApi";
+import { FaHeart } from "react-icons/fa";
 
 const Profile = () => {
-  const { data: profile, isLoading } = useGetProfileQuery();
+  const { data: profile, isLoading, error: err } = useGetProfileQuery();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,29 +41,24 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const { data: hotel } = useGetHotelsQuery();
-  const [isFavLocal, setIsFavLocal] = useState(false);
-  const { data: favorites } = useGetFavoritesQuery();
-  const [addFavorite] = useAddFavoriteMutation();
   const [removeFavorite] = useRemoveFavoriteMutation();
+  const { data: favorites } = useGetFavoritesQuery();
 
+  // 4 эле элемент алабыз
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-[87vh]">
-        <div className="text-gray-500">Загрузка...</div>
-      </div>
+  const isFavorite = (itemId: string, itemType: "HOTEL" | "CAR" | "TOUR") =>
+    favorites?.some(
+      (f) => f.itemType === itemType && (f.item as FavoriteItem).id === itemId
     );
-  }
 
-  if (!profile) {
+  if (isLoading) return <StatusMessage variant="loading" />;
+  if (error || !profile)
     return (
-      <div className="flex items-center justify-center h-[87vh]">
-        <div className="text-gray-500">Профиль не найден</div>
-      </div>
+      <StatusMessage
+        variant="error"
+        message={`${(err as AUTH.Error)?.data?.message}`}
+      />
     );
-  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -139,8 +135,8 @@ const Profile = () => {
   };
   const filteredFavorites =
     activeFilter === "ALL"
-      ? profile.favorites
-      : profile.favorites.filter((fav) => fav.itemType === activeFilter);
+      ? favorites || []
+      : favorites?.filter((fav) => fav.itemType === activeFilter) || [];
 
   return (
     <div className="p-4 sm:p-6 mx-auto h-[87vh] overflow-y-auto">
@@ -205,7 +201,7 @@ const Profile = () => {
       {/* Favorites Section */}
       <div className="mt-8 sm:mt-12 md:mt-20 p-4 sm:p-5 border border-gray-300 rounded-lg space-y-4 sm:space-y-5 bg-white shadow-sm">
         <div className="bg-[#0A8791] text-white rounded-xl text-sm sm:text-md p-2 w-fit px-4 font-medium">
-          Избранные ({profile.favorites.length})
+          Избранные ({favorites?.length})
         </div>
 
         {/* Category Filters */}
@@ -227,33 +223,23 @@ const Profile = () => {
         {/* Cards Grid */}
         {filteredFavorites.length === 0 ? (
           <div className="text-center py-16 text-gray-500">
-            <p className="text-lg select-none">У вас пока нет избранных элементов</p>
+            <p className="text-lg">У вас пока нет избранных элементов</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
             {filteredFavorites.map((fav: Favorite) => {
+              if (!fav.item) return null;
               const item = fav.item;
+              const favorite = isFavorite(fav.item.id, fav.itemType);
 
               if (fav.itemType === "HOTEL") {
                 const hotel = item as Hotel;
+
                 return (
                   <div
                     key={fav.id}
-                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow relative"
+                    className="bg-white border border-gray-300 relative rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                   >
-                    <button
-  onClick={async () => {
-    try {
-      await removeFavorite(fav.id).unwrap();
-    } catch (e) {
-      alert("Ошибка сервера");
-    }
-  }}
-  className="absolute text-red-600 text-3xl cursor-pointer right-3 top-1"
->
-  <FaHeart />
-</button>
-
                     {/* Image */}
                     <div className="h-32 bg-gray-100">
                       {hotel.images?.[0]?.img && (
@@ -262,9 +248,25 @@ const Profile = () => {
                           alt={hotel.title}
                           width={300}
                           height={200}
-                          className="w-full h-full object-cover"
+                          className="w-full  h-full object-cover"
                         />
                       )}
+                      <button
+                        onClick={async () => {
+                          try {
+                            if (favorite) {
+                              await removeFavorite(fav.id).unwrap();
+                            }
+                          } catch {
+                            alert("Ошибка сервера");
+                          }
+                        }}
+                        className={`absolute text-3xl cursor-pointer left-3 top-3 ${
+                          favorite ? "text-red-600" : "text-gray-300"
+                        }`}
+                      >
+                        <FaHeart />
+                      </button>
                     </div>
                     {/* Content */}
                     <div className="p-3 space-y-1">
@@ -287,7 +289,7 @@ const Profile = () => {
                 return (
                   <div
                     key={fav.id}
-                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                    className="bg-white relative border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                   >
                     <div className="h-32 bg-gray-100">
                       {car.image && (
@@ -299,6 +301,22 @@ const Profile = () => {
                           className="w-full h-full object-cover"
                         />
                       )}
+                      <button
+                        onClick={async () => {
+                          try {
+                            if (favorite) {
+                              await removeFavorite(fav.id).unwrap();
+                            }
+                          } catch {
+                            alert("Ошибка сервера");
+                          }
+                        }}
+                        className={`absolute text-3xl cursor-pointer left-3 top-3 ${
+                          favorite ? "text-red-600" : "text-gray-300"
+                        }`}
+                      >
+                        <FaHeart />
+                      </button>
                     </div>
                     <div className="p-3 space-y-1">
                       <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
@@ -320,7 +338,7 @@ const Profile = () => {
                 return (
                   <div
                     key={fav.id}
-                    className="bg-white border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                    className="bg-white relative border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                   >
                     <div className="h-32 bg-gray-100">
                       {tour.image && (
@@ -332,6 +350,22 @@ const Profile = () => {
                           className="w-full h-full object-cover"
                         />
                       )}
+                      <button
+                        onClick={async () => {
+                          try {
+                            if (favorite) {
+                              await removeFavorite(fav.id).unwrap();
+                            }
+                          } catch {
+                            alert("Ошибка сервера");
+                          }
+                        }}
+                        className={`absolute text-3xl cursor-pointer left-3 top-3 ${
+                          favorite ? "text-red-600" : "text-gray-300"
+                        }`}
+                      >
+                        <FaHeart />
+                      </button>
                     </div>
                     <div className="p-3 space-y-1">
                       <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">

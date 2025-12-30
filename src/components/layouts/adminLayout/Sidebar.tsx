@@ -15,8 +15,9 @@ import {
 import { MdTour } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
-import { useGetProfileQuery } from "@/shared/api/profileApi";
+import { profileApi, useGetProfileQuery } from "@/shared/api/profileApi";
 import Cookies from "js-cookie";
+import { store } from "@/redux/store";
 
 interface SidebarProps {
   open: boolean;
@@ -65,6 +66,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
   const handleLogout = () => {
     Cookies.remove("token");
     router.push("/login");
+    store.dispatch(profileApi.util.resetApiState());
   };
 
   return (

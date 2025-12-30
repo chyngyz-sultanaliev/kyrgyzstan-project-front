@@ -3,9 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { User, Settings, HelpCircle, LogOut } from "lucide-react";
+import { User, Settings, HelpCircle, LogOut, Home } from "lucide-react";
 import { IoClose } from "react-icons/io5";
-import { useGetProfileQuery } from "@/shared/api/profileApi";
+import { profileApi, useGetProfileQuery } from "@/shared/api/profileApi";
+import { store } from "@/redux/store";
 
 interface SidebarProps {
   open: boolean;
@@ -17,6 +18,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
   const { data: profile } = useGetProfileQuery();
   const router = useRouter();
   const menu = [
+    { label: "Home", href: "/", icon: <Home size={20} /> },
     { label: "Профиль", href: "/profile", icon: <User size={20} /> },
     {
       label: "Настройки",
@@ -34,6 +36,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
   const handleLogout = () => {
     Cookies.remove("token");
     router.push("/login");
+    store.dispatch(profileApi.util.resetApiState());
   };
 
   return (
