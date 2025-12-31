@@ -6,6 +6,7 @@ import { useGetNewsQuery } from "@/shared/api/newsApi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const News = () => {
+  
   const [active, setActive] = useState(0);
   const { data, isLoading } = useGetNewsQuery();
 
