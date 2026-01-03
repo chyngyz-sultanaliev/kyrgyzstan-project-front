@@ -132,7 +132,7 @@ const Detail = ({ tourDays }: Props) => {
         {/* Modal */}
         {modal.length > 0 && !submitted && (
           <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
-            <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5">
+            <div className="w-[340px] sm:w-[400px] h-[21rem] bg-white rounded-2xl flex flex-col items-center justify-center gap-5 ">
               <h2 className="text-lg font-semibold text-center">
                 Submit a request for selection
               </h2>
@@ -156,7 +156,7 @@ const Detail = ({ tourDays }: Props) => {
                         )
                       )
                     }
-                    className="border p-2 rounded-lg"
+                    className=" w-70 h-[50px] md:w-[280px] sm:w-[200px] pl-2 border  rounded-lg"
                   />
 
                   <input
@@ -172,7 +172,7 @@ const Detail = ({ tourDays }: Props) => {
                         )
                       )
                     }
-                    className="border p-2 rounded-lg"
+                    className="border w-full h-[50px] md:w-[280px] pl-2 rounded-lg"
                   />
 
                   <input
@@ -188,7 +188,7 @@ const Detail = ({ tourDays }: Props) => {
                         )
                       )
                     }
-                    className="border p-2 rounded-lg"
+                    className="border w-full h-[50px] md:w-[280px] pl-2 rounded-lg"
                   />
 
                   <button
@@ -211,7 +211,7 @@ const Detail = ({ tourDays }: Props) => {
 
         {submitted && (
           <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
-            <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5 text-center">
+            <div className="bg-white w-[340px] p-6 sm:w-[370px] rounded-2xl flex flex-col gap-5 text-center">
               <h2 className="text-lg font-semibold">
                 Your application has been sent!
               </h2>
