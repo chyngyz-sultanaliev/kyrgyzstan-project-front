@@ -111,7 +111,7 @@ const Category = () => {
             <div key={tour.id} className="flex flex-col ...">
               <div
                 key={tour.id}
-                className="flex flex-col rounded-3xl w-[394px] h-[435px] md:w-[290px] md:h-[300px] bg-white shadow-md p-4"
+                className="flex flex-col rounded-3xl w-full h-[435px] md:w-[290px] md:h-[300px] bg-white shadow-md p-4"
               >
                 {/* Image + Heart */}
                 <div

@@ -1,9 +1,9 @@
 import React from "react";
 import Welcome from "./Welcome";
-import Popular from "./Popular";
 import { hotelCategoryApi } from "@/shared/api/hotelCategoryApi";
 import { hotelApi } from "@/shared/api/hotelApi";
 import { store } from "@/redux/store";
+import Popular from "../hotel/Popular";
 
 const Hotel = async () => {
   const category = await store

@@ -43,6 +43,7 @@ const Detail = ({ tourDays }: Props) => {
   const [modal, setModal] = useState<ModalItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [open, setOpen] = useState(false);
+  const tourDaysFromApi = tour?.tourDays;
 
   if (!tourId) return <p>No ID</p>;
   if (isLoading) return <StatusMessage variant="loading" />;
@@ -192,7 +193,13 @@ const Detail = ({ tourDays }: Props) => {
 
                   <button
                     type="submit"
-                    className="bg-[#0A8791] text-white h-10 rounded-lg"
+                    disabled={!el.email || !el.num || !el.description}
+                    className={`h-10 rounded-lg text-white
+    ${
+      !el.email || !el.num || !el.description
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-[#0A8791]"
+    }`}
                   >
                     Submit
                   </button>
@@ -230,39 +237,22 @@ const Detail = ({ tourDays }: Props) => {
           <h1 className="text-2xl mb-2">Description</h1>
           <p>{tour.description}</p>
 
-          <div className="w-110 h-auto bg-[#D9D9D9] flex flex-col">
-            <div
-              className="flex items-center justify-between p-3 cursor-pointer"
-              onClick={() => setOpen(!open)}
-            >
-              <h4>Day 1</h4>
-              <SlArrowDown
-                className={`transition-transform ${open ? "rotate-180" : ""}`}
-              />
+          {/* Tour Days */}
+          {Array.isArray(tourDaysFromApi) && tourDaysFromApi.length > 0 && (
+            <div className="w-full h-auto mb:w-[210px] mb:h-[40px] sm:w-[390px] sm:h-[100px] bg-[#D9D9D9] flex flex-col gap-2 p-3">
+              {tourDaysFromApi.map((day) => (
+                <div
+                  key={day.id}
+                  className="bg-[#e5e5e5] min-h-[70px] px-6 py-4 rounded-lg"
+                >
+                  <h4 className="text-xl font-semibold mb-1">
+                    Day {day.dayNumber}
+                  </h4>
+                  <p className="text-gray-700">{day.description}</p>
+                </div>
+              ))}
             </div>
-
-            {open && (
-              <div className="flex flex-col gap-2 p-3">
-                {tourDays && tourDays.length > 0 ? (
-                  tourDays.map((day) => (
-                    <div
-                      key={day.id}
-                      className="bg-[#e5e5e5] min-h-[70px] px-6 py-4 rounded-lg"
-                    >
-                      <h4 className="text-xl font-semibold mb-1">
-                        Day {day.dayNumber}
-                      </h4>
-                      <p className="text-gray-700">{day.description}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-400">
-                    Route information not available
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </section>
 
