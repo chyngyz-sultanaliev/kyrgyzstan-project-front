@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from "react";
 
 const CARD_WIDTH = 160;
 const GAP = 16;
-const VISIBLE = 3;
+
+
 
 const MOVE_DURATION = 1.5; // 👈 3 карточка 1.5 секундада
 
@@ -14,13 +15,21 @@ const SPEED = 0.5; // канча секундада 1 блок жылат
 const PAUSE = 2; // токтоп туруу
 
 const STEP = CARD_WIDTH + GAP;
-const CONTAINER_WIDTH = CARD_WIDTH * VISIBLE + GAP * (VISIBLE - 1);
+
+
+const getVisibleCount = () => {
+  if (typeof window === "undefined") return 3;
+  return window.innerWidth < 640 ? 2 : 3; // 📱 phone = 2, 💻 desktop = 3
+};
 
 interface Props {
   category: any[];
 }
 
 function Welcome({ category }: Props) {
+const [visible, setVisible] = useState(getVisibleCount);
+const CONTAINER_WIDTH =
+  CARD_WIDTH * visible + GAP * (visible - 1);
   const x = useMotionValue(0);
   const isStopped = useRef(false);
   const controlsRef = useRef<ReturnType<typeof animate> | null>(null);
@@ -104,6 +113,15 @@ function Welcome({ category }: Props) {
   }, [category.length]);
 
   const items = [...category, ...category];
+  useEffect(() => {
+  const handleResize = () => {
+    setVisible(window.innerWidth < 640 ? 2 : 3);
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
   return (
     <section
       style={{
@@ -111,18 +129,18 @@ function Welcome({ category }: Props) {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className="w-full flex items-center justify-center"
+      className="w-full flex items-center justify-center overflow-hidden"
     >
-      <div className="flex flex-col lg:flex-row items-center justify-around w-full min-h-[80vh] bg-[#00000084] gap-10 px-4">
-        <div className="flex flex-col gap-5">
-          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-            Аренда коттеджей <br /> и домов в Кыргызстане
+      <div className="flex flex-col lg:flex-row items-center justify-around w-full min-h-[80vh] bg-[#00000084] gap-5 md:gap-10 px-4 pb-7 md:pb-0">
+        <div className="flex flex-col gap-0 md:gap-5">
+          <h1 className="text-white text-3xl sm:text-2xl md:text-5xl lg:text-6xl md:pl-0 pt-7 md:pt-0 w-xl text-center md:text-start md:w-2xl">
+            Аренда коттеджей и домов в Кыргызстане
           </h1>
-          <p className="text-white text-xl">
-            Найдите идеальный вариант сами или предоставьте это нам
+          <p className="text-white text-xl opacity-0 md:opacity-100">
+            Найдите идеальный вариант сами или предоставьте это нам.
           </p>
           <div
-            className="overflow-hidden"
+            className="overflow-hidden hidden md:flex"
             style={{ width: CONTAINER_WIDTH }}
             onMouseEnter={stopAnimation}
             onMouseLeave={startAnimation}
