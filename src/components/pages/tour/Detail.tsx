@@ -43,6 +43,7 @@ const Detail = ({ tourDays }: Props) => {
   const [modal, setModal] = useState<ModalItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [open, setOpen] = useState(false);
+  const tourDaysFromApi = tour?.tourDays;
 
   if (!tourId) return <p>No ID</p>;
   if (isLoading) return <StatusMessage variant="loading" />;
@@ -131,7 +132,7 @@ const Detail = ({ tourDays }: Props) => {
         {/* Modal */}
         {modal.length > 0 && !submitted && (
           <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
-            <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5">
+            <div className="w-[340px] sm:w-[400px] h-[21rem] bg-white rounded-2xl flex flex-col items-center justify-center gap-5 ">
               <h2 className="text-lg font-semibold text-center">
                 Submit a request for selection
               </h2>
@@ -155,7 +156,7 @@ const Detail = ({ tourDays }: Props) => {
                         )
                       )
                     }
-                    className="border p-2 rounded-lg"
+                    className=" w-70 h-[50px] md:w-[280px] sm:w-[200px] pl-2 border  rounded-lg"
                   />
 
                   <input
@@ -171,7 +172,7 @@ const Detail = ({ tourDays }: Props) => {
                         )
                       )
                     }
-                    className="border p-2 rounded-lg"
+                    className="border w-full h-[50px] md:w-[280px] pl-2 rounded-lg"
                   />
 
                   <input
@@ -187,12 +188,18 @@ const Detail = ({ tourDays }: Props) => {
                         )
                       )
                     }
-                    className="border p-2 rounded-lg"
+                    className="border w-full h-[50px] md:w-[280px] pl-2 rounded-lg"
                   />
 
                   <button
                     type="submit"
-                    className="bg-[#0A8791] text-white h-10 rounded-lg"
+                    disabled={!el.email || !el.num || !el.description}
+                    className={`h-10 rounded-lg text-white
+    ${
+      !el.email || !el.num || !el.description
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-[#0A8791]"
+    }`}
                   >
                     Submit
                   </button>
@@ -204,7 +211,7 @@ const Detail = ({ tourDays }: Props) => {
 
         {submitted && (
           <div className="fixed inset-0 bg-black/43 backdrop-blur-sm flex items-center justify-center z-60">
-            <div className="bg-white w-[440px] p-6 rounded-2xl flex flex-col gap-5 text-center">
+            <div className="bg-white w-[340px] p-6 sm:w-[370px] rounded-2xl flex flex-col gap-5 text-center">
               <h2 className="text-lg font-semibold">
                 Your application has been sent!
               </h2>
@@ -230,39 +237,22 @@ const Detail = ({ tourDays }: Props) => {
           <h1 className="text-2xl mb-2">Description</h1>
           <p>{tour.description}</p>
 
-          <div className="w-110 h-auto bg-[#D9D9D9] flex flex-col">
-            <div
-              className="flex items-center justify-between p-3 cursor-pointer"
-              onClick={() => setOpen(!open)}
-            >
-              <h4>Day 1</h4>
-              <SlArrowDown
-                className={`transition-transform ${open ? "rotate-180" : ""}`}
-              />
+          {/* Tour Days */}
+          {Array.isArray(tourDaysFromApi) && tourDaysFromApi.length > 0 && (
+            <div className="w-full h-auto mb:w-[210px] mb:h-[40px] sm:w-[390px] sm:h-[100px] bg-[#D9D9D9] flex flex-col gap-2 p-3">
+              {tourDaysFromApi.map((day) => (
+                <div
+                  key={day.id}
+                  className="bg-[#e5e5e5] min-h-[70px] px-6 py-4 rounded-lg"
+                >
+                  <h4 className="text-xl font-semibold mb-1">
+                    Day {day.dayNumber}
+                  </h4>
+                  <p className="text-gray-700">{day.description}</p>
+                </div>
+              ))}
             </div>
-
-            {open && (
-              <div className="flex flex-col gap-2 p-3">
-                {tourDays && tourDays.length > 0 ? (
-                  tourDays.map((day) => (
-                    <div
-                      key={day.id}
-                      className="bg-[#e5e5e5] min-h-[70px] px-6 py-4 rounded-lg"
-                    >
-                      <h4 className="text-xl font-semibold mb-1">
-                        Day {day.dayNumber}
-                      </h4>
-                      <p className="text-gray-700">{day.description}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-400">
-                    Route information not available
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </section>
 
