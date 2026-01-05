@@ -157,7 +157,7 @@ const Header = () => {
                 {/* User Actions */}
                 <div className="mb-6 pb-6 border-b border-gray-200">
                   <p className="text-xs text-gray-500 mb-3 uppercase tracking-wide">
-                    Account
+                    Profile
                   </p>
 
                   {!profile && !isLoading && (

@@ -6,6 +6,7 @@ import { useGetNewsQuery } from "@/shared/api/newsApi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const News = () => {
+  
   const [active, setActive] = useState(0);
   const { data, isLoading } = useGetNewsQuery();
 
@@ -86,9 +87,9 @@ const News = () => {
             <motion.div
               key={item.id || i}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ 
-                opacity: isActive ? 1 : 0.5, 
-                scale: isActive ? 1 : 0.9 
+              animate={{
+                opacity: isActive ? 1 : 0.5,
+                scale: isActive ? 1 : 0.9,
               }}
               transition={{ duration: 0.3 }}
               onClick={() =>
@@ -118,11 +119,6 @@ const News = () => {
                   <p className="text-sm text-gray-600 line-clamp-3">
                     {item.content}
                   </p>
-                  {isActive && (
-                    <button className="mt-4 text-[#0A8791] font-semibold text-sm hover:underline">
-                      Читать далее →
-                    </button>
-                  )}
                 </div>
               </div>
             </motion.div>
@@ -166,9 +162,6 @@ const News = () => {
               <p className="text-sm text-gray-600 mt-2">
                 {news[active]?.content}
               </p>
-              <button className="mt-4 text-[#0A8791] font-semibold text-sm hover:underline">
-                Читать далее →
-              </button>
             </div>
           </div>
         </motion.div>

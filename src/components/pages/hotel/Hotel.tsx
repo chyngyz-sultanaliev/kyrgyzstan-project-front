@@ -1,4 +1,3 @@
-import React from "react";
 import Welcome from "./Welcome";
 import Popular from "./Popular";
 import { hotelCategoryApi } from "@/shared/api/hotelCategoryApi";
