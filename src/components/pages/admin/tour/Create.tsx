@@ -339,7 +339,7 @@ const Create = () => {
             </div>
 
             {imagePreview && (
-              <div className="relative w-32 h-32 flex-shrink-0">
+              <div className="relative w-32 h-32 flex-shrink-">
                 <img
                   src={imagePreview}
                   alt="Preview"
